@@ -19,6 +19,7 @@
 #include "dialogue.hpp"
 #include "area.hpp"
 #include "door.hpp"
+#include "tile_set.hpp"
 #include "battle.hpp"
 #include "entity_manager.hpp"
 
@@ -41,6 +42,7 @@ int main()
 	entityManager.loadJson<Creature>("creatures.json");
 	entityManager.loadJson<Door>("doors.json");
 	entityManager.loadJson<Area>("areas.json");
+	entityManager.loadJson<TileSet>("tilesets.json");
 
 	// Seed the random number generator with the system time, so the
 	// random numbers produced by rand() will be different each time

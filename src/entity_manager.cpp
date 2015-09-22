@@ -8,6 +8,7 @@
 #include "creature.hpp"
 #include "area.hpp"
 #include "door.hpp"
+#include "tile_set.hpp"
 
 template <class T>
 void EntityManager::loadJson(std::string filename)
@@ -52,6 +53,7 @@ template <> std::string entityToString<Armor>() { return "armor"; }
 template <> std::string entityToString<Creature>() { return "creature"; }
 template <> std::string entityToString<Area>() { return "area"; }
 template <> std::string entityToString<Door>() { return "door"; }
+template <> std::string entityToString<TileSet>() { return "tileset"; }
 
 // Template instantiations
 template void EntityManager::loadJson<Item>(std::string);
@@ -60,6 +62,7 @@ template void EntityManager::loadJson<Armor>(std::string);
 template void EntityManager::loadJson<Creature>(std::string);
 template void EntityManager::loadJson<Area>(std::string);
 template void EntityManager::loadJson<Door>(std::string);
+template void EntityManager::loadJson<TileSet>(std::string);
 
 template Item* EntityManager::getEntity<Item>(std::string);
 template Weapon* EntityManager::getEntity<Weapon>(std::string);
@@ -67,4 +70,4 @@ template Armor* EntityManager::getEntity<Armor>(std::string);
 template Creature* EntityManager::getEntity<Creature>(std::string);
 template Area* EntityManager::getEntity<Area>(std::string);
 template Door* EntityManager::getEntity<Door>(std::string);
-
+template TileSet* EntityManager::getEntity<TileSet>(std::string);
