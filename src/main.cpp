@@ -36,13 +36,13 @@ EntityManager entityManager;
 int main()
 {
 	// Load the entities
+	entityManager.loadJson<TileSet>("tilesets.json");
 	entityManager.loadJson<Item>("items.json");
 	entityManager.loadJson<Weapon>("weapons.json");
 	entityManager.loadJson<Armor>("armor.json");
 	entityManager.loadJson<Creature>("creatures.json");
 	entityManager.loadJson<Door>("doors.json");
 	entityManager.loadJson<Area>("areas.json");
-	entityManager.loadJson<TileSet>("tilesets.json");
 
 	// Seed the random number generator with the system time, so the
 	// random numbers produced by rand() will be different each time

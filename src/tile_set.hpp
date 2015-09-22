@@ -13,11 +13,11 @@ class TileSet : public Entity
 {
 	public:
 
-	std::string filename;
 	sf::Texture tex;
+	unsigned int tilesize;
 
 	// Constructors
-	TileSet(std::string id, std::string filename);
+	TileSet(std::string id, std::string filename, unsigned int tilesize);
 	TileSet(std::string id, JsonBox::Value& v, EntityManager* mgr);
 
 	// Load the tile set from a json file

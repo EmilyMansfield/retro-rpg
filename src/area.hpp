@@ -9,6 +9,8 @@
 #include "inventory.hpp"
 #include "creature.hpp"
 #include "dialogue.hpp"
+#include "tile_set.hpp"
+#include "tile_map.hpp"
 
 class EntityManager;
 class Door;
@@ -35,9 +37,16 @@ class Area : public Entity
 	// instances of the creatures
 	std::vector<Creature> creatures;
 
+	// Tileset used to draw the area
+	TileSet* tileset;
+
+	// Tilemap describing the appearance of the area
+	TileMap tilemap;
+
 	// Constructors
 	Area(std::string id, Dialogue dialogue, Inventory items,
-		std::vector<Creature*> creatures);
+		std::vector<Creature*> creatures, TileSet* tileset,
+		TileMap& tilemap);
 	Area(std::string id, JsonBox::Value& v, EntityManager* mgr);
 
 	// Load the area from the given Json value

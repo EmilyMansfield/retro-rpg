@@ -1,5 +1,6 @@
 {
 	"tileset_dungeon" : {
-		"filename": "assets/tileset_dungeon.png"
+		"filename": "assets/tileset_dungeon.png",
+		"tilesize": 16
 	}
 }
