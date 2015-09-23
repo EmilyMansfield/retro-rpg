@@ -5,6 +5,7 @@
 #include "area.hpp"
 #include "tile_map.hpp"
 #include "player.hpp"
+
 class GameStateArea : public GameState
 {
 	private:

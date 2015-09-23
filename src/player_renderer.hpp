@@ -5,7 +5,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <string>
-#include <iostream>
 
 // Direction the player is moving in
 enum class Direction { NORTH = 'n', SOUTH = 's', EAST = 'e', WEST = 'w' };
@@ -23,26 +22,26 @@ class PlayerRenderer
 
 	// Position of the adjacent square that the player is trying to move to.
 	// If the player is not moving, this should be the same as pos
-	sf::Vector2u dest;
+	sf::Vector2f dest;
 
-	sf::Vector2u dirToVec(Direction dir)
+	sf::Vector2f dirToVec(Direction dir)
 	{
 		switch(dir)
 		{
 			case Direction::NORTH:
-			return sf::Vector2u(0, -1);
+			return sf::Vector2f(0, -1);
 
 			case Direction::EAST:
-			return sf::Vector2u(1, 0);
+			return sf::Vector2f(1, 0);
 
 			case Direction::SOUTH:
-			return sf::Vector2u(0, 1);
+			return sf::Vector2f(0, 1);
 
 			case Direction::WEST:
-			return sf::Vector2u(-1, 0);
+			return sf::Vector2f(-1, 0);
 
 			default:
-			return sf::Vector2u(0, 0);
+			return sf::Vector2f(0, 0);
 		}
 	}
 
@@ -52,7 +51,7 @@ class PlayerRenderer
 	sf::Sprite sprite;
 
 	// Position of the player in the game world, in grid squares not pixels
-	sf::Vector2u pos;
+	sf::Vector2f pos;
 	// Speed at which the player moves, in grid squares per second
 	float speed = 1.0f;
 
@@ -77,7 +76,7 @@ class PlayerRenderer
 			animString = std::string("player_idle_") + (char)movementDir;
 			// Reset the linear interpolation value
 			this->interp = 0.0f;
-			this->dest = this->pos;
+			this->pos = this->dest;
 		}
 		else
 		{
@@ -86,37 +85,33 @@ class PlayerRenderer
 			// Increase by number of tiles travelled in dt
 			this->interp += dt * speed;
 		}
-		std::cout << animString << std::endl;
 
 		// Set the sprite position depending on the direction and interpolation
-		sf::Vector2f spritePos(this->pos.x, this->pos.y);
-		spritePos += sf::Vector2f(
-			this->interp * dirToVec(this->movementDir).x,
-			this->interp * dirToVec(this->movementDir).y
-		);
-		this->sprite.setPosition(spritePos * (float)ts);
+		this->sprite.setPosition((float)ts * (this->pos + this->interp * dirToVec(this->movementDir)));
 
 		// Now calculate the animation frame based on the interpolation value
 		Animation& a = this->tiles->animations[animString];
 		unsigned int frame = this->interp * (float)a.len;
 
 		// Set the texture rectangle from the frame
-		this->sprite.setTextureRect(sf::IntRect(
-			(a.x + frame) * ts, a.y * ts, ts, ts));
+		this->sprite.setTextureRect(sf::IntRect((a.x + frame) * ts, a.y * ts, ts, ts));
 	}
 
 	void step(Direction dir)
 	{
-		this->movementDir = dir;
-		this->dest = this->pos + dirToVec(dir);
+		if(this->pos == this->dest)
+		{
+			this->movementDir = dir;
+			this->dest = this->pos + dirToVec(dir);
+		}
 	}
 
 	// Set position and stop movement
-	void setPos(sf::Vector2u pos)
+	void setPos(sf::Vector2f pos)
 	{
 		this->pos = pos;
 		this->dest = pos;
-		this->sprite.setPosition(sf::Vector2f(this->pos.x * ts, this->pos.y * ts));
+		this->sprite.setPosition((float)ts * this->pos);
 	}
 };
 

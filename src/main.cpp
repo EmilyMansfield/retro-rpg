@@ -54,7 +54,7 @@ int main()
 	// Set the current area to be the first area in the atlas,
 	// placing the player there upon game start
 	player.currentArea = "area_01";
-	player.renderer.setPos(sf::Vector2u(2, 2));
+	player.renderer.setPos(sf::Vector2f(2, 2));
 	player.visitedAreas.insert(player.currentArea);
 	// Pointer to to the current area for convenience
 	Area* areaPtr = player.getAreaPtr(&entityManager);
