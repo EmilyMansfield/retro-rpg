@@ -12,6 +12,10 @@ class GameStateArea : public GameState
 
 	public:
 
+	virtual void handleInput(sf::Event& event);
+	virtual void update(float dt);
+	virtual void draw(sf::RenderWindow& window, float dt) const;
+
 	GameStateArea(Area* area)
 	{
 		this->area = area;
