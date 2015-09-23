@@ -30,6 +30,7 @@ class TileMap : public sf::Drawable, public sf::Transformable
 
 	unsigned int w; // Number of columns (x axis)
 	unsigned int h; // Number of rows (y axis)
+	unsigned int ts; // Width and height of each tile
 
 	std::vector<unsigned int> map;
 
@@ -54,7 +55,7 @@ class TileMap : public sf::Drawable, public sf::Transformable
 
 		// Set the tileset
 		this->tileset = tileset;
-		unsigned int ts = this->tileset->tilesize;
+		this->ts = this->tileset->tilesize;
 
 		// Construct a vertex array from the map
 

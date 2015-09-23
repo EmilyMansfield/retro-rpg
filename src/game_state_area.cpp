@@ -16,5 +16,6 @@ void GameStateArea::update(float dt)
 
 void GameStateArea::draw(sf::RenderWindow& window, float dt) const
 {
+	window.setView(this->view);
 	window.draw(this->area->tilemap);
 }
