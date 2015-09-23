@@ -4,13 +4,14 @@
 #include "game_state.hpp"
 #include "area.hpp"
 #include "tile_map.hpp"
-
+#include "player.hpp"
 class GameStateArea : public GameState
 {
 	private:
 
 	Area* area;
 	sf::View view;
+	Player* player;
 
 	public:
 
@@ -18,9 +19,10 @@ class GameStateArea : public GameState
 	virtual void update(float dt);
 	virtual void draw(sf::RenderWindow& window, float dt) const;
 
-	GameStateArea(Area* area)
+	GameStateArea(Area* area, Player* player)
 	{
 		this->area = area;
+		this->player = player;
 		TileMap& tm = this->area->tilemap;
 		// Move the tilemap origin to its centre
 		tm.setOrigin(tm.ts * tm.w * 0.5, tm.ts * tm.h * 0.5);

@@ -28,6 +28,7 @@
 #include "entity_manager.hpp"
 #include "game_state.hpp"
 #include "game_state_area.hpp"
+#include "player_renderer.hpp"
 
 // Keeps track of items, weapons, creatures etc.
 EntityManager entityManager;
@@ -48,16 +49,18 @@ int main()
 	std::srand(std::time(nullptr));
 
 	Player player("test", 10, 4, 4, 0, 0, 1, "none");
+	player.renderer = PlayerRenderer(entityManager.getEntity<TileSet>("tileset_overworld"));
 
 	// Set the current area to be the first area in the atlas,
 	// placing the player there upon game start
 	player.currentArea = "area_01";
+	player.renderer.setPos(sf::Vector2u(2, 2));
 	player.visitedAreas.insert(player.currentArea);
 	// Pointer to to the current area for convenience
 	Area* areaPtr = player.getAreaPtr(&entityManager);
 
 	// Current game state object
-	std::shared_ptr<GameState> currentState(new GameStateArea(areaPtr));
+	std::shared_ptr<GameState> currentState(new GameStateArea(areaPtr, &player));
 
 	// Open a window which can be closed and has a titlebar, but cannot
 	// be resized. Limit the framerate to 60fps.

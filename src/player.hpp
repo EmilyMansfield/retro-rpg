@@ -3,15 +3,19 @@
 
 #include <unordered_set>
 #include <string>
+#include <SFML/System.hpp>
 #include "JsonBox.h"
 
 #include "creature.hpp"
+#include "player_renderer.hpp"
 
 class EntityManager;
 
 class Player : public Creature
 {
 	public:
+
+	PlayerRenderer renderer;
 
 	// Name of the player's class
 	// Class may be Fighter, Rogue etc

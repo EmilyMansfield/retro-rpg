@@ -4,10 +4,29 @@
 #include <string>
 #include "JsonBox.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 
 #include "entity.hpp"
 
 class EntityManager;
+
+class Animation
+{
+	public:
+
+	unsigned int x;
+	unsigned int y;
+	unsigned int len;
+
+	Animation() {}
+	Animation(unsigned int x, unsigned int y, unsigned int len)
+	{
+		this->x = x;
+		this->y = y;
+		this->len = len;		
+	}
+
+};
 
 class TileSet : public Entity
 {
@@ -15,6 +34,10 @@ class TileSet : public Entity
 
 	sf::Texture tex;
 	unsigned int tilesize;
+
+	// Map of animations stored in the sprite sheet, each labelled by
+	// a string id
+	std::map<std::string, Animation> animations;
 
 	// Constructors
 	TileSet(std::string id, std::string filename, unsigned int tilesize);

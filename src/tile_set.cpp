@@ -23,4 +23,13 @@ void TileSet::load(JsonBox::Value& v, EntityManager* mgr)
 	JsonBox::Object o = v.getObject();
 	this->tilesize = o["tilesize"].getInteger();
 	this->tex.loadFromFile(o["filename"].getString());
+	if(o.find("animations") != o.end())
+	{
+		for(auto anim : o["animations"].getArray())
+		{
+			JsonBox::Object animO = anim.getObject();
+			this->animations[animO["name"].getString()] =
+				Animation(animO["x"].getInteger(), animO["y"].getInteger(), animO["len"].getInteger());
+		}
+	}
 }
