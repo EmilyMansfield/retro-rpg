@@ -95,8 +95,9 @@ int main()
 				break;
 			}
 			// Handle the event
-			currentState->handleInput(event);
+			currentState->handleEvent(event);
 		}
+		currentState->handleInput(dt);
 
 		// Update the game proportionally to dt
 		currentState->update(dt);

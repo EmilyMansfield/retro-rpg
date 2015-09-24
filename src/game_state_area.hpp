@@ -16,7 +16,8 @@ class GameStateArea : public GameState
 
 	public:
 
-	virtual void handleInput(sf::Event& event);
+	virtual void handleEvent(sf::Event& event);
+	virtual void handleInput(float dt);
 	virtual void update(float dt);
 	virtual void draw(sf::RenderWindow& window, float dt) const;
 

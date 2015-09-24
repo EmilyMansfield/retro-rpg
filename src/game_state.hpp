@@ -8,7 +8,8 @@ class GameState
 {
 	public:
 
-	virtual void handleInput(sf::Event& event) = 0;
+	virtual void handleEvent(sf::Event& event) = 0;
+	virtual void handleInput(float dt) = 0;
 	virtual void update(float dt) = 0;
 	virtual void draw(sf::RenderWindow& window, float dt) const = 0;
 

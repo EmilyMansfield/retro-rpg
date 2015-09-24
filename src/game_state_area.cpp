@@ -5,16 +5,23 @@
 #include "area.hpp"
 #include "player_renderer.hpp"
 
-void GameStateArea::handleInput(sf::Event& event)
+void GameStateArea::handleEvent(sf::Event& event)
+{
+
+}
+
+void GameStateArea::handleInput(float dt)
 {
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		this->player->renderer.step(Direction::NORTH);
+		this->player->renderer.step(dt, Direction::NORTH);
 	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		this->player->renderer.step(Direction::EAST);
+		this->player->renderer.step(dt, Direction::EAST);
 	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		this->player->renderer.step(Direction::SOUTH);
+		this->player->renderer.step(dt, Direction::SOUTH);
 	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		this->player->renderer.step(Direction::WEST);
+		this->player->renderer.step(dt, Direction::WEST);
+	else
+		this->player->renderer.stop();
 }
 
 void GameStateArea::update(float dt)
