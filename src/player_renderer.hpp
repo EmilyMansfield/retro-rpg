@@ -114,6 +114,9 @@ class PlayerRenderer
 	// moving
 	void step(float dt, Direction dir)
 	{
+		// Player is not stopping if they are moving
+		this->stopping = false;
+
 		// Player is stationary and changing direction
 		if(this->movementDir != dir && !this->walking)
 		{
