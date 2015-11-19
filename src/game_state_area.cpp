@@ -13,15 +13,15 @@ void GameStateArea::handleEvent(sf::Event& event)
 void GameStateArea::handleInput(float dt)
 {
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		this->player->renderer.step(dt, Direction::NORTH);
+		this->player->renderer.step(dt, Direction::NORTH, this->area->tilemap);
 	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		this->player->renderer.step(dt, Direction::EAST);
+		this->player->renderer.step(dt, Direction::EAST, this->area->tilemap);
 	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		this->player->renderer.step(dt, Direction::SOUTH);
+		this->player->renderer.step(dt, Direction::SOUTH, this->area->tilemap);
 	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		this->player->renderer.step(dt, Direction::WEST);
+		this->player->renderer.step(dt, Direction::WEST, this->area->tilemap);
 	else
-		this->player->renderer.stop();
+		this->player->renderer.step(dt, Direction::NONE, this->area->tilemap);
 }
 
 void GameStateArea::update(float dt)

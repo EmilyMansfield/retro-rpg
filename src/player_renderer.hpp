@@ -2,29 +2,29 @@
 #define PLAYER_RENDERER_HPP
 
 #include "tile_set.hpp"
+#include "tile_map.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <string>
+#include <cmath>
 
 // Direction the player is moving in
-enum class Direction { NORTH = 'n', SOUTH = 's', EAST = 'e', WEST = 'w' };
+enum class Direction { NORTH = 'n', SOUTH = 's', EAST = 'e', WEST = 'w', NONE = 0 };
 
 class PlayerRenderer
 {
 	private:
 
-	// Current interpolation value used for movement, 0 = at pos, 1 = at dest
-	float interp = 0.0f;
-	// Delay in seconds before walking starts when the button is held
-	float walkingDelay = 0.1f;
-	float walkingTimer;
-
 	// Tilesheet containing the player's texture frames
 	TileSet* tiles;
 	unsigned int ts;
 
-	bool walking;
-	bool stopping;
+	Direction moveIntention;
+	Direction lastMove;
+	sf::Vector2f destination;
+	sf::Vector2f lastPos;
+	bool moving;
+	float interp;
 
 	sf::Vector2f dirToVec(Direction dir)
 	{
@@ -47,6 +47,14 @@ class PlayerRenderer
 		}
 	}
 
+	Direction vecToDir(sf::Vector2f dir)
+	{
+		if(fabs(dir.x) > fabs(dir.y))
+			return (dir.x > 0 ? Direction::EAST : Direction::WEST);
+		else
+			return (dir.y > 0 ? Direction::SOUTH : Direction::NORTH);
+	}
+
 	public:
 
 	// Sprite used to display the player
@@ -54,10 +62,9 @@ class PlayerRenderer
 
 	// Position of the player in the game world, in grid squares not pixels
 	sf::Vector2f pos;
+	sf::Vector2f velocity;
 	// Speed at which the player moves, in grid squares per second
 	float speed = 3.0f;
-
-	Direction movementDir;
 
 	PlayerRenderer() {}
 	PlayerRenderer(TileSet* tiles)
@@ -65,27 +72,97 @@ class PlayerRenderer
 		this->tiles = tiles;
 		this->sprite.setTexture(this->tiles->tex);
 		this->ts = this->tiles->tilesize;
-		this->movementDir = Direction::SOUTH;
-		this->walking = false;
-		this->stopping = false;
-		this->walkingTimer = 0.0f;
+		this->interp = 0.0f;
+		this->moveIntention = Direction::NONE;
+		this->lastMove = Direction::SOUTH;
+		this->moving = false;
+	}
+
+
+	void setPos(sf::Vector2f pos)
+	{
+		this->pos = pos;
+		this->sprite.setPosition((float)ts * this->pos);
+	}
+
+	void continueMovingTo()
+	{
+		velocity = destination - pos;
+		velocity /= (float)sqrt(velocity.x*velocity.x+velocity.y*velocity.y);
+		velocity *= speed;
+	}
+	void continueMovingFrom()
+	{
+		// Set new destination
+		destination = destination + dirToVec(lastMove);
+		// Move towards new destination
+		continueMovingTo();
+	}
+	void changeDirection(Direction dir)
+	{
+		// Snap to destination tile
+		setPos(destination);
+		// Set new destination
+		destination = destination + dirToVec(dir);
+		// Move towards the new destination
+		continueMovingTo();
+		// Remember move
+		lastMove = dir;
+	}
+
+	void startMoving(Direction dir)
+	{
+		// Set new destination
+		destination = pos + dirToVec(dir);
+		// Move
+		moving = true;
+		continueMovingTo();
+		// Remember move
+		lastMove = dir;
+	}
+	void stopMoving()
+	{
+		// Snap to destination tile to avoid inaccuracies
+		setPos(destination);
+		// Stop moving
+		moving = false;
+		velocity.x = 0.0f;
+		velocity.y = 0.0f;
+	}
+
+	bool justReachedDestination()
+	{
+		return (pos.x >= destination.x && lastPos.x < destination.x) ||
+			(pos.x <= destination.x && lastPos.x > destination.x) ||
+			(pos.y >= destination.y && lastPos.y < destination.y) ||
+			(pos.y <= destination.y && lastPos.y > destination.y);
+	}
+
+	bool canMoveIn(sf::Vector2f start, Direction dir, TileMap& tm)
+	{
+		return tm.at(start + dirToVec(dir)) == 0;
 	}
 
 	void update(float dt)
 	{
+		// Move player according to velocity
+		lastPos = pos;
+		setPos(pos + dt * velocity);
+		interp = 0.0f;
+
 		// id of the playing animation
 		std::string animString;
-		if(this->walking)
+		if(this->moving)
 		{
-			animString = std::string("player_walk_") + (char)movementDir;
-			this->interp += dt * speed;
+			animString = std::string("player_walk_") + (char)vecToDir(velocity);
+			// this->interp += dt * speed;
 
 			// Set the sprite position depending on the direction and interpolation
-			this->sprite.setPosition((float)ts * (this->pos + this->interp * dirToVec(this->movementDir)));	
+			// this->sprite.setPosition((float)ts * (this->pos + this->interp * dirToVec(this->movementDir)));
 		}
 		else
 		{
-			animString = std::string("player_idle_") + (char)movementDir;
+			animString = std::string("player_idle_") + (char)(velocity == sf::Vector2f(0,0) ? lastMove : vecToDir(velocity));
 		}
 
 		// Now calculate the animation frame based on the interpolation value
@@ -94,65 +171,51 @@ class PlayerRenderer
 
 		// Set the texture rectangle from the frame
 		this->sprite.setTextureRect(sf::IntRect((a.x + frame) * ts, a.y * ts, ts, ts));
-
-		if(this->interp >= 1.0f)
-		{
-			if(this->stopping)
-			{
-				this->walking = false;
-				this->stopping = false;
-			}
-			// this->walking = false;
-			this->interp = 0.0f;
-			this->setPos(this->pos + dirToVec(this->movementDir));
-		}
 	}
 
-	// If the player is stationary, they can change direction by pressing
-	// a direction button. Holding that button will start to move the player
-	// after a delay, in which case changing direction will keep the player
-	// moving
-	void step(float dt, Direction dir)
+	void step(float dt, Direction dir, TileMap& tm)
 	{
-		// Player is not stopping if they are moving
-		this->stopping = false;
+		// Set direction to move in
+		this->moveIntention = dir;
 
-		// Player is stationary and changing direction
-		if(this->movementDir != dir && !this->walking)
+		// Stop if at the destination
+		if(moving && justReachedDestination() && moveIntention == Direction::NONE)
 		{
-			this->movementDir = dir;
-			this->walkingTimer = 0.0f;
+			stopMoving();
 		}
-		// Player is stationary and trying to move
-		else if(this->movementDir == dir && !this->walking)
-		{
-			if(this->walkingTimer < this->walkingDelay)
-			{
-				this->walkingTimer += dt;
-			}
-			else
-			{
-				this->walking = true;
-				this->walkingTimer = 0.0f;
-			}
-		}
-		// Player is moving so can change direction at the end of a motion
-		else if(this->interp == 0.0f)
-		{
-			this->movementDir = dir;
-		}
-	}
 
-	void stop()
-	{
-		this->stopping = true;
-	}
+		// Stop if at a wall
+		else if(moving && justReachedDestination() && moveIntention != Direction::NONE &&
+			!canMoveIn(destination, moveIntention, tm))
+		{
+			stopMoving();
+		}
 
-	// Set position and stop movement
-	void setPos(sf::Vector2f pos)
-	{
-		this->pos = pos;
-		this->sprite.setPosition((float)ts * this->pos);
+		// Destination reached but continue in the same direction
+		else if(moving && justReachedDestination() && moveIntention != Direction::NONE &&
+			canMoveIn(destination, moveIntention, tm) && moveIntention == lastMove)
+		{
+			continueMovingFrom();
+		}
+
+		// Destination reached but continue in a different direction
+		else if(moving && justReachedDestination() && moveIntention != Direction::NONE &&
+			canMoveIn(destination, moveIntention, tm) && moveIntention != lastMove)
+		{
+			changeDirection(moveIntention);
+		}
+
+		// Destination not reached so keep going
+		else if(moving && !justReachedDestination())
+		{
+			continueMovingTo();
+		}
+
+		// Start moving from stationary
+		else if(!moving && moveIntention != Direction::NONE && canMoveIn(pos, moveIntention, tm))
+		{
+			startMoving(moveIntention);
+		}
 	}
 };
 
