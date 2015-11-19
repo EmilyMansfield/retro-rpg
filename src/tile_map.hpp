@@ -29,6 +29,6 @@ class TileMap : public sf::Drawable, public sf::Transformable
 	TileMap(JsonBox::Array& a, TileSet* tileset);
 
 	unsigned int at(unsigned int x, unsigned int y);
-	unsigned int at(sf::Vector2u pos);
+	unsigned int at(sf::Vector2f pos);
 };
 #endif /* TILE_MAP_HPP */

@@ -85,7 +85,7 @@ unsigned int TileMap::at(unsigned int x, unsigned int y)
 	return this->map[y * this->w + x];
 }
 
-unsigned int TileMap::at(sf::Vector2u pos)
+unsigned int TileMap::at(sf::Vector2f pos)
 {
-	return this->map[pos.y * this->w + pos.x];
+	return this->map[(unsigned int)(pos.y * this->w + pos.x)];
 }
