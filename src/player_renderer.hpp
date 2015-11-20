@@ -216,6 +216,12 @@ class PlayerRenderer
 		{
 			startMoving(moveIntention);
 		}
+
+		// Change direction but don't move
+		else if(!moving && moveIntention != Direction::NONE && !canMoveIn(pos, moveIntention, tm))
+		{
+			lastMove = moveIntention;
+		}
 	}
 };
 
