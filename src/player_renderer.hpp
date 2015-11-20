@@ -25,6 +25,9 @@ class PlayerRenderer
 	sf::Vector2f lastPos;
 	bool moving;
 	float interp;
+	float moveTimer;
+	float moveDelay = 0.15f;
+	bool moveTimerOn;
 
 	sf::Vector2f dirToVec(Direction dir)
 	{
@@ -76,6 +79,8 @@ class PlayerRenderer
 		this->moveIntention = Direction::NONE;
 		this->lastMove = Direction::SOUTH;
 		this->moving = false;
+		this->moveTimer = 0.0f;
+		this->moveTimerOn = false;
 	}
 
 
@@ -178,6 +183,15 @@ class PlayerRenderer
 		// Set direction to move in
 		this->moveIntention = dir;
 
+		// Increment the move delay counter if necessary
+		if(moveTimerOn) moveTimer += dt;
+		// Reset timer if no move button is held
+		if(moveIntention == Direction::NONE)
+		{
+			moveTimerOn = false;
+			moveTimer = 0.0f;
+		}
+
 		// Stop if at the destination
 		if(moving && justReachedDestination() && moveIntention == Direction::NONE)
 		{
@@ -211,10 +225,20 @@ class PlayerRenderer
 			continueMovingTo();
 		}
 
+		// Change direction from stationary, and start movement timer
+		else if(!moveTimerOn && !moving && moveIntention != Direction::NONE && canMoveIn(pos, moveIntention, tm))
+		{
+			moveTimerOn = true;
+			moveTimer = 0.0f;
+			lastMove = moveIntention;
+		}
+
 		// Start moving from stationary
-		else if(!moving && moveIntention != Direction::NONE && canMoveIn(pos, moveIntention, tm))
+		else if(moveTimerOn && moveTimer >= moveDelay && !moving && moveIntention != Direction::NONE && canMoveIn(pos, moveIntention, tm))
 		{
 			startMoving(moveIntention);
+			moveTimerOn = false;
+			moveTimer = 0.0f;
 		}
 
 		// Change direction but don't move
