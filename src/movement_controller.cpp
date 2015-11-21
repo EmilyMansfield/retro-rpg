@@ -157,7 +157,8 @@ void MovementController::step(float dt, Direction dir, TileMap& tm)
 	}
 
 	// Change direction from stationary, and start movement timer
-	else if(!moveTimerOn && !moving && moveIntention != Direction::NONE && canMoveIn(pos, moveIntention, tm))
+	else if(!moveTimerOn && !moving && moveIntention != Direction::NONE &&
+		canMoveIn(pos, moveIntention, tm))
 	{
 		moveTimerOn = true;
 		moveTimer = 0.0f;
@@ -165,7 +166,8 @@ void MovementController::step(float dt, Direction dir, TileMap& tm)
 	}
 
 	// Start moving from stationary
-	else if(moveTimerOn && moveTimer >= moveDelay && !moving && moveIntention != Direction::NONE && canMoveIn(pos, moveIntention, tm))
+	else if(moveTimerOn && moveTimer >= moveDelay && !moving && moveIntention != Direction::NONE &&
+		canMoveIn(pos, moveIntention, tm))
 	{
 		startMoving(moveIntention);
 		moveTimerOn = false;
@@ -173,7 +175,8 @@ void MovementController::step(float dt, Direction dir, TileMap& tm)
 	}
 
 	// Change direction but don't move
-	else if(!moving && moveIntention != Direction::NONE && !canMoveIn(pos, moveIntention, tm))
+	else if(!moving && moveIntention != Direction::NONE &&
+		!canMoveIn(pos, moveIntention, tm))
 	{
 		lastMove = moveIntention;
 	}
