@@ -1,13 +1,13 @@
 #ifndef PLAYER_RENDERER_HPP
 #define PLAYER_RENDERER_HPP
 
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <cmath>
+
 #include "tile_set.hpp"
 #include "tile_map.hpp"
 #include "movement_controller.hpp"
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <string>
-#include <cmath>
 
 class PlayerRenderer
 {
