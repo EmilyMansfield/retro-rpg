@@ -41,17 +41,21 @@ class PlayerRenderer
 		// Move player according to velocity
 		movementController.update(dt);
 		this->sprite.setPosition((float)ts * movementController.pos);
-		interp = 0.0f;
+		// Calculate the animation interpolation value by calculating
+		// how far through a single tile of movement the sprite is.
+		// Note that using modf would be safer, but we assume positions
+		// are smaller than 2^31, which I think is reasonable
+		sf::Vector2f p1 = movementController.pos;
+		sf::Vector2f p2 = sf::Vector2f((int)p1.x, (int)p1.y);
+		// One of these terms is zero, so this is equivalent to taking
+		// max(fabs(p1.x-p2.x), fabs(p1.y-p2.y))
+		interp = fabs(p1.x-p2.x) + fabs(p1.y-p2.y);
 
 		// id of the playing animation
 		std::string animString;
 		if(movementController.moving)
 		{
 			animString = std::string("player_walk_") + (char)movementController.movementDir();
-			// this->interp += dt * speed;
-
-			// Set the sprite position depending on the direction and interpolation
-			// this->sprite.setPosition((float)ts * (this->pos + this->interp * dirToVec(this->movementDir)));
 		}
 		else
 		{
