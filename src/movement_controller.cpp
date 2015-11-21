@@ -34,19 +34,19 @@ Direction MovementController::vecToDir(sf::Vector2f dir)
 		return (dir.y > 0 ? Direction::SOUTH : Direction::NORTH);
 }
 
-void MovementController::MovementController::continueMovingTo()
+void MovementController::setVelToDest()
 {
 	velocity = destination - pos;
 	velocity /= (float)sqrt(velocity.x*velocity.x+velocity.y*velocity.y);
 	velocity *= speed;
 }
 
-void MovementController::continueMovingFrom()
+void MovementController::resetVelToDest()
 {
 	// Set new destination
 	destination = destination + dirToVec(lastMove);
 	// Move towards new destination
-	continueMovingTo();
+	setVelToDest();
 }
 
 void MovementController::changeDirection(Direction dir)
@@ -56,7 +56,7 @@ void MovementController::changeDirection(Direction dir)
 	// Set new destination
 	destination = destination + dirToVec(dir);
 	// Move towards the new destination
-	continueMovingTo();
+	setVelToDest();
 	// Remember move
 	lastMove = dir;
 }
@@ -67,7 +67,7 @@ void MovementController::startMoving(Direction dir)
 	destination = pos + dirToVec(dir);
 	// Move
 	moving = true;
-	continueMovingTo();
+	setVelToDest();
 	// Remember move
 	lastMove = dir;
 }
@@ -140,7 +140,7 @@ void MovementController::step(float dt, Direction dir, TileMap& tm)
 	else if(moving && justReachedDestination() && moveIntention != Direction::NONE &&
 		canMoveIn(destination, moveIntention, tm) && moveIntention == lastMove)
 	{
-		continueMovingFrom();
+		resetVelToDest();
 	}
 
 	// Destination reached but continue in a different direction
@@ -153,7 +153,7 @@ void MovementController::step(float dt, Direction dir, TileMap& tm)
 	// Destination not reached so keep going
 	else if(moving && !justReachedDestination())
 	{
-		continueMovingTo();
+		setVelToDest();
 	}
 
 	// Change direction from stationary, and start movement timer
