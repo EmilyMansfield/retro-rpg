@@ -5,8 +5,9 @@
 #include <sstream>
 
 #include "message_box.hpp"
+#include "text.hpp"
 
-std::vector<std::string> gui::MessageBox::alignString(const std::string& str)
+std::vector<std::string> gui::MessageBox::alignString(const std::string& str) const
 {
 	std::vector<std::string> alignedLines;
 
@@ -85,4 +86,66 @@ std::vector<std::string> gui::MessageBox::alignString(const std::string& str)
 	}
 
 	return alignedLines;
+}
+
+void gui::MessageBox::createPages(const std::vector<std::string>& lines)
+{
+	size_t maxHeight = dimensions.height - 2;
+
+	std::string page = topBorder(dimensions.width);
+
+	for(size_t i = 0; i < lines.size(); ++i)
+	{
+		// There are maxHeight lines, so this is true on the last line
+		if(i % maxHeight == maxHeight-1)
+		{
+			// Add the line to the page, construct the corresponding
+			// gui::Text, then add it to the vector of pages
+			page += "\x86" + lines[i] + "\x84";
+			page += bottomBorder(dimensions.width);
+			pages.push_back(gui::Text(page, *font));
+			page = topBorder(dimensions.width);
+		}
+		else
+		{
+			page += "\x86" + lines[i] + "\x84\n";
+		}
+	}
+	// We'll still have a partial page unless the number of
+	// lines is divisible by the maximum height
+	if(lines.size() % maxHeight != 0)
+	{
+		page += bottomBorder(dimensions.width);
+		pages.push_back(gui::Text(page, *font));
+	}
+}
+
+std::string gui::MessageBox::topBorder(size_t length)
+{
+	std::string border = "\x80";
+	for(size_t i = 0; i < length; ++i)
+	{
+		border += "\x87";
+	}
+	border += "\x81";
+	return border;
+}
+
+std::string gui::MessageBox::bottomBorder(size_t length)
+{
+	std::string border = "\x83";
+	for(size_t i = 0; i < length; ++i)
+	{
+		border += "\x85";
+	}
+	border += "\x82";
+	return border;
+}
+
+gui::MessageBox::MessageBox(const sf::IntRect& dimensions,
+	const std::string& text, gui::Font& font)
+{
+	this->dimensions = dimensions;
+	this->font = &font;
+	createPages(alignString(text));
 }

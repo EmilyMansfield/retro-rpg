@@ -6,6 +6,7 @@
 #include <string>
 
 #include "text.hpp"
+#include "font.hpp"
 
 namespace gui
 {
@@ -18,15 +19,28 @@ class MessageBox
 
 	sf::IntRect dimensions;
 	std::vector<gui::Text> pages;
+	gui::Font* font;
 
 	// Take a string and split it into a number of line each
 	// fitting within the dimensions of the IntRect
-	std::vector<std::string> alignString(const std::string& str);
+	std::vector<std::string> alignString(const std::string& str) const;
+
+	// Given a list of lines, form those line into pages according to the
+	// dimensions of the IntRect and then generate the geometry for them
+	// via gui::Text
+	void createPages(const std::vector<std::string>& lines);
+
+	// Return border characters of given length, e.g.
+	// topBorder(8) = /------\
+	// bottomBorder(5) = \---/
+	std::string topBorder(size_t length);
+	std::string bottomBorder(size_t length);
 
 	public:
 
 	MessageBox() {}
-	MessageBox(const sf::IntRect& dimensions, const std::string& text);
+	MessageBox(const sf::IntRect& dimensions, const std::string& text,
+		gui::Font& font);
 };
 }
 #endif /* GUI_MESSAGE_BOX_HPP */
