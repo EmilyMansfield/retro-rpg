@@ -30,56 +30,24 @@ class Font
 
 	public:
 
-	Font() {}
-
 	// Load the font from an image file which has the characters from
 	// 0x20 to 0x9f arranged in a grid
-	bool loadFromFile(const std::string& filename, unsigned int characterSize = 8)
-	{
-		tex.loadFromFile(filename);
-		this->characterSize = characterSize;
-		this->width = tex.getSize().x / characterSize;
-	}
+	bool loadFromFile(const std::string& filename, unsigned int characterSize = 8);
 
-	Font(const std::string& filename, unsigned int characterSize = 8) : Font()
-	{
-		loadFromFile(filename, characterSize);
-	}
+	Font() {}
+	Font(const std::string& filename, unsigned int characterSize = 8);
 
 	// The benefit of using a getter here instead of making tex public
 	// is that we don't want the texture of a font to change, because
 	// then the rest of the object would become invalid
-	const sf::Texture& getTexture() const
-	{
-		return tex;
-	}
+	const sf::Texture& getTexture() const;
 
 	// Return an sf::Glyph object corresponding to the extended ascii character
 	// value codePoint
-	sf::Glyph getGlyph(unsigned int codePoint) const
-	{
-		sf::Glyph g;
-		// Allow for ASCII from space up to DEL (last standard character) and then allow for
-		// another custom 32 characters up to that
-		if(codePoint < 0x20 || codePoint > 0xA0) return g;
-		g.textureRect = sf::IntRect(
-			characterSize * (codePoint % width),
-			characterSize * ((codePoint-0x20) / width),
-			characterSize,
-			characterSize);
-		g.bounds = sf::FloatRect(0.0f, 0.0f, characterSize, characterSize);
-		g.advance = characterSize;
-
-		return g;
-	}
+	sf::Glyph getGlyph(unsigned int codePoint) const;
 
 	// Return the distance between consecutive lines of text
-	float getLineSpacing() const
-	{
-		// Fixed width fonts are separated by their character size
-		// both horizontally and vertically
-		return characterSize;
-	}
+	float getLineSpacing() const;
 };
 }
 #endif /* BITMAP_FONT_HPP */
