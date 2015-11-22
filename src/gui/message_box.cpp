@@ -140,6 +140,11 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 	// lines is divisible by the maximum height
 	if(lines.size() % maxHeight != 0)
 	{
+		// Add padding lines to make the page the desired height
+		for(size_t i = lines.size() % maxHeight; i <= maxHeight; ++i)
+		{
+			page += rowBorder(dimensions.width);
+		}
 		page += bottomBorder(dimensions.width);
 		pages.push_back(gui::Text(page, *font));
 	}
@@ -164,6 +169,17 @@ std::string gui::MessageBox::bottomBorder(size_t length)
 		border += "\x85";
 	}
 	border += "\x82";
+	return border;
+}
+
+std::string gui::MessageBox::rowBorder(size_t length)
+{
+	std::string border = "\x86";
+	for(size_t i = 1; i < length-1; ++i)
+	{
+		border += " ";
+	}
+	border += "\x84\n";
 	return border;
 }
 

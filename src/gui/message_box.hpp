@@ -34,6 +34,7 @@ class MessageBox
 	// bottomBorder(5) = \---/
 	std::string topBorder(size_t length);
 	std::string bottomBorder(size_t length);
+	std::string rowBorder(size_t length);
 
 	public:
 	std::vector<gui::Text> pages;
