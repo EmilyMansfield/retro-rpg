@@ -7,23 +7,44 @@
 
 #include "font.hpp"
 
+// gui::Text is a visual representation of an std::string drawn using
+// a gui::Font. The text may have a colour, like sf::Text, but each ascii
+// character may also have a filled background determined by a universal
+// background colour. To facillitate easy text colour changing the text
+// in the font is white (we can then multiply by the intended colour),
+// but then we can't include the background colour in the font. Instead
+// we separately draw a background under all ascii glyphs. Non-ascii
+// glyphs are geometrical characters, and cannot have their colour changed.
 namespace gui
 {
 class Text : public sf::Drawable, public sf::Transformable
 {
 	private:
 
+	// String of text to display. May contain non-ascii values
 	std::string text;
-	unsigned int characterSize;
+	// Font to draw text in
 	gui::Font* font;
+	// Colour of the text
 	sf::Color col;
+	// Background colour of all ascii text elements. Non-ascii elements
+	// (i.e. those above the 0x80 range) are used to print geometry pieces,
+	// which do not fill the entire glyph bounds and so handle their own
+	// backgrounds
 	sf::Color backgroundCol;
+	// 1x1 texture used to print the background
 	sf::Texture backgroundTex;
 
+	// Array of vertices corresponding to the bounds of the glyphs to draw
 	sf::VertexArray vertices;
+	// Array of bounds of ascii glyphs
 	sf::VertexArray backgroundVertices;
+
+	// Width and height of the produced text
 	sf::FloatRect bounds;
 
+	// Regenerate the geometry of the text, populating the vertex arrays
+	// and calculating the bounds
 	void generateGeometry()
 	{
 		// Each tile is a quad
@@ -31,6 +52,7 @@ class Text : public sf::Drawable, public sf::Transformable
 		backgroundVertices.setPrimitiveType(sf::Quads);
 
 		// Calculate number of non-newline glyphs
+		// (newlines do not require a quad)
 		size_t count = 0;
 		for(size_t i = 0; i < text.size(); ++i)
 		{
@@ -40,6 +62,7 @@ class Text : public sf::Drawable, public sf::Transformable
 		vertices.resize(4 * count);
 
 		// Calculate number of non-newline ascii glyphs
+		// (non-ascii characters do not require a background quad)
 		count = 0;
 		for(size_t i = 0; i < text.size(); ++i)
 		{
@@ -50,19 +73,27 @@ class Text : public sf::Drawable, public sf::Transformable
 
 		// Construct the vertex arrays and calculate the bounds
 		bounds = sf::FloatRect(0,0,0,0);
-		float x = 0;
+		float x = 0; // Current 'cursor' position, if you were typing the text
 		float y = 0;
+		// i is the index of the character in the text
+		// j is the index of the background quad
+		// k is the index of the glyph quad
 		for(size_t i = 0, j = 0, k = 0; i < text.size(); ++i)
 		{
+			// Newlines reset the cursor to the start of the next line
+			// On Windows, '\n' moves the the next line but does not
+			// move to the start, and an additional '\r' character is
+			// required. We ignore '\r' characters and adopt the POSIX
+			// convention (Linux, OSX, etc.) where '\n' does both.
 			if(text[i] == '\n')
 			{
 				x = 0;
-				y += font->getLineSpacing(characterSize);
+				y += font->getLineSpacing();
 			}
 			else
 			{
 				// Add the glyph to the vertex array
-				sf::Glyph g = font->getGlyph(text[i] & 0xff, characterSize, false);
+				sf::Glyph g = font->getGlyph(text[i] & 0xff);
 				// Pointer to the current quad. By treating this as an
 				// array we may easily access the vertices of the quad
 				// 3---2
@@ -80,7 +111,8 @@ class Text : public sf::Drawable, public sf::Transformable
 				quad[2].texCoords = sf::Vector2f(g.textureRect.left + g.textureRect.width, g.textureRect.top);
 				quad[3].texCoords = sf::Vector2f(g.textureRect.left, g.textureRect.top);
 
-				++k;
+				++k; // Just added a glyph to the array
+
 				// Add to the background glyphs if an ascii character
 				if((text[i] & 0xff) < 0x80)
 				{
@@ -96,27 +128,27 @@ class Text : public sf::Drawable, public sf::Transformable
 					quad[2].texCoords = sf::Vector2f(1, 1);
 					quad[3].texCoords = sf::Vector2f(0, 1);
 
-					++j;
+					++j; // Just added a background to the array
 				}
 
 				// Increase the current position by the glyph bounds
 				x += g.bounds.width;
-				// Adjust the bounds if necessary
+				// Adjust the bounds if necessary (i.e. keep track of the greatest x)
 				if(x > bounds.width) bounds.width = x;
 			}
 		}
+		// No need to keep track of greatest y for vertical bounds,
+		// since y only ever increases
 		bounds.height = y;
 	}
 
 	public:
 
 	Text() : font(nullptr) {}
-	Text(const std::string& text, Font& font,
-		unsigned int characterSize = 8)
+	Text(const std::string& text, Font& font)
 	{
 		this->text = text;
 		this->font = &font;
-		this->characterSize = characterSize;
 		this->backgroundCol = sf::Color(0,0,0,0);
 		this->col = sf::Color(0xff,0xff,0xff,0xff);
 		this->backgroundTex.create(1, 1);
@@ -126,6 +158,7 @@ class Text : public sf::Drawable, public sf::Transformable
 		generateGeometry();
 	}
 
+	// Override sf::Drawable::draw so the text can be printed using window.draw()
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		// Apply the transformation from sf::Transformable
@@ -140,13 +173,15 @@ class Text : public sf::Drawable, public sf::Transformable
 			target.draw(backgroundVertices, states);
 		}
 
-		// Set the texture
-		states.texture = &font->getTexture(characterSize);
+		// Set the glyph texture
+		states.texture = &font->getTexture();
 
-		// Draw the vertex array
+		// Draw the glyph vertex array
 		target.draw(vertices, states);
 	}
 
+	// Get a global position vector (after sf::Transformable transforms)
+	// to the index-th character in the string
 	sf::Vector2f findCharacterPos(size_t index) const
 	{
 		// Don't exceed text bounds
@@ -163,21 +198,26 @@ class Text : public sf::Drawable, public sf::Transformable
 			if(text[i] == '\n')
 			{
 				pos.x = 0;
-				pos.y += font->getLineSpacing(characterSize);
+				pos.y += font->getLineSpacing();
 			}
-			// Might as well be general and support non-fixed-width too
-			pos.x += font->getGlyph(text[i], characterSize, false).advance;
+			// This is equivalent to increasing by the font's
+			// characterSize in this case, but this is more natural
+			// (you'll get a speedup doing that though)
+			pos.x += font->getGlyph(text[i]).advance;
 		}
 
 		// Apply sf::Transformable transform to local position
 		return getTransform().transformPoint(pos);
 	}
 
-	unsigned int getCharacterSize() const
-	{
-		return characterSize;
-	}
-
+	// Why are we using getters and setters here?
+	// col is changeable without doing any regeneration of the text,
+	// but backgroundCol requires a texture update so must use a setter.
+	// We want to be consistent, so col uses a setter too.
+	// The font and string require geometry updates, so they also
+	// need setters, and hence have getters too.
+	// The bounds should also not be modifiable, so we use a getter
+	// for those too. (But no setters, of course!)
 	const sf::Color& getColor() const
 	{
 		return col;
@@ -208,17 +248,6 @@ class Text : public sf::Drawable, public sf::Transformable
 		return text;
 	}
 
-	unsigned int getStyle() const
-	{
-		return 0;
-	}
-
-	void setCharacterSize(unsigned int size)
-	{
-		characterSize = size;
-
-		generateGeometry();
-	}
 
 	void setColor(sf::Color& color)
 	{
