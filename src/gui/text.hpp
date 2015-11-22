@@ -50,7 +50,7 @@ class Text : public sf::Drawable, public sf::Transformable
 	public:
 
 	Text() : font(nullptr) {}
-	Text(const std::string& text, Font& font);
+	Text(const std::string& text, gui::Font& font);
 
 	// Override sf::Drawable::draw so the text can be printed using window.draw()
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
