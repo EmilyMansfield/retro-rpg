@@ -8,7 +8,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "")
 endif()
 
 # Set sources
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 include_directories(src/include)
 
 # Set compiler flags
