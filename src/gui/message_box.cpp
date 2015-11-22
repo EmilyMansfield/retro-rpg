@@ -57,14 +57,21 @@ std::vector<std::string> gui::MessageBox::alignString(const std::string& str) co
 				// longword
 				std::string partA = w.substr(0, maxWidth-1);
 				std::string partB = w.substr(maxWidth-1);
-				alignedLine += partA + "-";
+				alignedLine = partA + "-";
 				alignedLines.push_back(alignedLine);
-				alignedLine = partB;
-				width += partB.size();
+				// Now empty the line, replace the word by the second part
+				// and try again. This way we can hyphenate the same word
+				// multiple times if it's really long
+				alignedLine.clear();
+				*i = partB;
+				width = 0;
+				--i; continue;
 			}
 			// Otherwise if the word doesn't fit then add a newline,
 			// reset to the start of the next line, and try again
-			else if(width + w.size() >= maxWidth)
+			// +1 takes into account the space that would be added
+			// if this could fit onto the line
+			else if(width != 0 && width + w.size() + 1 > maxWidth)
 			{
 				alignedLines.push_back(alignedLine);
 				alignedLine.clear();
