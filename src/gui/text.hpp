@@ -5,15 +5,17 @@
 #include <string>
 #include <iostream>
 
-#include "bitmap_font.hpp"
+#include "font.hpp"
 
-class BitmapText : public sf::Drawable, public sf::Transformable
+namespace gui
+{
+class Text : public sf::Drawable, public sf::Transformable
 {
 	private:
 
 	std::string text;
 	unsigned int characterSize;
-	BitmapFont* font;
+	gui::Font* font;
 	sf::Color col;
 	sf::Color backgroundCol;
 	sf::Texture backgroundTex;
@@ -108,8 +110,8 @@ class BitmapText : public sf::Drawable, public sf::Transformable
 
 	public:
 
-	BitmapText() : font(nullptr) {}
-	BitmapText(const std::string& text, BitmapFont& font,
+	Text() : font(nullptr) {}
+	Text(const std::string& text, Font& font,
 		unsigned int characterSize = 8)
 	{
 		this->text = text;
@@ -186,7 +188,7 @@ class BitmapText : public sf::Drawable, public sf::Transformable
 		return backgroundCol;
 	}
 
-	const BitmapFont* getFont() const
+	const gui::Font* getFont() const
 	{
 		return font;
 	}
@@ -230,7 +232,7 @@ class BitmapText : public sf::Drawable, public sf::Transformable
 		backgroundTex.update(pixels);
 	}
 
-	void setFont(BitmapFont& font)
+	void setFont(gui::Font& font)
 	{
 		this->font = &font;
 
@@ -244,5 +246,6 @@ class BitmapText : public sf::Drawable, public sf::Transformable
 		generateGeometry();
 	}
 };
+}
 
 #endif /* BITMAP_TEXT_HPP */

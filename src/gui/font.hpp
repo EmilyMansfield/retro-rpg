@@ -3,12 +3,15 @@
 
 #include <SFML/Graphics.hpp>
 
-// We'll be dealing entirely with bitmap fonts as they'll
-// fit more with the aesthetic of the game, and they let us
-// create the dialogue borders using one system. If you
-// choose to use SFML's font system instead, then you'll have
-// to take this account and adapt Dialogue accordingly.
-class BitmapFont
+// We'll be dealing entirely with fixed-width bitmap fonts as they'll
+// fit more with the aesthetic of the game, and we can use them to
+// create boxes and dialogues using non-ascii characters. Our Font
+// class will resemble the sf::Font class, but it will lack many of
+// the irrelevant functions. (Unfortunately sf::Font has no virtual
+// methods, so we can't just redefine it and get a text class for free)
+namespace gui
+{
+class Font
 {
 	private:
 
@@ -21,7 +24,7 @@ class BitmapFont
 
 	public:
 
-	BitmapFont() {}
+	Font() {}
 
 	bool loadFromFile(const std::string& filename,
 		unsigned int characterSize = 8)
@@ -30,8 +33,8 @@ class BitmapFont
 		this->characterSize = characterSize;
 	}
 
-	BitmapFont(const std::string& filename,
-		unsigned int characterSize = 8) : BitmapFont()
+	Font(const std::string& filename,
+		unsigned int characterSize = 8) : Font()
 	{
 		loadFromFile(filename, characterSize);
 	}
@@ -82,5 +85,5 @@ class BitmapFont
 		return 0.0f;
 	}
 };
-
+}
 #endif /* BITMAP_FONT_HPP */

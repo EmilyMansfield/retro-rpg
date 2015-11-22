@@ -5,8 +5,8 @@
 #include "area.hpp"
 #include "tile_map.hpp"
 #include "player.hpp"
-#include "bitmap_font.hpp"
-#include "bitmap_text.hpp"
+#include "gui/font.hpp"
+#include "gui/text.hpp"
 
 class GameStateArea : public GameState
 {
@@ -15,8 +15,8 @@ class GameStateArea : public GameState
 	Area* area;
 	sf::View view;
 	Player* player;
-	BitmapFont font;
-	BitmapText text;
+	gui::Font font;
+	gui::Text text;
 
 	public:
 
@@ -38,7 +38,7 @@ class GameStateArea : public GameState
 		this->view.reset(sf::FloatRect(0.0f, 0.0f, 256.0f, 240.0f));
 
 		this->font.loadFromFile("assets/font.png");
-		this->text = BitmapText(
+		this->text = gui::Text(
 			"\x80\x87\x87\x87\x87\x87\x81\n\x86Hello\x84\n\x83\x85\x85\x85\x85\x85\x82",
 			this->font);
 		this->text.setBackgroundColor(sf::Color(0x00, 0x40, 0x58));
