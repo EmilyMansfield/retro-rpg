@@ -18,7 +18,6 @@ class MessageBox
 	private:
 
 	sf::IntRect dimensions;
-	std::vector<gui::Text> pages;
 	gui::Font* font;
 
 	// Take a string and split it into a number of line each
@@ -37,7 +36,7 @@ class MessageBox
 	std::string bottomBorder(size_t length);
 
 	public:
-
+	std::vector<gui::Text> pages;
 	MessageBox() {}
 	MessageBox(const sf::IntRect& dimensions, const std::string& text,
 		gui::Font& font);

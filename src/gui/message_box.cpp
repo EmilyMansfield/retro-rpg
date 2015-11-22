@@ -57,14 +57,17 @@ std::vector<std::string> gui::MessageBox::alignString(const std::string& str) co
 				// longword
 				std::string partA = w.substr(0, maxWidth-1);
 				std::string partB = w.substr(maxWidth-1);
-				alignedLine += partA + "-\n" + partB;
+				alignedLine += partA + "-";
+				alignedLines.push_back(alignedLine);
+				alignedLine = partB;
 				width += partB.size();
 			}
 			// Otherwise if the word doesn't fit then add a newline,
 			// reset to the start of the next line, and try again
-			else if(width + w.size() > maxWidth)
+			else if(width + w.size() >= maxWidth)
 			{
-				alignedLine += "\n";
+				alignedLines.push_back(alignedLine);
+				alignedLine.clear();
 				width = 0;
 				// No 'redo' or 'retry' in C++, but we can fake one
 				// by decrementing the iterator then continuing
@@ -91,6 +94,7 @@ std::vector<std::string> gui::MessageBox::alignString(const std::string& str) co
 void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 {
 	size_t maxHeight = dimensions.height - 2;
+	size_t maxWidth = dimensions.width - 2;
 
 	std::string page = topBorder(dimensions.width);
 
@@ -99,16 +103,30 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 		// There are maxHeight lines, so this is true on the last line
 		if(i % maxHeight == maxHeight-1)
 		{
-			// Add the line to the page, construct the corresponding
-			// gui::Text, then add it to the vector of pages
-			page += "\x86" + lines[i] + "\x84";
+			// Expand the line to the width of the box
+			std::string padding;
+			if(lines[i].size() < maxWidth)
+			{
+				for(size_t j = 0; j < maxWidth-lines[i].size(); ++j)
+					padding += " ";
+			}
+			// Surround the line with border to pieces and add it to the page
+			page += "\x86" + lines[i] + padding + "\x84\n";
+			// Add the bottom border of the page
 			page += bottomBorder(dimensions.width);
+			// Add the page to the list of pages and reset
 			pages.push_back(gui::Text(page, *font));
 			page = topBorder(dimensions.width);
 		}
 		else
 		{
-			page += "\x86" + lines[i] + "\x84\n";
+			std::string padding;
+			if(lines[i].size() < maxWidth)
+			{
+				for(size_t j = 0; j < maxWidth-lines[i].size(); ++j)
+					padding += " ";
+			}
+			page += "\x86" + lines[i] + padding + "\x84\n";
 		}
 	}
 	// We'll still have a partial page unless the number of
@@ -123,18 +141,18 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 std::string gui::MessageBox::topBorder(size_t length)
 {
 	std::string border = "\x80";
-	for(size_t i = 0; i < length; ++i)
+	for(size_t i = 1; i < length-1; ++i)
 	{
 		border += "\x87";
 	}
-	border += "\x81";
+	border += "\x81\n";
 	return border;
 }
 
 std::string gui::MessageBox::bottomBorder(size_t length)
 {
 	std::string border = "\x83";
-	for(size_t i = 0; i < length; ++i)
+	for(size_t i = 1; i < length-1; ++i)
 	{
 		border += "\x85";
 	}
