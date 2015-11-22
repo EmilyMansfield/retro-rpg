@@ -1,5 +1,5 @@
-#ifndef BITMAP_TEXT_HPP
-#define BITMAP_TEXT_HPP
+#ifndef GUI_TEXT_HPP
+#define GUI_TEXT_HPP
 
 #include <SFML/Graphics.hpp>
 #include <string>
@@ -81,4 +81,4 @@ class Text : public sf::Drawable, public sf::Transformable
 };
 }
 
-#endif /* BITMAP_TEXT_HPP */
+#endif /* GUI_TEXT_HPP */

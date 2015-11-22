@@ -1,5 +1,5 @@
-#ifndef BITMAP_FONT_HPP
-#define BITMAP_FONT_HPP
+#ifndef GUI_FONT_HPP
+#define GUI_FONT_HPP
 
 #include <SFML/Graphics.hpp>
 
@@ -50,4 +50,4 @@ class Font
 	float getLineSpacing() const;
 };
 }
-#endif /* BITMAP_FONT_HPP */
+#endif /* GUI_FONT_HPP */
