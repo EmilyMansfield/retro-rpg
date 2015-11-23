@@ -5,6 +5,30 @@
 #include "font.hpp"
 #include "text.hpp"
 
+void gui::Text::glyphToQuad(const sf::Glyph& g, sf::Vertex* quad,
+	const sf::Vector2f& pos, const sf::Color& col)
+{
+	// By treating the pointer as an array we may easily access
+	// the vertices of the quad
+	// 3---2
+	// |   |
+	// 0---1
+	quad[0].position = sf::Vector2f(pos.x, pos.y + g.bounds.height);
+	quad[1].position = sf::Vector2f(pos.x + g.bounds.width, pos.y + g.bounds.height);
+	quad[2].position = sf::Vector2f(pos.x + g.bounds.width, pos.y);
+	quad[3].position = sf::Vector2f(pos.x, pos.y);
+
+	quad[0].texCoords = sf::Vector2f(g.textureRect.left, g.textureRect.top + g.textureRect.height);
+	quad[1].texCoords = sf::Vector2f(g.textureRect.left + g.textureRect.width, g.textureRect.top + g.textureRect.height);
+	quad[2].texCoords = sf::Vector2f(g.textureRect.left + g.textureRect.width, g.textureRect.top);
+	quad[3].texCoords = sf::Vector2f(g.textureRect.left, g.textureRect.top);
+
+	quad[0].color = col;
+	quad[1].color = col;
+	quad[2].color = col;
+	quad[3].color = col;
+}
+
 void gui::Text::generateGeometry()
 {
 	// Each tile is a quad
@@ -13,10 +37,13 @@ void gui::Text::generateGeometry()
 
 	// Calculate number of non-newline glyphs
 	// (newlines do not require a quad)
+	// Double-count all border glyphs because they'll need both
+	// background and foreground pieces
 	size_t count = 0;
 	for(size_t i = 0; i < text.size(); ++i)
 	{
 		if(text[i] != '\n') ++count;
+		if(0x80 <= text[i] <= 0x88) ++count;
 	}
 	// Allocate space in the vertex array for them
 	vertices.resize(4 * count);
@@ -54,35 +81,23 @@ void gui::Text::generateGeometry()
 		{
 			// Add the glyph to the vertex array
 			sf::Glyph g = font->getGlyph(text[i] & 0xff);
-			// Pointer to the current quad. By treating this as an
-			// array we may easily access the vertices of the quad
-			// 3---2
-			// |   |
-			// 0---1
-			sf::Vertex* quad = &vertices[4*k];
-
-			quad[0].position = sf::Vector2f(x, y + g.bounds.height);
-			quad[1].position = sf::Vector2f(x + g.bounds.width, y + g.bounds.height);
-			quad[2].position = sf::Vector2f(x + g.bounds.width, y);
-			quad[3].position = sf::Vector2f(x, y);
-
-			quad[0].texCoords = sf::Vector2f(g.textureRect.left, g.textureRect.top + g.textureRect.height);
-			quad[1].texCoords = sf::Vector2f(g.textureRect.left + g.textureRect.width, g.textureRect.top + g.textureRect.height);
-			quad[2].texCoords = sf::Vector2f(g.textureRect.left + g.textureRect.width, g.textureRect.top);
-			quad[3].texCoords = sf::Vector2f(g.textureRect.left, g.textureRect.top);
-
+			glyphToQuad(g, &vertices[4*k], sf::Vector2f(x, y), col);
 			++k; // Just added a glyph to the array
 
-			// Add to the background glyphs if an ascii character
-			if((text[i] & 0xff) < 0x80)
+			// If a border character then add the background glyph too
+			// This is necessary because border glyphs only have partially
+			// filled backgrounds
+			if(0x80 <= (text[i] & 0xff) && (text[i] & 0xff) <= 0x88)
 			{
-				// Ascii glyphs should also change text colour
-				quad[0].color = col;
-				quad[1].color = col;
-				quad[2].color = col;
-				quad[3].color = col;
-
-				quad = &backgroundVertices[4*j];
+				// Background glyphs for borders are 0x20 later
+				sf::Glyph bg = font->getGlyph((text[i] & 0xff) + 0x20);
+				glyphToQuad(bg, &vertices[4*k], sf::Vector2f(x, y), backgroundCol);
+				++k;
+			}
+			// Add to the background glyphs if an ascii character
+			else if((text[i] & 0xff) < 0x80)
+			{
+				sf::Vertex* quad = &backgroundVertices[4*j];
 
 				quad[0].position = sf::Vector2f(x, y + g.bounds.height);
 				quad[1].position = sf::Vector2f(x + g.bounds.width, y + g.bounds.height);
@@ -191,6 +206,7 @@ void gui::Text::setBackgroundColor(const sf::Color& color)
 	backgroundCol = color;
 	unsigned char pixels[4] = {color.r, color.g, color.b, color.a};
 	backgroundTex.update(pixels);
+	generateGeometry();
 }
 
 void gui::Text::setFont(gui::Font& font)

@@ -23,8 +23,8 @@ sf::Glyph gui::Font::getGlyph(unsigned int codePoint) const
 {
 	sf::Glyph g;
 	// Allow for ASCII from space up to DEL (last standard character) and then allow for
-	// another custom 32 characters up to that
-	if(codePoint < 0x20 || codePoint > 0xA0) return g;
+	// another custom 64 characters after that
+	if(codePoint < 0x20 || codePoint > 0xC0) return g;
 	g.textureRect = sf::IntRect(
 		characterSize * (codePoint % width),
 		characterSize * ((codePoint-0x20) / width),

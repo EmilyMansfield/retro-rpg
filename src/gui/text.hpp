@@ -47,6 +47,10 @@ class Text : public sf::Drawable, public sf::Transformable
 	// and calculating the bounds
 	void generateGeometry();
 
+	// Construct a textured quad with position pos  and colour col from a glyph
+	void glyphToQuad(const sf::Glyph& g, sf::Vertex* quad,
+		const sf::Vector2f& pos, const sf::Color& col = sf::Color::Black);
+
 	public:
 
 	Text() : font(nullptr) {}

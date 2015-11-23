@@ -7,6 +7,7 @@
 #include "player.hpp"
 #include "gui/font.hpp"
 #include "gui/text.hpp"
+#include "gui/message_box.hpp"
 
 class GameStateArea : public GameState
 {
@@ -16,7 +17,7 @@ class GameStateArea : public GameState
 	sf::View view;
 	Player* player;
 	gui::Font font;
-	gui::Text text;
+	gui::MessageBox msgBox;
 
 	public:
 
@@ -38,11 +39,11 @@ class GameStateArea : public GameState
 		this->view.reset(sf::FloatRect(0.0f, 0.0f, 256.0f, 240.0f));
 
 		this->font.loadFromFile("assets/font.png");
-		this->text = gui::Text(
-			"\x80\x87\x87\x87\x87\x87\x81\n\x86Hello\x84\n\x83\x85\x85\x85\x85\x85\x82",
+		this->msgBox = gui::MessageBox(
+			sf::IntRect(0, 0, 32, 5),
+			"Hello, world!\nHow's it going, are you done yet?",
 			this->font);
-		this->text.setBackgroundColor(sf::Color(0x00, 0x40, 0x58));
-		this->text.setPosition(0, 7*tm.ts);
+		this->msgBox.setPosition(0, 7*tm.ts);
 	}
 };
 
