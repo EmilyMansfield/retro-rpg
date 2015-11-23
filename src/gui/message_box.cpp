@@ -199,6 +199,25 @@ gui::MessageBox::MessageBox(const sf::IntRect& dimensions,
 {
 	this->dimensions = dimensions;
 	this->font = &font;
-	createPages(alignString(text));
 	this->currentPage = 0;
+	createPages(alignString(text));
+	// Set the background colours
+	for(auto& page : pages)
+	{
+		page.setBackgroundColor(sf::Color(0x00, 0x40, 0x58));
+	}
+}
+
+void gui::MessageBox::setPage(unsigned int page)
+{
+	if(page >= pages.size())
+		page = pages.size() % page;
+	currentPage = page;
+}
+unsigned int gui::MessageBox::getPage() const { return currentPage; }
+
+void gui::MessageBox::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	states.transform *= getTransform();
+	pages.at(currentPage).draw(target, states);
 }

@@ -13,12 +13,14 @@ namespace gui
 // The gui::MessageBox class takes a string of arbitrary length to display,
 // and splits it up into pages of text that fit into a given box size. It also
 // adds a border around each page of text.
-class MessageBox
+class MessageBox : public sf::Drawable, public sf::Transformable
 {
 	private:
 
 	sf::IntRect dimensions;
 	gui::Font* font;
+	std::vector<gui::Text> pages;
+	unsigned int currentPage;
 
 	// Take a string and split it into a number of line each
 	// fitting within the dimensions of the IntRect
@@ -37,10 +39,17 @@ class MessageBox
 	std::string rowBorder(size_t length);
 
 	public:
-	std::vector<gui::Text> pages;
+
 	MessageBox() {}
 	MessageBox(const sf::IntRect& dimensions, const std::string& text,
 		gui::Font& font);
+
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+	// Sets the current page and checks bounds too, looping if too high
+	void setPage(unsigned int page);
+	// Have to use a getter since we used a setter
+	unsigned int getPage() const;
 };
 }
 #endif /* GUI_MESSAGE_BOX_HPP */
