@@ -105,6 +105,17 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 
 	std::string page = topBorder(dimensions.width);
 
+	// If the lines vector is empty, we'll just make a blank box
+	if(lines.size() == 0)
+	{
+		for(size_t i = 0; i < maxHeight; ++i)
+			page += rowBorder(dimensions.width);
+		page += bottomBorder(dimensions.width);
+		pages.push_back(gui::Text(page, *font));
+		return;
+	}
+
+	// Otherwise there are lines of text so we can add them
 	for(size_t i = 0; i < lines.size(); ++i)
 	{
 		// There are maxHeight lines, so this is true on the last line
@@ -189,4 +200,5 @@ gui::MessageBox::MessageBox(const sf::IntRect& dimensions,
 	this->dimensions = dimensions;
 	this->font = &font;
 	createPages(alignString(text));
+	this->currentPage = 0;
 }
