@@ -76,6 +76,12 @@ void gui::Text::generateGeometry()
 			// Add to the background glyphs if an ascii character
 			if((text[i] & 0xff) < 0x80)
 			{
+				// Ascii glyphs should also change text colour
+				quad[0].color = col;
+				quad[1].color = col;
+				quad[2].color = col;
+				quad[3].color = col;
+
 				quad = &backgroundVertices[4*j];
 
 				quad[0].position = sf::Vector2f(x, y + g.bounds.height);
@@ -174,10 +180,10 @@ sf::FloatRect gui::Text::getGlobalBounds()		const
 	return getTransform().transformRect(bounds);
 }
 
-
-void gui::Text::setColor(sf::Color& color)
+void gui::Text::setColor(const sf::Color& color)
 {
 	col = color;
+	generateGeometry();
 }
 
 void gui::Text::setBackgroundColor(const sf::Color& color)

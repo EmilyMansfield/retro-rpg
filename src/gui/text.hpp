@@ -74,7 +74,7 @@ class Text : public sf::Drawable, public sf::Transformable
 	sf::FloatRect		getGlobalBounds()	const;
 	const std::string&	getString()			const;
 
-	void setColor(sf::Color& color);
+	void setColor(const sf::Color& color);
 	void setBackgroundColor(const sf::Color& color);
 	void setFont(gui::Font& font);
 	void setString(const std::string& string);
