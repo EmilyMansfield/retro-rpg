@@ -3,6 +3,7 @@
 #include <iterator>
 #include <string>
 #include <sstream>
+#include <iostream>
 
 #include "message_box.hpp"
 #include "text.hpp"

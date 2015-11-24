@@ -49,7 +49,7 @@ namespace gui
 // size is determined by the font (since our fonts are fixed size,
 // if you're using sf::Font you'll have to specify characterSize
 // in the constructor).
-class Menu
+class Menu : public sf::Drawable, public sf::Transformable
 {
 	private:
 
@@ -86,6 +86,8 @@ class Menu
 	void activate(unsigned int index);
 
 	void addEntry(const std::string& entry, void (*callback)(int));
+
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 }
 

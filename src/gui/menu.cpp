@@ -1,17 +1,9 @@
 #include <utility>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 #include "menu.hpp"
 #include "message_box.hpp"
-
-gui::Menu::Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
-		const gui::Font& font)
-{
-	this->alignment = alignment;
-	this->entrySize = entrySize;
-	this->font = &font;
-	generateGeometry();
-}
 
 void gui::Menu::generateGeometry()
 {
@@ -24,8 +16,8 @@ void gui::Menu::generateGeometry()
 	// quotient of (number of entries) / (entries per row) will give
 	// the number of completed rows, and the remainder will give the
 	// number of entries on the partially completed row.
-	unsigned int numRows = alignment.x / entrySize.x;
-	unsigned int partialRow = alignment.x % entrySize.x;
+	unsigned int numRows = entries.size() / alignment.x;
+	unsigned int partialRow = entries.size() % alignment.x;
 	// We now concatenate the first entrySize.y lines of each
 	// group of alignment.x entries. As an example if alignment is (3,1)
 	// and entrySize is (5, 2) we will transform
@@ -87,17 +79,17 @@ void gui::Menu::generateGeometry()
 		}
 	}
 	// Now do the last partial row, if there is one
-	if(partialRow > 0)
-	{
-		for(unsigned int line = 0; line < entrySize.y; ++line)
-		{
-			std::string alignedLine;
-			for(unsigned int entry = 0; entry < partialRow; ++entry)
-			{
-				alignedLine += alignedEntries[(numRows-1) * alignment.x + entry][line];
-			}
-		}
-	}
+	// if(partialRow > 0)
+	// {
+	// 	for(unsigned int line = 0; line < entrySize.y; ++line)
+	// 	{
+	// 		std::string alignedLine;
+	// 		for(unsigned int entry = 0; entry < partialRow; ++entry)
+	// 		{
+	// 			alignedLine += alignedEntries[(numRows-1) * alignment.x + entry][line];
+	// 		}
+	// 	}
+	// }
 
 	// Now every line has been padded we can form a single string from them and
 	// pass them to gui::MessageBox to get formatted output. gui::MessageBox
@@ -116,7 +108,8 @@ void gui::Menu::generateGeometry()
 	// padding, there's alignment.x of them, and there's two more for the border.
 	sf::IntRect msgBoxBounds(0, 0,
 		alignment.x * (entrySize.x + 2) + 2,
-		entrySize.y * (numRows + (partialRow > 0 ? 1 : 0) + 2));
+		alignment.y * entrySize.y + 2);
+
 	std::string msgBoxStr;
 	// The number of aligned lines will not be equal to msgBoxBounds.y in general,
 	// so we will iterate up to the minimum of the two and then fill the rest with
@@ -154,5 +147,20 @@ void gui::Menu::activate(unsigned int index)
 void gui::Menu::addEntry(const std::string& entry, void (*callback)(int))
 {
 	entries.push_back(std::make_pair(entry, callback));
+	generateGeometry();
+}
+
+void gui::Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	states.transform *= getTransform();
+	msgBox.draw(target, states);
+}
+
+gui::Menu::Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
+		const gui::Font& font)
+{
+	this->alignment = alignment;
+	this->entrySize = entrySize;
+	this->font = &font;
 	generateGeometry();
 }
