@@ -18,7 +18,7 @@ class MessageBox : public sf::Drawable, public sf::Transformable
 	private:
 
 	sf::IntRect dimensions;
-	gui::Font* font;
+	const gui::Font* font;
 	std::vector<gui::Text> pages;
 	unsigned int currentPage;
 
@@ -42,7 +42,7 @@ class MessageBox : public sf::Drawable, public sf::Transformable
 
 	MessageBox() {}
 	MessageBox(const sf::IntRect& dimensions, const std::string& text,
-		gui::Font& font);
+		const gui::Font& font);
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

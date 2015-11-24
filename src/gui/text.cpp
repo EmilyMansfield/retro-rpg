@@ -123,7 +123,7 @@ void gui::Text::generateGeometry()
 	bounds.height = y;
 }
 
-gui::Text::Text(const std::string& text, Font& font)
+gui::Text::Text(const std::string& text, const Font& font)
 {
 	this->text = text;
 	this->font = &font;
@@ -209,7 +209,7 @@ void gui::Text::setBackgroundColor(const sf::Color& color)
 	generateGeometry();
 }
 
-void gui::Text::setFont(gui::Font& font)
+void gui::Text::setFont(const gui::Font& font)
 {
 	this->font = &font;
 	generateGeometry();

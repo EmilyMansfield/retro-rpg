@@ -24,7 +24,7 @@ class Text : public sf::Drawable, public sf::Transformable
 	// String of text to display. May contain non-ascii values
 	std::string text;
 	// Font to draw text in
-	gui::Font* font;
+	const gui::Font* font;
 	// Colour of the text
 	sf::Color col;
 	// Background colour of all ascii text elements. Non-ascii elements
@@ -54,7 +54,7 @@ class Text : public sf::Drawable, public sf::Transformable
 	public:
 
 	Text() : font(nullptr) {}
-	Text(const std::string& text, gui::Font& font);
+	Text(const std::string& text, const gui::Font& font);
 
 	// Override sf::Drawable::draw so the text can be printed using window.draw()
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -80,7 +80,7 @@ class Text : public sf::Drawable, public sf::Transformable
 
 	void setColor(const sf::Color& color);
 	void setBackgroundColor(const sf::Color& color);
-	void setFont(gui::Font& font);
+	void setFont(const gui::Font& font);
 	void setString(const std::string& string);
 };
 }

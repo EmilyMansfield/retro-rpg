@@ -195,7 +195,7 @@ std::string gui::MessageBox::rowBorder(size_t length)
 }
 
 gui::MessageBox::MessageBox(const sf::IntRect& dimensions,
-	const std::string& text, gui::Font& font)
+	const std::string& text, const gui::Font& font)
 {
 	this->dimensions = dimensions;
 	this->font = &font;
