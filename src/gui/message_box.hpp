@@ -10,6 +10,10 @@
 
 namespace gui
 {
+// Take a string and split it into a number of lines each
+// fitting within the given width
+std::vector<std::string> alignString(const std::string& str, unsigned int maxWidth);
+
 // The gui::MessageBox class takes a string of arbitrary length to display,
 // and splits it up into pages of text that fit into a given box size. It also
 // adds a border around each page of text.
@@ -21,10 +25,6 @@ class MessageBox : public sf::Drawable, public sf::Transformable
 	const gui::Font* font;
 	std::vector<gui::Text> pages;
 	unsigned int currentPage;
-
-	// Take a string and split it into a number of line each
-	// fitting within the dimensions of the IntRect
-	std::vector<std::string> alignString(const std::string& str) const;
 
 	// Given a list of lines, form those line into pages according to the
 	// dimensions of the IntRect and then generate the geometry for them

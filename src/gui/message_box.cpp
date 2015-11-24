@@ -7,13 +7,10 @@
 #include "message_box.hpp"
 #include "text.hpp"
 
-std::vector<std::string> gui::MessageBox::alignString(const std::string& str) const
+std::vector<std::string> gui::alignString(const std::string& str,
+	unsigned int maxWidth)
 {
 	std::vector<std::string> alignedLines;
-
-	// We'll add a border, so the dimensions the string should fit
-	// in are smaller than the dimensions of the message box
-	size_t maxWidth = dimensions.width - 2;
 
 	// First we split up str into lines, determined by manually placed
 	// newlines in the string. We do this before splitting into words
@@ -200,7 +197,7 @@ gui::MessageBox::MessageBox(const sf::IntRect& dimensions,
 	this->dimensions = dimensions;
 	this->font = &font;
 	this->currentPage = 0;
-	createPages(alignString(text));
+	createPages(gui::alignString(text, dimensions.width-2));
 	// Set the background colours
 	for(auto& page : pages)
 	{
