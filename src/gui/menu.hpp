@@ -2,7 +2,7 @@
 #define MENU_HPP
 
 #include <utility>
-#include <sfml/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "message_box.hpp"
 
@@ -57,7 +57,7 @@ class Menu
 	// to right and top to bottom as in the example, along with
 	// their callbacks. We maintain this vector to allow for
 	// dynamic insertion and deletion of elements.
-	std::vector<std::string, void (*)(int)> entries;
+	std::vector<std::pair<std::string, void (*)(int)>> entries;
 	// The overall menu is a single gui::MessageBox object
 	// created by stitching each individual entry together
 	// in the correct pattern
@@ -89,4 +89,4 @@ class Menu
 };
 }
 
-#endif MENU_HPP
+#endif /* MENU_HPP */
