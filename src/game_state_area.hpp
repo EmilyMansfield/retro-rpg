@@ -6,8 +6,8 @@
 #include "tile_map.hpp"
 #include "player.hpp"
 #include "gui/font.hpp"
-#include "gui/text.hpp"
 #include "gui/message_box.hpp"
+#include "gui/menu.hpp"
 
 class GameStateArea : public GameState
 {
@@ -18,6 +18,7 @@ class GameStateArea : public GameState
 	Player* player;
 	gui::Font font;
 	gui::MessageBox msgBox;
+	gui::Menu menu;
 
 	public:
 
@@ -44,6 +45,13 @@ class GameStateArea : public GameState
 			"Hello, world!\nHow's it going, are you done yet?",
 			this->font);
 		this->msgBox.setPosition(0, 7*tm.ts);
+
+		this->menu = gui::Menu(sf::Vector2u(2, 3), sf::Vector2u(6, 1), this->font);
+		this->menu.setPosition(0*tm.ts, 10*tm.ts);
+		this->menu.addEntry("Hello", nullptr);
+		this->menu.addEntry("World", nullptr);
+		this->menu.addEntry("Foobar", nullptr);
+		this->menu.addEntry("Fish", nullptr);
 	}
 };
 

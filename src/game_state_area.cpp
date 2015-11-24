@@ -35,4 +35,5 @@ void GameStateArea::draw(sf::RenderWindow& window, float dt) const
 	window.draw(this->area->tilemap);
 	window.draw(this->player->renderer.sprite);
 	window.draw(this->msgBox);
+	window.draw(this->menu);
 }
