@@ -8,30 +8,29 @@
 
 namespace gui
 {
-// A Menu consists of an ordered set of gui::Text entries, each
-// of which can be selected via the activate function.
-// Each entry has an associated callback function which is
-// called if that entry is activated, and which accepts
-// a single argument equal to the index of the entry. The callback
-// should return void.
+// A Menu consists of an ordered set of entries, each of which can be
+// selected via the activate function. Each entry has an associated
+// callback function which is called if that entry is activated, and
+// which accepts a single argument equal to the index of the entry.
+// The callback should return void.
 
-// Each entry is created from an std::string and a callback, and
-// the string is converted into a gui::Text object automatically
-// according to the chosen alignment of the Menu. The alignment
-// describes the number of items in each horizontal row of the
-// Menu, and the number of items in each vertical column. The
-// sizes of each individual gui::Text is also determined by the
-// Menu's bounds, which describes the height and width of each
-// gui::Text entry.
-// e.g., with bounds of 8x2, alignment of 2x3 we would have
-// the following 22x8 structure
+// Each entry is created from an std::string and a callback, and the
+// strings are concatenated and converted into a gui::Text object
+// automatically according to the chosen alignment of the Menu. The
+// alignment describes the width and height of the menu, in entries.
+// The size of each entry is determined by the entrySize argument,
+// which is measured in characters. e.g., with entrySize of 8x2,
+// alignment of 2x3 we would have the following 22x8 structure
+
 // /--------------------\
 // | Option 1  Option 2 |
 // | Option 3 *Opt 4    |
 // | Opt 5     Option 6 |
 // \--------------------/
-// and with bounds of 10x2, alignment of 1x3, the following
-// 14x10 structure
+
+// and with entrySize of 10x2, alignment of 1x3, the following 14x10
+// structure
+
 // /------------\
 // | This is a  |
 // | long one.  |
@@ -40,15 +39,15 @@ namespace gui
 // | Padding is |
 // | not shrunk |
 // \----------- /
-//
+
 // Note that horizontal padding is added on both sides of each option,
 // to make room for the selector * which can be added to an entry via
 // the select function and which marks the currently selected entry.
 
-// All dimensions are given in characters, not in pixels. Character
-// size is determined by the font (since our fonts are fixed size,
-// if you're using sf::Font you'll have to specify characterSize
+// Character size is determined by the font (since our fonts are fixed
+// size, if you're using sf::Font you'll have to specify characterSize
 // in the constructor).
+
 class Menu : public sf::Drawable, public sf::Transformable
 {
 	private:
@@ -58,7 +57,7 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// their callbacks. We maintain this vector to allow for
 	// dynamic insertion and deletion of elements.
 	std::vector<std::pair<std::string, void (*)(int)>> entries;
-	// The overall menu is a single gui::MessageBox object
+	// The overall menu is a single gui::Text object
 	// created by stitching each individual entry together
 	// in the correct pattern
 	gui::Text text;

@@ -1,9 +1,7 @@
 #include <utility>
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 #include "menu.hpp"
-#include "message_box.hpp"
 
 void gui::Menu::generateGeometry()
 {
@@ -92,32 +90,33 @@ void gui::Menu::generateGeometry()
 	// 	}
 	// }
 
+	// Width and height of final text, without borders
 	unsigned int width = alignment.x * (entrySize.x + 2);
 	unsigned int height = alignment.y * entrySize.y;
 
 	// Add top border
-	std::string msgBoxStr = "\x80" + std::string(width, '\x87') + "\x81\n";
+	std::string textStr = "\x80" + std::string(width, '\x87') + "\x81\n";
 
 	// Add entry lines, up to the maximum number allowable
 	unsigned int bound = alignedLines.size();
 	if(bound > height) bound = height;
 	for(unsigned int i = 0; i < bound; ++i)
 	{
-		msgBoxStr += "\x86" + alignedLines[i] + "\x84\n";
+		textStr += "\x86" + alignedLines[i] + "\x84\n";
 	}
 
 	// Add padding lines, up to the indented height
 	std::string padding(width, ' ');
 	for(unsigned int i = bound; i < height; ++i)
 	{
-		msgBoxStr += "\x86" + padding + "\x84\n";
+		textStr += "\x86" + padding + "\x84\n";
 	}
 
 	// Add bottom border
-	msgBoxStr += "\x83" + std::string(width, '\x85') + "\x82";
+	textStr += "\x83" + std::string(width, '\x85') + "\x82";
 
 	// Finally we can create the gui::Text
-	text = gui::Text(msgBoxStr, *font);
+	text = gui::Text(textStr, *font);
 }
 
 void gui::Menu::select(unsigned int index, unsigned char selector)

@@ -10,10 +10,6 @@
 
 namespace gui
 {
-// Take a string and split it into a number of lines each
-// fitting within the given width
-std::vector<std::string> alignString(const std::string& str, unsigned int maxWidth);
-
 // The gui::MessageBox class takes a string of arbitrary length to display,
 // and splits it up into pages of text that fit into a given box size. It also
 // adds a border around each page of text.
