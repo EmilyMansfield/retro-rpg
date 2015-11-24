@@ -32,8 +32,7 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 			std::string padding;
 			if(lines[i].size() < maxWidth)
 			{
-				for(size_t j = 0; j < maxWidth-lines[i].size(); ++j)
-					padding += " ";
+				padding = std::string(maxWidth - lines[i].size(), ' ');
 			}
 			// Surround the line with border to pieces and add it to the page
 			page += "\x86" + lines[i] + padding + "\x84\n";
@@ -70,35 +69,17 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 
 std::string gui::MessageBox::topBorder(size_t length)
 {
-	std::string border = "\x80";
-	for(size_t i = 1; i < length-1; ++i)
-	{
-		border += "\x87";
-	}
-	border += "\x81\n";
-	return border;
+	return "\x80" + std::string(length-2, '\x87') + "\x81\n";
 }
 
 std::string gui::MessageBox::bottomBorder(size_t length)
 {
-	std::string border = "\x83";
-	for(size_t i = 1; i < length-1; ++i)
-	{
-		border += "\x85";
-	}
-	border += "\x82";
-	return border;
+	return "\x83" + std::string(length-2, '\x85') + "\x82";
 }
 
 std::string gui::MessageBox::rowBorder(size_t length)
 {
-	std::string border = "\x86";
-	for(size_t i = 1; i < length-1; ++i)
-	{
-		border += " ";
-	}
-	border += "\x84\n";
-	return border;
+	return "\x86" + std::string(length-2, ' ') + "\x84\n";
 }
 
 gui::MessageBox::MessageBox(const sf::IntRect& dimensions,

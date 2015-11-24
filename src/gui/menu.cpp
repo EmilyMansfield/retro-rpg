@@ -47,18 +47,12 @@ void gui::Menu::generateGeometry()
 			// which is equivalent to each entry being surrounded by 1
 			// space. Each entry should also have additional right padding
 			// so that it's the same length as entrySize.x
-			// Have to evaluate dif first, because .size changes during the loop
-			size_t dif = entrySize.x - entry[row].size();
-			for(size_t i = 0; i < dif; ++i) entry[row] += " ";
-			entry[row] = " " + entry[row] + " ";
+			entry[row] = " " + entry[row] + std::string(1 + entrySize.x - entry[row].size(), ' ');
 		}
 		// Now add additional rows made of whitespace, if necessary
 		for(size_t row = entry.size(); row < entrySize.y; ++row)
 		{
-			std::string line;
-			for(size_t i = 0; i < entrySize.x + 2; ++i)
-				line += " ";
-			entry.push_back(line);
+			entry.push_back(std::string(entrySize.x + 2, ' '));
 		}
 	}
 	// Now each entry is padded, they can be combined
