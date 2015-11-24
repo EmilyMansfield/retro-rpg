@@ -4,7 +4,7 @@
 #include <utility>
 #include <SFML/Graphics.hpp>
 
-#include "message_box.hpp"
+#include "text.hpp"
 
 namespace gui
 {
@@ -61,7 +61,7 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// The overall menu is a single gui::MessageBox object
 	// created by stitching each individual entry together
 	// in the correct pattern
-	gui::MessageBox msgBox;
+	gui::Text text;
 	// Number of entries in width x height format,
 	// *not* rows x columns 
 	sf::Vector2u alignment;

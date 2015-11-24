@@ -49,8 +49,9 @@ void gui::Menu::generateGeometry()
 			// which is equivalent to each entry being surrounded by 1
 			// space. Each entry should also have additional right padding
 			// so that it's the same length as entrySize.x
-			for(size_t i = 0; i < entrySize.x - entry[row].size(); ++i)
-				entry[row] += " ";
+			// Have to evaluate dif first, because .size changes during the loop
+			size_t dif = entrySize.x - entry[row].size();
+			for(size_t i = 0; i < dif; ++i) entry[row] += " ";
 			entry[row] = " " + entry[row] + " ";
 		}
 		// Now add additional rows made of whitespace, if necessary
@@ -91,47 +92,32 @@ void gui::Menu::generateGeometry()
 	// 	}
 	// }
 
-	// Now every line has been padded we can form a single string from them and
-	// pass them to gui::MessageBox to get formatted output. gui::MessageBox
-	// won't need to do any alignment (if everything worked properly) because
-	// we've already ensured that everything is the right length, but it will
-	// put a border around everything and generate the required gui::Text element.
-	// 
-	// The total number of lines we want gui::MessageBox to work with is
-	// entrySize.y * [numRows + (1 if partial row)] + 2
-	// Since each row has entrySize.y lines, there's no vertical padding,
-	// there's numRows (+1) rows, and there's two extra lines for the border.
-	//
-	// The total width of the gui::MessageBox is
-	// alignment.x * (entrySize.x + 2) + 2
-	// since each entry is entrySize.x wide, they have two extra characters for
-	// padding, there's alignment.x of them, and there's two more for the border.
-	sf::IntRect msgBoxBounds(0, 0,
-		alignment.x * (entrySize.x + 2) + 2,
-		alignment.y * entrySize.y + 2);
+	unsigned int width = alignment.x * (entrySize.x + 2);
+	unsigned int height = alignment.y * entrySize.y;
 
-	std::string msgBoxStr;
-	// The number of aligned lines will not be equal to msgBoxBounds.y in general,
-	// so we will iterate up to the minimum of the two and then fill the rest with
-	// blank lines
+	// Add top border
+	std::string msgBoxStr = "\x80" + std::string(width, '\x87') + "\x81\n";
+
+	// Add entry lines, up to the maximum number allowable
 	unsigned int bound = alignedLines.size();
-	if(bound > msgBoxBounds.height) bound = msgBoxBounds.height;
+	if(bound > height) bound = height;
 	for(unsigned int i = 0; i < bound; ++i)
 	{
-		msgBoxStr += alignedLines[i];
-		if(i != msgBoxBounds.height-1) msgBoxStr += "\n"; // Don't add newline to last line
-	}
-	std::string padding;
-	for(unsigned int i = 0; i < msgBoxBounds.width; ++i)
-		padding += " ";
-	for(unsigned int i = bound; i < msgBoxBounds.height; ++i)
-	{
-		msgBoxStr += padding;
-		if(i != msgBoxBounds.height-1) msgBoxStr += "\n";
+		msgBoxStr += "\x86" + alignedLines[i] + "\x84\n";
 	}
 
-	// Finally we can create the gui::MessageBox
-	msgBox = gui::MessageBox(msgBoxBounds, msgBoxStr, *font);
+	// Add padding lines, up to the indented height
+	std::string padding(width, ' ');
+	for(unsigned int i = bound; i < height; ++i)
+	{
+		msgBoxStr += "\x86" + padding + "\x84\n";
+	}
+
+	// Add bottom border
+	msgBoxStr += "\x83" + std::string(width, '\x85') + "\x82";
+
+	// Finally we can create the gui::Text
+	text = gui::Text(msgBoxStr, *font);
 }
 
 void gui::Menu::select(unsigned int index, unsigned char selector)
@@ -153,7 +139,7 @@ void gui::Menu::addEntry(const std::string& entry, void (*callback)(int))
 void gui::Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
-	msgBox.draw(target, states);
+	text.draw(target, states);
 }
 
 gui::Menu::Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
