@@ -72,17 +72,19 @@ void gui::Menu::generateGeometry()
 		}
 	}
 	// Now do the last partial row, if there is one
-	// if(partialRow > 0)
-	// {
-	// 	for(unsigned int line = 0; line < entrySize.y; ++line)
-	// 	{
-	// 		std::string alignedLine;
-	// 		for(unsigned int entry = 0; entry < partialRow; ++entry)
-	// 		{
-	// 			alignedLine += alignedEntries[(numRows-1) * alignment.x + entry][line];
-	// 		}
-	// 	}
-	// }
+	if(partialRow > 0)
+	{
+		for(unsigned int line = 0; line < entrySize.y; ++line)
+		{
+			std::string alignedLine;
+			for(unsigned int entry = 0; entry < partialRow; ++entry)
+			{
+				alignedLine += alignedEntries[numRows * alignment.x + entry][line];
+			}
+			alignedLine += std::string((alignment.x-partialRow) * (2+entrySize.x), ' ');
+			alignedLines.push_back(alignedLine);
+		}
+	}
 
 	// Width and height of final text, without borders
 	unsigned int width = alignment.x * (entrySize.x + 2);
