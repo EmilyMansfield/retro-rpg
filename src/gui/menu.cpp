@@ -38,8 +38,11 @@ void gui::Menu::formatEntries()
 	// Note that we will also add the correct padding, and will discard any
 	// text outside of the bounds (if each entry were a messagebox, they would
 	// be on another page).
-	for(auto& entry : alignedEntries)
+	for(unsigned int i = 0; i < alignedEntries.size(); ++i)
 	{
+		// We need an index variable to check for selected elements
+		auto& entry = alignedEntries[i];
+
 		// First pad the existing rows
 		for(size_t row = 0; row < entry.size(); ++row)
 		{
@@ -47,7 +50,8 @@ void gui::Menu::formatEntries()
 			// which is equivalent to each entry being surrounded by 1
 			// space. Each entry should also have additional right padding
 			// so that it's the same length as entrySize.x
-			entry[row] = " " + entry[row] + std::string(1 + entrySize.x - entry[row].size(), ' ');
+			entry[row] = (i == selectedEntry ? std::string(1, selectorCharacter) : " ") +
+				entry[row] + std::string(1 + entrySize.x - entry[row].size(), ' ');
 		}
 		// Now add additional rows made of whitespace, if necessary
 		for(size_t row = entry.size(); row < entrySize.y; ++row)
@@ -122,6 +126,9 @@ void gui::Menu::generateGeometry()
 
 void gui::Menu::select(unsigned int index, unsigned char selector)
 {
+	selectedEntry = index;
+	selectorCharacter = selector;
+	formatEntries();
 	generateGeometry();
 }
 
@@ -151,6 +158,8 @@ gui::Menu::Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
 	this->font = &font;
 	this->textCol = textCol;
 	this->backgroundCol = backgroundCol;
+	this->selectedEntry = 0;
+	this->selectorCharacter = ' ';
 	formatEntries();
 	generateGeometry();
 }

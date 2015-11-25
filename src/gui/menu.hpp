@@ -72,6 +72,9 @@ class Menu : public sf::Drawable, public sf::Transformable
 	sf::Vector2u entrySize;
 	// Font to use
 	const gui::Font* font;
+	// The currently selected element and its selector character
+	unsigned int selectedEntry;
+	unsigned char selectorCharacter;
 
 	// We have to store these ourselves because generateGeometry
 	// will reset the text properties
