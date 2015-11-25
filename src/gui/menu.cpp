@@ -3,7 +3,7 @@
 
 #include "menu.hpp"
 
-void gui::Menu::generateGeometry()
+void gui::Menu::formatEntries()
 {
 	// First split each entry into lines which fit within the desired bounds
 	std::vector<std::vector<std::string>> alignedEntries;
@@ -56,7 +56,7 @@ void gui::Menu::generateGeometry()
 		}
 	}
 	// Now each entry is padded, they can be combined
-	std::vector<std::string> alignedLines;
+	alignedLines.clear();
 	// Note row is not a line, but rather a row of entries
 	// which may span multiple lines
 	for(unsigned int row = 0; row < numRows; ++row)
@@ -85,7 +85,10 @@ void gui::Menu::generateGeometry()
 			alignedLines.push_back(alignedLine);
 		}
 	}
+}
 
+void gui::Menu::generateGeometry()
+{
 	// Width and height of final text, without borders
 	unsigned int width = alignment.x * (entrySize.x + 2);
 	unsigned int height = alignment.y * entrySize.y;
@@ -130,6 +133,7 @@ void gui::Menu::activate(unsigned int index)
 void gui::Menu::addEntry(const std::string& entry, void (*callback)(int))
 {
 	entries.push_back(std::make_pair(entry, callback));
+	formatEntries();
 	generateGeometry();
 }
 
@@ -147,6 +151,7 @@ gui::Menu::Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
 	this->font = &font;
 	this->textCol = textCol;
 	this->backgroundCol = backgroundCol;
+	formatEntries();
 	generateGeometry();
 }
 

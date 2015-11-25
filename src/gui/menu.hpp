@@ -57,6 +57,10 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// their callbacks. We maintain this vector to allow for
 	// dynamic insertion and deletion of elements.
 	std::vector<std::pair<std::string, void (*)(int)>> entries;
+	// Preprocessed entries which have been aligned and split into
+	// lines. This only needs to be regenerated when the entries
+	// themselves are changed
+	std::vector<std::string> alignedLines;
 	// The overall menu is a single gui::Text object
 	// created by stitching each individual entry together
 	// in the correct pattern
@@ -74,6 +78,7 @@ class Menu : public sf::Drawable, public sf::Transformable
 	sf::Color backgroundCol;
 	sf::Color textCol;
 
+	void formatEntries();
 	void generateGeometry();
 
 	public:
