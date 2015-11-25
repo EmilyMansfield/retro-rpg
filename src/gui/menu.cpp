@@ -113,6 +113,8 @@ void gui::Menu::generateGeometry()
 
 	// Finally we can create the gui::Text
 	text = gui::Text(textStr, *font);
+	text.setColor(textCol);
+	text.setBackgroundColor(backgroundCol);
 }
 
 void gui::Menu::select(unsigned int index, unsigned char selector)
@@ -143,5 +145,22 @@ gui::Menu::Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
 	this->alignment = alignment;
 	this->entrySize = entrySize;
 	this->font = &font;
+	this->textCol = sf::Color(0xff, 0xff, 0xff);
+	this->backgroundCol = sf::Color(0x00, 0x40, 0x58);
 	generateGeometry();
+}
+
+const sf::Color& gui::Menu::getBackgroundColor() const { return text.getBackgroundColor(); }
+const sf::Color& gui::Menu::getColor()			 const { return text.getColor(); }
+
+void gui::Menu::setBackgroundColor(const sf::Color& col)
+{
+	backgroundCol = col;
+	text.setBackgroundColor(col);
+}
+
+void gui::Menu::setColor(const sf::Color& col)
+{
+	textCol = col;
+	text.setColor(col);
 }

@@ -69,6 +69,11 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// Font to use
 	const gui::Font* font;
 
+	// We have to store these ourselves because generateGeometry
+	// will reset the text properties
+	sf::Color backgroundCol;
+	sf::Color textCol;
+
 	void generateGeometry();
 
 	public:
@@ -87,6 +92,11 @@ class Menu : public sf::Drawable, public sf::Transformable
 	void addEntry(const std::string& entry, void (*callback)(int));
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+	void setBackgroundColor(const sf::Color& col);
+	void setColor(const sf::Color& col);
+	const sf::Color& getBackgroundColor() const;
+	const sf::Color& getColor() const;
 };
 }
 
