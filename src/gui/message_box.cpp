@@ -18,7 +18,7 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 		for(size_t i = 0; i < maxHeight; ++i)
 			page += rowBorder(dimensions.width);
 		page += bottomBorder(dimensions.width);
-		pages.push_back(gui::Text(page, *font));
+		pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
 		return;
 	}
 
@@ -39,7 +39,7 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 			// Add the bottom border of the page
 			page += bottomBorder(dimensions.width);
 			// Add the page to the list of pages and reset
-			pages.push_back(gui::Text(page, *font));
+			pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
 			page = topBorder(dimensions.width);
 		}
 		else
@@ -63,7 +63,7 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 			page += rowBorder(dimensions.width);
 		}
 		page += bottomBorder(dimensions.width);
-		pages.push_back(gui::Text(page, *font));
+		pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
 	}
 }
 
@@ -83,17 +83,15 @@ std::string gui::MessageBox::rowBorder(size_t length)
 }
 
 gui::MessageBox::MessageBox(const sf::IntRect& dimensions,
-	const std::string& text, const gui::Font& font)
+	const std::string& text, const gui::Font& font,
+	const sf::Color& backgroundCol, const sf::Color& textCol)
 {
 	this->dimensions = dimensions;
 	this->font = &font;
 	this->currentPage = 0;
+	this->backgroundCol = backgroundCol;
+	this->textCol = textCol;
 	createPages(gui::alignString(text, dimensions.width-2));
-	// Set the background colours
-	for(auto& page : pages)
-	{
-		page.setBackgroundColor(sf::Color(0x00, 0x40, 0x58));
-	}
 }
 
 void gui::MessageBox::setPage(unsigned int page)

@@ -26,7 +26,7 @@ class Text : public sf::Drawable, public sf::Transformable
 	// Font to draw text in
 	const gui::Font* font;
 	// Colour of the text
-	sf::Color col;
+	sf::Color textCol;
 	// Background colour of all ascii text elements. Non-ascii elements
 	// (i.e. those above the 0x80 range) are used to print geometry pieces,
 	// which do not fill the entire glyph bounds and so handle their own
@@ -54,7 +54,9 @@ class Text : public sf::Drawable, public sf::Transformable
 	public:
 
 	Text() : font(nullptr) {}
-	Text(const std::string& text, const gui::Font& font);
+	Text(const std::string& text, const gui::Font& font,
+		const sf::Color& backgroundCol = sf::Color(0x00, 0x40, 0x58),
+		const sf::Color& textCol = sf::Color(0xff, 0xff, 0xff));
 
 	// Override sf::Drawable::draw so the text can be printed using window.draw()
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -64,11 +66,9 @@ class Text : public sf::Drawable, public sf::Transformable
 	sf::Vector2f findCharacterPos(size_t index) const;
 
 	// Why are we using getters and setters here?
-	// col is changeable without doing any regeneration of the text,
-	// but backgroundCol requires a texture update so must use a setter.
-	// We want to be consistent, so col uses a setter too.
-	// The font and string require geometry updates, so they also
-	// need setters, and hence have getters too.
+	// Changing most of the variables requires a geometry regeneration
+	// before the change is visible, which we can force if we make
+	// the variables private and only allow changes through setters
 	// The bounds should also not be modifiable, so we use a getter
 	// for those too. (But no setters, of course!)
 	const sf::Color&	getColor()			const;

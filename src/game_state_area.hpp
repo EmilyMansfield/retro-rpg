@@ -46,7 +46,8 @@ class GameStateArea : public GameState
 			this->font);
 		this->msgBox.setPosition(0, 7*tm.ts);
 
-		this->menu = gui::Menu(sf::Vector2u(2, 3), sf::Vector2u(6, 1), this->font);
+		this->menu = gui::Menu(sf::Vector2u(2, 3), sf::Vector2u(6, 1), this->font,
+			sf::Color(0x00, 0x40, 0x58));
 		this->menu.setPosition(0*tm.ts, 10*tm.ts);
 		this->menu.addEntry("Hello", nullptr);
 		this->menu.addEntry("World", nullptr);

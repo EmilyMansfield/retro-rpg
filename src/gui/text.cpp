@@ -83,7 +83,7 @@ void gui::Text::generateGeometry()
 		{
 			// Add the glyph to the vertex array
 			sf::Glyph g = font->getGlyph(text[i] & 0xff);
-			glyphToQuad(g, &vertices[4*k], sf::Vector2f(x, y), col);
+			glyphToQuad(g, &vertices[4*k], sf::Vector2f(x, y), textCol);
 			++k; // Just added a glyph to the array
 
 			// If a border character then add the background glyph too
@@ -125,14 +125,20 @@ void gui::Text::generateGeometry()
 	bounds.height = y;
 }
 
-gui::Text::Text(const std::string& text, const Font& font)
+gui::Text::Text(const std::string& text, const gui::Font& font,
+	const sf::Color& backgroundCol, const sf::Color& textCol)
 {
 	this->text = text;
 	this->font = &font;
-	this->backgroundCol = sf::Color(0,0,0,0);
-	this->col = sf::Color(0xff,0xff,0xff,0xff);
+	this->backgroundCol = backgroundCol;
+	this->textCol = textCol;
 	this->backgroundTex.create(1, 1);
-	unsigned char pixels[4] = {0, 0, 0, 0};
+	unsigned char pixels[4] = {
+		backgroundCol.r,
+		backgroundCol.g,
+		backgroundCol.b,
+		backgroundCol.a
+	};
 	this->backgroundTex.update(pixels);
 
 	generateGeometry();
@@ -187,7 +193,7 @@ sf::Vector2f gui::Text::findCharacterPos(size_t index) const
 	return getTransform().transformPoint(pos);
 }
 
-const sf::Color& gui::Text::getColor()			const { return col; }
+const sf::Color& gui::Text::getColor()			const { return textCol; }
 const sf::Color& gui::Text::getBackgroundColor()const { return backgroundCol; }
 const gui::Font* gui::Text::getFont()			const { return font; }
 const std::string& gui::Text::getString()		const { return text; }
@@ -199,7 +205,7 @@ sf::FloatRect gui::Text::getGlobalBounds()		const
 
 void gui::Text::setColor(const sf::Color& color)
 {
-	col = color;
+	textCol = color;
 	generateGeometry();
 }
 

@@ -140,27 +140,27 @@ void gui::Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 gui::Menu::Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
-		const gui::Font& font)
+		const gui::Font& font, const sf::Color& backgroundCol, const sf::Color& textCol)
 {
 	this->alignment = alignment;
 	this->entrySize = entrySize;
 	this->font = &font;
-	this->textCol = sf::Color(0xff, 0xff, 0xff);
-	this->backgroundCol = sf::Color(0x00, 0x40, 0x58);
+	this->textCol = textCol;
+	this->backgroundCol = backgroundCol;
 	generateGeometry();
 }
 
 const sf::Color& gui::Menu::getBackgroundColor() const { return text.getBackgroundColor(); }
 const sf::Color& gui::Menu::getColor()			 const { return text.getColor(); }
 
-void gui::Menu::setBackgroundColor(const sf::Color& col)
+void gui::Menu::setBackgroundColor(const sf::Color& backgroundCol)
 {
-	backgroundCol = col;
-	text.setBackgroundColor(col);
+	this->backgroundCol = backgroundCol;
+	text.setBackgroundColor(backgroundCol);
 }
 
-void gui::Menu::setColor(const sf::Color& col)
+void gui::Menu::setColor(const sf::Color& textCol)
 {
-	textCol = col;
-	text.setColor(col);
+	this->textCol = textCol;
+	text.setColor(textCol);
 }

@@ -80,7 +80,8 @@ class Menu : public sf::Drawable, public sf::Transformable
 
 	Menu() {}
 	Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
-		const gui::Font& font);
+		const gui::Font& font, const sf::Color& backgroundCol = sf::Color(0x00, 0x40, 0x58),
+		const sf::Color& textCol = sf::Color(0xff, 0xff, 0xff));
 
 	// Mark an entry as selected by adding a selector before its entry,
 	// by default `*`. Can be a non-ascii character.
@@ -93,8 +94,8 @@ class Menu : public sf::Drawable, public sf::Transformable
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	void setBackgroundColor(const sf::Color& col);
-	void setColor(const sf::Color& col);
+	void setBackgroundColor(const sf::Color& textCol);
+	void setColor(const sf::Color& textCol);
 	const sf::Color& getBackgroundColor() const;
 	const sf::Color& getColor() const;
 };
