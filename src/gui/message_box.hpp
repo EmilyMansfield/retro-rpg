@@ -17,7 +17,7 @@ class MessageBox : public sf::Drawable, public sf::Transformable
 {
 	private:
 
-	sf::IntRect dimensions;
+	sf::Vector2u dimensions;
 	const gui::Font* font;
 	std::vector<gui::Text> pages;
 	unsigned int currentPage;
@@ -26,7 +26,7 @@ class MessageBox : public sf::Drawable, public sf::Transformable
 	sf::Color textCol;
 
 	// Given a list of lines, form those line into pages according to the
-	// dimensions of the IntRect and then generate the geometry for them
+	// dimensions of the Vector2u and then generate the geometry for them
 	// via gui::Text
 	void createPages(const std::vector<std::string>& lines);
 
@@ -40,7 +40,7 @@ class MessageBox : public sf::Drawable, public sf::Transformable
 	public:
 
 	MessageBox() {}
-	MessageBox(const sf::IntRect& dimensions, const std::string& text,
+	MessageBox(const sf::Vector2u& dimensions, const std::string& text,
 		const gui::Font& font, const sf::Color& backgroundCol = sf::Color(0x00, 0x40, 0x58),
 		const sf::Color& textCol = sf::Color(0xff, 0xff, 0xff));
 

@@ -41,7 +41,7 @@ class GameStateArea : public GameState
 
 		this->font.loadFromFile("assets/font.png");
 		this->msgBox = gui::MessageBox(
-			sf::IntRect(0, 0, 32, 5),
+			sf::Vector2u(32, 5),
 			"Hello, world!\nHow's it going, are you done yet?",
 			this->font);
 		this->msgBox.setPosition(0, 7*tm.ts);

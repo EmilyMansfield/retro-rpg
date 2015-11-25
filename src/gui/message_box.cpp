@@ -7,17 +7,17 @@
 
 void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 {
-	size_t maxHeight = dimensions.height - 2;
-	size_t maxWidth = dimensions.width - 2;
+	size_t maxHeight = dimensions.y - 2;
+	size_t maxWidth = dimensions.x - 2;
 
-	std::string page = topBorder(dimensions.width);
+	std::string page = topBorder(dimensions.x);
 
 	// If the lines vector is empty, we'll just make a blank box
 	if(lines.size() == 0)
 	{
 		for(size_t i = 0; i < maxHeight; ++i)
-			page += rowBorder(dimensions.width);
-		page += bottomBorder(dimensions.width);
+			page += rowBorder(dimensions.x);
+		page += bottomBorder(dimensions.x);
 		pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
 		return;
 	}
@@ -37,10 +37,10 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 			// Surround the line with border to pieces and add it to the page
 			page += "\x86" + lines[i] + padding + "\x84\n";
 			// Add the bottom border of the page
-			page += bottomBorder(dimensions.width);
+			page += bottomBorder(dimensions.x);
 			// Add the page to the list of pages and reset
 			pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
-			page = topBorder(dimensions.width);
+			page = topBorder(dimensions.x);
 		}
 		else
 		{
@@ -60,9 +60,9 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 		// Add padding lines to make the page the desired height
 		for(size_t i = lines.size() % maxHeight; i <= maxHeight; ++i)
 		{
-			page += rowBorder(dimensions.width);
+			page += rowBorder(dimensions.x);
 		}
-		page += bottomBorder(dimensions.width);
+		page += bottomBorder(dimensions.x);
 		pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
 	}
 }
@@ -82,7 +82,7 @@ std::string gui::MessageBox::rowBorder(size_t length)
 	return "\x86" + std::string(length-2, ' ') + "\x84\n";
 }
 
-gui::MessageBox::MessageBox(const sf::IntRect& dimensions,
+gui::MessageBox::MessageBox(const sf::Vector2u& dimensions,
 	const std::string& text, const gui::Font& font,
 	const sf::Color& backgroundCol, const sf::Color& textCol)
 {
@@ -91,7 +91,7 @@ gui::MessageBox::MessageBox(const sf::IntRect& dimensions,
 	this->currentPage = 0;
 	this->backgroundCol = backgroundCol;
 	this->textCol = textCol;
-	createPages(gui::alignString(text, dimensions.width-2));
+	createPages(gui::alignString(text, dimensions.x-2));
 }
 
 void gui::MessageBox::setPage(unsigned int page)
