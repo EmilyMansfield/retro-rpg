@@ -12,7 +12,7 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 include_directories(src/include)
 
 # Set compiler flags
-set(CMAKE_CXX_FLAGS -std=c++11)
+set(CMAKE_CXX_FLAGS "-std=c++11")
 set(PROJECT_LINK_LIBS m)
 
 # Add the final executable to be built
