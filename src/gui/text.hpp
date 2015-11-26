@@ -84,10 +84,6 @@ class Text : public sf::Drawable, public sf::Transformable
 	void setFont(const gui::Font& font);
 	void setString(const std::string& string);
 };
-
-// Take a string and split it into a number of lines each
-// fitting within the given width
-std::vector<std::string> alignString(const std::string& str, unsigned int maxWidth);
 }
 
 #endif /* GUI_TEXT_HPP */

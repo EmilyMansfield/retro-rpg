@@ -2,6 +2,8 @@
 #define GUI_HPP
 
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include <string>
 
 namespace gui
 {
@@ -46,6 +48,11 @@ namespace gui
 		static const sf::Color fg(0xff, 0xff, 0xff);
 		static const sf::Color bg(0x00, 0x40, 0x58);
 	}
+
+	// Take a string and split it into a number of lines each
+	// fitting within the given width
+	std::vector<std::string> alignString(const std::string& str,
+		unsigned int maxWidth);
 }
 
 #endif /* GUI_HPP */
