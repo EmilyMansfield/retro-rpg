@@ -4,6 +4,7 @@
 #include <utility>
 #include <SFML/Graphics.hpp>
 
+#include "gui.hpp"
 #include "text.hpp"
 
 namespace gui
@@ -88,8 +89,8 @@ class Menu : public sf::Drawable, public sf::Transformable
 
 	Menu() {}
 	Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
-		const gui::Font& font, const sf::Color& backgroundCol = sf::Color(0x00, 0x40, 0x58),
-		const sf::Color& textCol = sf::Color(0xff, 0xff, 0xff));
+		const gui::Font& font, const sf::Color& backgroundCol = gui::Style::bg,
+		const sf::Color& textCol = gui::Style::fg);
 
 	// Mark an entry as selected by adding a selector before its entry,
 	// by default `*`. Can be a non-ascii character.

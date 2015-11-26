@@ -1,6 +1,7 @@
 #include <utility>
 #include <SFML/Graphics.hpp>
 
+#include "gui.hpp"
 #include "menu.hpp"
 
 void gui::Menu::formatEntries()
@@ -98,25 +99,25 @@ void gui::Menu::generateGeometry()
 	unsigned int height = alignment.y * entrySize.y;
 
 	// Add top border
-	std::string textStr = "\x80" + std::string(width, '\x87') + "\x81\n";
+	std::string textStr = gui::Border::genTop(width+2);
 
 	// Add entry lines, up to the maximum number allowable
 	unsigned int bound = alignedLines.size();
 	if(bound > height) bound = height;
 	for(unsigned int i = 0; i < bound; ++i)
 	{
-		textStr += "\x86" + alignedLines[i] + "\x84\n";
+		textStr += gui::Border::surround(alignedLines[i]) + "\n";
 	}
 
 	// Add padding lines, up to the indented height
 	std::string padding(width, ' ');
 	for(unsigned int i = bound; i < height; ++i)
 	{
-		textStr += "\x86" + padding + "\x84\n";
+		textStr += gui::Border::surround(padding) + "\n";
 	}
 
 	// Add bottom border
-	textStr += "\x83" + std::string(width, '\x85') + "\x82";
+	textStr += gui::Border::genBottom(width+2);
 
 	// Finally we can create the gui::Text
 	text = gui::Text(textStr, *font);

@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "gui.hpp"
 #include "font.hpp"
 
 // gui::Text is a visual representation of an std::string drawn using
@@ -55,8 +56,8 @@ class Text : public sf::Drawable, public sf::Transformable
 
 	Text() : font(nullptr) {}
 	Text(const std::string& text, const gui::Font& font,
-		const sf::Color& backgroundCol = sf::Color(0x00, 0x40, 0x58),
-		const sf::Color& textCol = sf::Color(0xff, 0xff, 0xff));
+		const sf::Color& backgroundCol = gui::Style::bg,
+		const sf::Color& textCol = gui::Style::fg);
 
 	// Override sf::Drawable::draw so the text can be printed using window.draw()
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

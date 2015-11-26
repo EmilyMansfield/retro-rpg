@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 
+#include "gui.hpp"
 #include "text.hpp"
 #include "font.hpp"
 
@@ -41,8 +42,8 @@ class MessageBox : public sf::Drawable, public sf::Transformable
 
 	MessageBox() {}
 	MessageBox(const sf::Vector2u& dimensions, const std::string& text,
-		const gui::Font& font, const sf::Color& backgroundCol = sf::Color(0x00, 0x40, 0x58),
-		const sf::Color& textCol = sf::Color(0xff, 0xff, 0xff));
+		const gui::Font& font, const sf::Color& backgroundCol = gui::Style::bg,
+		const sf::Color& textCol = gui::Style::fg);
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
