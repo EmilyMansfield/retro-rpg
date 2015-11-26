@@ -22,25 +22,19 @@ namespace gui
 
 		static inline std::string genTop(size_t length)
 		{
-			return gui::Border::topLeft +
-				std::string(length-2, gui::Border::top[0]) + 
-				gui::Border::topRight + "\n";
+			return topLeft + std::string(length-2, top[0]) + topRight + "\n";
 		}
 		static inline std::string genBottom(size_t length)
 		{
-			return gui::Border::bottomLeft +
-				std::string(length-2, gui::Border::bottom[0]) + 
-				gui::Border::bottomRight;
+			return bottomLeft + std::string(length-2, bottom[0]) + bottomRight;
 		}
 		static inline std::string genRow(size_t length)
 		{
-			return gui::Border::left +
-				std::string(length-2, ' ') + 
-				gui::Border::right + "\n";
+			return left + std::string(length-2, ' ') + right + "\n";
 		}
 		static inline std::string surround(const std::string& str)
 		{
-			return gui::Border::left + str + gui::Border::right;
+			return left + str + right;
 		}
 	}
 
