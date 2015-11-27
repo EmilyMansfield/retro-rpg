@@ -60,7 +60,7 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// to right and top to bottom as in the example, along with
 	// their callbacks. We maintain this vector to allow for
 	// dynamic insertion and deletion of elements.
-	std::vector<std::pair<std::string, void (*)(int)>> entries;
+	std::vector<std::pair<std::string, void (*)(void*, int)>> entries;
 	// Preprocessed entries which have been aligned and split into
 	// lines. This only needs to be regenerated when the entries
 	// themselves are changed
@@ -106,11 +106,10 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// ADVANCE - Reset to the start of the next row or column
 	void navigate(gui::Direction dir, gui::NavigationMode xMode, gui::NavigationMode yMode);
 
-	// Call the callback associated with the index, and pass through the
-	// index of the option as an argument
-	void activate(unsigned int index);
+	// Call the callback associated with the currently selected entry
+	void activate(void* ptr);
 
-	void addEntry(const std::string& entry, void (*callback)(int));
+	void addEntry(const std::string& entry, void (*callback)(void*, int));
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

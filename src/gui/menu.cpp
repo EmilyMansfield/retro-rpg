@@ -133,12 +133,13 @@ void gui::Menu::select(unsigned int index, unsigned char selector)
 	generateGeometry();
 }
 
-void gui::Menu::activate(unsigned int index)
+void gui::Menu::activate(void* ptr)
 {
-	entries.at(index).second(index);
+	if(entries.at(selectedEntry).second)
+		entries.at(selectedEntry).second(ptr, selectedEntry);
 }
 
-void gui::Menu::addEntry(const std::string& entry, void (*callback)(int))
+void gui::Menu::addEntry(const std::string& entry, void (*callback)(void*, int))
 {
 	entries.push_back(std::make_pair(entry, callback));
 	formatEntries();

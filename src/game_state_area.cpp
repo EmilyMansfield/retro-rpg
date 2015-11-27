@@ -9,24 +9,29 @@ void GameStateArea::handleEvent(sf::Event& event)
 {
 	if(event.type == sf::Event::KeyPressed)
 	{
-		// Open/close the start menu
-		if(event.key.code == sf::Keyboard::Return)
+		if(startMenuVisible)
 		{
-			startMenuVisible = !startMenuVisible;
-			startMenu.select(0, '*');
-		}
-
-		// Handle menu navigation
-		else if(startMenuVisible)
-		{
+			// Handle menu navigation
 			if(event.key.code == sf::Keyboard::Up)
 				startMenu.navigate(gui::Direction::UP, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
-			if(event.key.code == sf::Keyboard::Right)
+			else if(event.key.code == sf::Keyboard::Right)
 				startMenu.navigate(gui::Direction::RIGHT, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
-			if(event.key.code == sf::Keyboard::Down)
+			else if(event.key.code == sf::Keyboard::Down)
 				startMenu.navigate(gui::Direction::DOWN, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
-			if(event.key.code == sf::Keyboard::Left)
+			else if(event.key.code == sf::Keyboard::Left)
 				startMenu.navigate(gui::Direction::LEFT, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
+			// Open a menu option
+			else if(event.key.code == sf::Keyboard::Return)
+				startMenu.activate(this);
+		}
+		else
+		{
+			// Open the start menu
+			if(event.key.code == sf::Keyboard::Return)
+			{
+				startMenuVisible = true;
+				startMenu.select(0, '*');
+			}	
 		}
 	}
 }
@@ -63,4 +68,21 @@ void GameStateArea::draw(sf::RenderWindow& window, float dt) const
 	window.draw(this->area->tilemap);
 	window.draw(this->player->renderer.sprite);
 	if(startMenuVisible) window.draw(startMenu);
+}
+
+void GameStateArea::callbackItems(int index)
+{
+
+}
+void GameStateArea::callbackStatus(int index)
+{
+
+}
+void GameStateArea::callbackSave(int index)
+{
+
+}
+void GameStateArea::callbackExit(int index)
+{
+	startMenuVisible = false;
 }
