@@ -5,8 +5,6 @@
 #include "area.hpp"
 #include "tile_map.hpp"
 #include "player.hpp"
-#include "gui/font.hpp"
-#include "gui/message_box.hpp"
 #include "gui/menu.hpp"
 
 class GameStateArea : public GameState

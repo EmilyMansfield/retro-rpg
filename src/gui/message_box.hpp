@@ -7,7 +7,8 @@
 
 #include "gui.hpp"
 #include "text.hpp"
-#include "font.hpp"
+
+class Font;
 
 namespace gui
 {

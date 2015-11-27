@@ -2,8 +2,6 @@
 #include <SFML/Window.hpp>
 
 #include "game_state_area.hpp"
-#include "area.hpp"
-#include "player_renderer.hpp"
 
 void GameStateArea::handleEvent(sf::Event& event)
 {

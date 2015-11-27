@@ -2,7 +2,6 @@
 #include <cmath>
 
 #include "movement_controller.hpp"
-#include "tile_set.hpp"
 #include "tile_map.hpp"
 
 sf::Vector2f MovementController::dirToVec(Direction dir)

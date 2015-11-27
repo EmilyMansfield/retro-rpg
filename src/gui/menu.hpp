@@ -7,6 +7,8 @@
 #include "gui.hpp"
 #include "text.hpp"
 
+class Font;
+
 namespace gui
 {
 // A Menu consists of an ordered set of entries, each of which can be

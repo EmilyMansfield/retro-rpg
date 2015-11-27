@@ -3,7 +3,7 @@
 
 #include <SFML/System.hpp>
 
-#include "tile_map.hpp"
+class TileMap;
 
 // Direction the entity is moving in
 enum class Direction { NORTH = 'n', SOUTH = 's', EAST = 'e', WEST = 'w', NONE = 0 };
