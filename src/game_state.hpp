@@ -3,6 +3,12 @@
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include "gui/font.hpp"
+
+// Alternative is to manage fonts using the entity manager, but fonts
+// are not really entities and this way we can keep the gui definitions
+// separate from the rest of the game
+static const gui::Font mainFont("assets/font.png");
 
 class GameState
 {
