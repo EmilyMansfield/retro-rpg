@@ -2,6 +2,10 @@
 #include <SFML/Window.hpp>
 
 #include "game_state_title.hpp"
+#include "player_renderer.hpp"
+#include "player.hpp"
+#include "entity_manager.hpp"
+#include "game_state_area.hpp"
 
 void GameStateTitle::handleEvent(sf::Event& event)
 {
@@ -34,7 +38,12 @@ void GameStateTitle::draw(sf::RenderWindow& window, float dt) const
 
 void GameStateTitle::callbackContinue(int index)
 {
-
+	std::shared_ptr<Player> player(new Player("test", 10, 4, 4, 0, 0, 1, "none"));
+	player->renderer = PlayerRenderer(mgr->getEntity<TileSet>("tileset_overworld"));
+	player->renderer.setPos(sf::Vector2f(2, 2));
+	player->currentArea = "area_01";
+	player->visitedAreas.insert(player->currentArea);
+	state.reset(new GameStateArea(state, player->getAreaPtr(mgr), player));
 }
 void GameStateTitle::callbackQuit(int index)
 {

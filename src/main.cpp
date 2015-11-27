@@ -8,19 +8,17 @@
 #include <SFML/System.hpp>
 #include <memory>
 
-#include "item.hpp"
-#include "weapon.hpp"
-#include "armor.hpp"
-#include "creature.hpp"
-#include "player.hpp"
-#include "area.hpp"
-#include "door.hpp"
-#include "tile_set.hpp"
 #include "entity_manager.hpp"
 #include "game_state.hpp"
-#include "game_state_area.hpp"
 #include "game_state_title.hpp"
-#include "player_renderer.hpp"
+
+class TileSet;
+class Item;
+class Weapon;
+class Armor;
+class Creature;
+class Door;
+class Area;
 
 // Keeps track of items, weapons, creatures etc.
 EntityManager entityManager;
@@ -40,20 +38,8 @@ int main()
 	// random numbers produced by rand() will be different each time
 	std::srand(std::time(nullptr));
 
-	Player player("test", 10, 4, 4, 0, 0, 1, "none");
-	player.renderer = PlayerRenderer(entityManager.getEntity<TileSet>("tileset_overworld"));
-
-	// Set the current area to be the first area in the atlas,
-	// placing the player there upon game start
-	player.currentArea = "area_01";
-	player.renderer.setPos(sf::Vector2f(2, 2));
-	player.visitedAreas.insert(player.currentArea);
-	// Pointer to to the current area for convenience
-	Area* areaPtr = player.getAreaPtr(&entityManager);
-
 	// Current game state object
-	std::shared_ptr<GameState> currentState(new GameStateTitle(currentState));
-	// std::shared_ptr<GameState> currentState(new GameStateArea(currentState, areaPtr, &player));
+	std::shared_ptr<GameState> currentState(new GameStateTitle(currentState, &entityManager));
 
 	// Open a window which can be closed and has a titlebar, but cannot
 	// be resized. Limit the framerate to 60fps.

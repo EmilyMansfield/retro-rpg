@@ -7,15 +7,16 @@
 #include "player.hpp"
 #include "gui/menu.hpp"
 
+class EntityManager;
+
 class GameStateTitle : public GameState
 {
 	private:
 
 	std::shared_ptr<GameState>& state;
+	EntityManager* mgr;
 
 	sf::View view;
-	Player* player;
-
 	gui::Menu titleMenu;
 
 	public:
@@ -25,9 +26,9 @@ class GameStateTitle : public GameState
 	virtual void update(float dt);
 	virtual void draw(sf::RenderWindow& window, float dt) const;
 
-	GameStateTitle(std::shared_ptr<GameState>& ptr) : state(ptr)
+	GameStateTitle(std::shared_ptr<GameState>& ptr, EntityManager* mgr) : state(ptr)
 	{
-		this->player = player;
+		this->mgr = mgr;
 		this->view.reset(sf::FloatRect(0.0f, 0.0f, 256.0f, 240.0f));
 
 		titleMenu = gui::Menu(sf::Vector2u(1, 2), sf::Vector2u(8, 2), mainFont);

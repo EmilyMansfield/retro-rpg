@@ -14,9 +14,9 @@ class GameStateArea : public GameState
 	std::shared_ptr<GameState>& state;
 
 	Area* area;
-	sf::View view;
-	Player* player;
+	std::shared_ptr<Player> player;
 
+	sf::View view;
 	gui::Menu startMenu;
 	bool startMenuVisible;
 
@@ -27,7 +27,8 @@ class GameStateArea : public GameState
 	virtual void update(float dt);
 	virtual void draw(sf::RenderWindow& window, float dt) const;
 
-	GameStateArea(std::shared_ptr<GameState>& ptr, Area* area, Player* player) : state(ptr)
+	GameStateArea(std::shared_ptr<GameState>& ptr, Area* area,
+		std::shared_ptr<Player> player) : state(ptr)
 	{
 		this->area = area;
 		this->player = player;
