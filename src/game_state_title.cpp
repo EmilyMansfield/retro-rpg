@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <fstream>
+#include "JsonBox.h"
 
 #include "game_state_title.hpp"
 #include "player_renderer.hpp"
@@ -29,7 +31,27 @@ void GameStateTitle::handleEvent(sf::Event& event)
 		{
 			if(event.key.code == sf::Keyboard::Return)
 			{
-				subState = SubState::CLASS;
+				std::ifstream f((name + ".json").c_str());
+				if(f.good())
+				{
+					f.close();
+					// Load the player
+					JsonBox::Value saveData;
+					JsonBox::Value areaData;
+					saveData.loadFromFile(name + ".json");
+					areaData.loadFromFile(name + "_areas.json");
+					std::shared_ptr<Player> player(new Player(saveData, areaData, mgr));
+					player->renderer = PlayerRenderer(mgr->getEntity<TileSet>("tileset_overworld"));
+					player->renderer.setPos(sf::Vector2f(2, 2));
+					player->currentArea = "area_01";
+					player->visitedAreas.insert(player->currentArea);
+					state.reset(new GameStateArea(state, player->getAreaPtr(mgr), player));
+				}
+				else
+				{
+					f.close();
+					subState = SubState::CLASS;
+				}
 			}
 		}
 		else if(event.type == sf::Event::TextEntered)
