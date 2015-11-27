@@ -16,7 +16,6 @@ class GameStateArea : public GameState
 	Area* area;
 	sf::View view;
 	Player* player;
-	gui::Font font;
 	gui::MessageBox msgBox;
 	gui::Menu menu;
 
@@ -38,21 +37,6 @@ class GameStateArea : public GameState
 		tm.setPosition(tm.ts * tm.w * 0.5, tm.ts * tm.h * 0.5);
 		// Create a view of the game world
 		this->view.reset(sf::FloatRect(0.0f, 0.0f, 256.0f, 240.0f));
-
-		this->font.loadFromFile("assets/font.png");
-		this->msgBox = gui::MessageBox(
-			sf::Vector2u(32, 5),
-			"Hello, world!\nHow's it going, are you done yet?",
-			this->font);
-		this->msgBox.setPosition(0, 7*tm.ts);
-
-		this->menu = gui::Menu(sf::Vector2u(2, 3), sf::Vector2u(6, 1), this->font,
-			sf::Color(0x00, 0x40, 0x58));
-		this->menu.setPosition(0*tm.ts, 10*tm.ts);
-		this->menu.addEntry("Hello", nullptr);
-		this->menu.addEntry("World", nullptr);
-		this->menu.addEntry("Foobar", nullptr);
-		this->menu.addEntry("Fish", nullptr);
 	}
 };
 
