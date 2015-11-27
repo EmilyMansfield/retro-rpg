@@ -9,16 +9,54 @@
 
 void GameStateTitle::handleEvent(sf::Event& event)
 {
-	if(event.type == sf::Event::KeyPressed)
+	if(subState == SubState::TITLE)
 	{
 		// Handle menu navigation
-		if(event.key.code == sf::Keyboard::Up)
-			titleMenu.navigate(gui::Direction::UP, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
-		else if(event.key.code == sf::Keyboard::Down)
-			titleMenu.navigate(gui::Direction::DOWN, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
-		// Open a menu option
-		else if(event.key.code == sf::Keyboard::Return)
-			titleMenu.activate(this);
+		if(event.type == sf::Event::KeyPressed)
+		{
+			if(event.key.code == sf::Keyboard::Up)
+				titleMenu.navigate(gui::Direction::UP, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
+			else if(event.key.code == sf::Keyboard::Down)
+				titleMenu.navigate(gui::Direction::DOWN, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
+			// Open a menu option
+			else if(event.key.code == sf::Keyboard::Return)
+				titleMenu.activate(this);
+		}
+	}
+	else if(subState == SubState::NAME)
+	{
+		if(event.type == sf::Event::KeyPressed)
+		{
+			if(event.key.code == sf::Keyboard::Return)
+			{
+				subState = SubState::CLASS;
+			}
+		}
+		else if(event.type == sf::Event::TextEntered)
+		{
+			if(event.text.unicode < 127)
+			{
+				char c = static_cast<char>(event.text.unicode);
+				if(c == '\b' && name.size() > 0) name.pop_back();
+				else if(c >= ' ' && name.size() < (256/8-2)) name.push_back(c);
+				nameEntryBox = gui::MessageBox(sf::Vector2u(name.size(), 1), name, mainFont);
+				nameEntryBox.setPosition(sf::Vector2f(
+					128.0f - 8*nameEntryBox.getSize().x/2,
+					120.0 + 8*nameEntry.getSize().y/2));
+			}
+		}
+	}
+	else if(subState == SubState::CLASS)
+	{
+		if(event.type == sf::Event::KeyPressed)
+		{
+			if(event.key.code == sf::Keyboard::Up)
+				classEntryMenu.navigate(gui::Direction::UP, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
+			else if(event.key.code == sf::Keyboard::Down)
+				classEntryMenu.navigate(gui::Direction::DOWN, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
+			else if(event.key.code == sf::Keyboard::Return)
+				classEntryMenu.activate(this);
+		}
 	}
 }
 
@@ -33,19 +71,47 @@ void GameStateTitle::update(float dt)
 void GameStateTitle::draw(sf::RenderWindow& window, float dt) const
 {
 	window.setView(this->view);
-	window.draw(titleMenu);
+
+	if(subState == SubState::TITLE)
+		window.draw(titleMenu);
+	else if(subState == SubState::NAME)
+	{
+		window.draw(nameEntry);
+		window.draw(nameEntryBox);
+	}
+	else if(subState == SubState::CLASS)
+	{
+		window.draw(classEntry);
+		window.draw(classEntryMenu);
+	}
 }
 
 void GameStateTitle::callbackContinue(int index)
 {
-	std::shared_ptr<Player> player(new Player("test", 10, 4, 4, 0, 0, 1, "none"));
+	subState = SubState::NAME;
+
+}
+void GameStateTitle::callbackQuit(int index)
+{
+	state.reset();
+}
+void GameStateTitle::callbackCreatePlayer(int index)
+{
+	std::shared_ptr<Player> player;
+	switch(index)
+	{
+		case 0:
+			player.reset(new Player(name, 15, 5, 4, 1.0/64.0, 0, 1, "Fighter"));
+			break;
+		case 1:
+			player.reset(new Player(name, 15, 4, 5, 1.0/64.0, 0, 1, "Rogue"));
+			break;
+		default:
+			player.reset(new Player(name, 15, 4, 4, 1.0/64.0, 0, 1, "Adventurer"));
+	}
 	player->renderer = PlayerRenderer(mgr->getEntity<TileSet>("tileset_overworld"));
 	player->renderer.setPos(sf::Vector2f(2, 2));
 	player->currentArea = "area_01";
 	player->visitedAreas.insert(player->currentArea);
 	state.reset(new GameStateArea(state, player->getAreaPtr(mgr), player));
-}
-void GameStateTitle::callbackQuit(int index)
-{
-	state.reset();
 }

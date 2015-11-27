@@ -8,17 +8,17 @@
 
 void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 {
-	size_t maxHeight = dimensions.y - 2;
-	size_t maxWidth = dimensions.x - 2;
+	size_t maxHeight = dimensions.y;
+	size_t maxWidth = dimensions.x;
 
-	std::string page = gui::Border::genTop(dimensions.x);
+	std::string page = gui::Border::genTop(dimensions.x+2);
 
 	// If the lines vector is empty, we'll just make a blank box
 	if(lines.size() == 0)
 	{
 		for(size_t i = 0; i < maxHeight; ++i)
-			page += gui::Border::genRow(dimensions.x);
-		page += gui::Border::genBottom(dimensions.x);
+			page += gui::Border::genRow(dimensions.x+2);
+		page += gui::Border::genBottom(dimensions.x+2);
 		pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
 		return;
 	}
@@ -38,10 +38,10 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 			// Surround the line with border to pieces and add it to the page
 			page += gui::Border::surround(lines[i]+padding) + "\n";
 			// Add the bottom border of the page
-			page += gui::Border::genBottom(dimensions.x);
+			page += gui::Border::genBottom(dimensions.x+2);
 			// Add the page to the list of pages and reset
 			pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
-			page = gui::Border::genTop(dimensions.x);
+			page = gui::Border::genTop(dimensions.x+2);
 		}
 		else
 		{
@@ -60,9 +60,9 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 		// Add padding lines to make the page the desired height
 		for(size_t i = lines.size() % maxHeight; i <= maxHeight; ++i)
 		{
-			page += gui::Border::genRow(dimensions.x);
+			page += gui::Border::genRow(dimensions.x+2);
 		}
-		page += gui::Border::genBottom(dimensions.x);
+		page += gui::Border::genBottom(dimensions.x+2);
 		pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
 	}
 }
@@ -76,7 +76,7 @@ gui::MessageBox::MessageBox(const sf::Vector2u& dimensions,
 	this->currentPage = 0;
 	this->backgroundCol = backgroundCol;
 	this->textCol = textCol;
-	createPages(gui::alignString(text, dimensions.x-2));
+	createPages(gui::alignString(text, dimensions.x));
 }
 
 void gui::MessageBox::setPage(unsigned int page)
@@ -91,4 +91,9 @@ void gui::MessageBox::draw(sf::RenderTarget& target, sf::RenderStates states) co
 {
 	states.transform *= getTransform();
 	pages.at(currentPage).draw(target, states);
+}
+
+sf::Vector2u gui::MessageBox::getSize() const
+{
+	return dimensions + sf::Vector2u(2, 2);
 }

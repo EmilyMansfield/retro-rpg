@@ -52,6 +52,8 @@ class MessageBox : public sf::Drawable, public sf::Transformable
 	void setPage(unsigned int page);
 	// Have to use a getter since we used a setter
 	unsigned int getPage() const;
+
+	sf::Vector2u getSize() const;
 };
 }
 #endif /* GUI_MESSAGE_BOX_HPP */
