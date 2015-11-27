@@ -82,14 +82,14 @@ class GameStateTitle : public GameState
 	{
 		switch(index)
 		{
-			case 0: ((GameStateTitle*)ptr)->callbackContinue(index); break;
-			case 1: ((GameStateTitle*)ptr)->callbackQuit(index); break;
+			case 0: static_cast<GameStateTitle*>(ptr)->callbackContinue(index); break;
+			case 1: static_cast<GameStateTitle*>(ptr)->callbackQuit(index); break;
 			default: break;
 		}
 	}
 	static void classCallback(void *ptr, int index)
 	{
-		((GameStateTitle*)ptr)->callbackCreatePlayer(index);
+		static_cast<GameStateTitle*>(ptr)->callbackCreatePlayer(index);
 	}
 	void callbackContinue(int index);
 	void callbackQuit(int index);

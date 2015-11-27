@@ -73,10 +73,10 @@ class GameStateArea : public GameState
 		// https://isocpp.org/wiki/faq/pointers-to-members
 		switch(index)
 		{
-			case 0: ((GameStateArea*)ptr)->callbackItems(index); break;
-			case 1: ((GameStateArea*)ptr)->callbackStatus(index); break;
-			case 2: ((GameStateArea*)ptr)->callbackSave(index); break;
-			case 3: ((GameStateArea*)ptr)->callbackExit(index); break;
+			case 0: static_cast<GameStateArea*>(ptr)->callbackItems(index); break;
+			case 1: static_cast<GameStateArea*>(ptr)->callbackStatus(index); break;
+			case 2: static_cast<GameStateArea*>(ptr)->callbackSave(index); break;
+			case 3: static_cast<GameStateArea*>(ptr)->callbackExit(index); break;
 			default: break;
 		}
 	}
