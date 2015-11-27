@@ -49,6 +49,9 @@ namespace gui
 // size, if you're using sf::Font you'll have to specify characterSize
 // in the constructor).
 
+enum class Direction { UP, DOWN, LEFT, RIGHT };
+enum class NavigationMode { STOP, LOOP, ADVANCE };
+
 class Menu : public sf::Drawable, public sf::Transformable
 {
 	private:
@@ -88,13 +91,21 @@ class Menu : public sf::Drawable, public sf::Transformable
 	public:
 
 	Menu() {}
-	Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
+	Menu(const sf::Vector2u& alignment, const sf::Vector2u& entrySize,
 		const gui::Font& font, const sf::Color& backgroundCol = gui::Style::bg,
 		const sf::Color& textCol = gui::Style::fg);
 
 	// Mark an entry as selected by adding a selector before its entry,
 	// by default `*`. Can be a non-ascii character.
 	void select(unsigned int index, unsigned char selector = '*');
+	// Move the selector in the specified direction using the specified
+	// navigation mode, which determines the behaviour when the selector
+	// reaches the end of a row or column
+	// STOP - Do not move any more
+	// LOOP - Reset to the start of the row or column
+	// ADVANCE - Reset to the start of the next row or column
+	void navigate(gui::Direction dir, gui::NavigationMode xMode, gui::NavigationMode yMode);
+
 	// Call the callback associated with the index, and pass through the
 	// index of the option as an argument
 	void activate(unsigned int index);
@@ -107,6 +118,10 @@ class Menu : public sf::Drawable, public sf::Transformable
 	void setColor(const sf::Color& textCol);
 	const sf::Color& getBackgroundColor() const;
 	const sf::Color& getColor() const;
+
+	// Return the total size of the menu, including borders,
+	// measured in characters
+	sf::Vector2u getSize() const;
 };
 }
 

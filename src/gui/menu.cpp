@@ -151,7 +151,7 @@ void gui::Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	text.draw(target, states);
 }
 
-gui::Menu::Menu(const sf::Vector2u alignment, const sf::Vector2u& entrySize,
+gui::Menu::Menu(const sf::Vector2u& alignment, const sf::Vector2u& entrySize,
 		const gui::Font& font, const sf::Color& backgroundCol, const sf::Color& textCol)
 {
 	this->alignment = alignment;
@@ -178,4 +178,100 @@ void gui::Menu::setColor(const sf::Color& textCol)
 {
 	this->textCol = textCol;
 	text.setColor(textCol);
+}
+
+
+sf::Vector2u gui::Menu::getSize() const
+{
+	return sf::Vector2u(
+		(entrySize.x + 2) * alignment.x + 2,
+		(entrySize.y	) * alignment.y + 2);
+}
+
+void gui::Menu::navigate(gui::Direction dir, gui::NavigationMode xMode, gui::NavigationMode yMode)
+{
+	sf::Vector2u pos(selectedEntry % alignment.x, selectedEntry / alignment.x);
+
+	switch(dir)
+	{
+		case gui::Direction::UP:
+		// Start of vertical column
+		if(pos.y == 0)
+		{
+			if(yMode == gui::NavigationMode::LOOP)
+			{
+				pos.y = alignment.y - 1;
+			}
+			else if(yMode == gui::NavigationMode::ADVANCE)
+			{
+				pos.y = alignment.y - 1;
+				// Remember that pos.x is an *unsigned* integer, so recklessly
+				// decrementing is a no-go if pos.x might be 0
+				if(pos.x == 0) pos.x = alignment.x - 1;
+				else --pos.x;
+			}
+		}
+		else
+			--pos.y;
+		break;
+
+		case gui::Direction::DOWN:
+		// End of vertical column
+		if(pos.y == alignment.y-1)
+		{
+			if(yMode == gui::NavigationMode::LOOP)
+			{
+				pos.y = 0;
+			}
+			else if(yMode == gui::NavigationMode::ADVANCE)
+			{
+				pos.y = 0;
+				if(pos.x >= alignment.x-1) pos.x = 0;
+				else ++pos.x;
+			}
+		}
+		else
+			++pos.y;
+		break;
+
+		case gui::Direction::RIGHT:
+		// End of horizontal row
+		if(pos.x == alignment.x - 1)
+		{
+			if(xMode == gui::NavigationMode::LOOP)
+			{
+				pos.x = 0;
+			}
+			else if(xMode == gui::NavigationMode::ADVANCE)
+			{
+				pos.x = 0;
+				if(pos.y == alignment.y - 1) pos.y = 0;
+				else ++pos.y;
+			}
+		}
+		else
+			++pos.x;
+		break;
+
+		case gui::Direction::LEFT:
+		// Start of horizontal row
+		if(pos.x == 0)
+		{
+			if(xMode == gui::NavigationMode::LOOP)
+			{
+				pos.x = alignment.x - 1;
+			}
+			else if(xMode == gui::NavigationMode::ADVANCE)
+			{
+				pos.x = alignment.x - 1;
+				if(pos.y == 0) pos.y = alignment.y - 1;
+				else --pos.y;
+			}
+		}
+		else
+			--pos.x;
+		break;
+	}
+
+	select(pos.y * alignment.x + pos.x, selectorCharacter);
 }
