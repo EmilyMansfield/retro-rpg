@@ -19,6 +19,7 @@
 #include "entity_manager.hpp"
 #include "game_state.hpp"
 #include "game_state_area.hpp"
+#include "game_state_title.hpp"
 #include "player_renderer.hpp"
 
 // Keeps track of items, weapons, creatures etc.
@@ -51,11 +52,12 @@ int main()
 	Area* areaPtr = player.getAreaPtr(&entityManager);
 
 	// Current game state object
-	std::shared_ptr<GameState> currentState(new GameStateArea(areaPtr, &player));
+	std::shared_ptr<GameState> currentState(new GameStateTitle(currentState));
+	// std::shared_ptr<GameState> currentState(new GameStateArea(currentState, areaPtr, &player));
 
 	// Open a window which can be closed and has a titlebar, but cannot
 	// be resized. Limit the framerate to 60fps.
-	sf::RenderWindow window(sf::VideoMode(256, 240), "Penguin Programmer RPG",
+	sf::RenderWindow window(sf::VideoMode(512, 480), "Penguin Programmer RPG",
 		sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
 
@@ -86,16 +88,21 @@ int main()
 				break;
 			}
 			// Handle the event
-			currentState->handleEvent(event);
+			if(currentState) currentState->handleEvent(event);
 		}
-		currentState->handleInput(dt);
+		if(currentState) currentState->handleInput(dt);
 
+		if(!currentState)
+		{
+			window.close();
+			break;
+		}
 		// Update the game proportionally to dt
-		currentState->update(dt);
+		if(currentState) currentState->update(dt);
 
 		// Render the window
 		window.clear(sf::Color::Black);
-		currentState->draw(window, dt);
+		if(currentState) currentState->draw(window, dt);
 		window.display();
 	}
 

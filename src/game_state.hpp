@@ -1,6 +1,7 @@
 #ifndef GAME_STATE_HPP
 #define GAME_STATE_HPP
 
+#include <memory>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include "gui/font.hpp"

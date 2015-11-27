@@ -1,6 +1,8 @@
 #ifndef GAME_STATE_AREA_HPP
 #define GAME_STATE_AREA_HPP
 
+#include <memory>
+
 #include "game_state.hpp"
 #include "area.hpp"
 #include "tile_map.hpp"
@@ -9,7 +11,7 @@
 
 class GameStateArea : public GameState
 {
-	private:
+	std::shared_ptr<GameState>& state;
 
 	Area* area;
 	sf::View view;
@@ -25,7 +27,7 @@ class GameStateArea : public GameState
 	virtual void update(float dt);
 	virtual void draw(sf::RenderWindow& window, float dt) const;
 
-	GameStateArea(Area* area, Player* player)
+	GameStateArea(std::shared_ptr<GameState>& ptr, Area* area, Player* player) : state(ptr)
 	{
 		this->area = area;
 		this->player = player;
