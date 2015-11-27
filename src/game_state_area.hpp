@@ -16,8 +16,9 @@ class GameStateArea : public GameState
 	Area* area;
 	sf::View view;
 	Player* player;
-	gui::MessageBox msgBox;
-	gui::Menu menu;
+
+	gui::Menu startMenu;
+	bool startMenuVisible;
 
 	public:
 
@@ -37,6 +38,15 @@ class GameStateArea : public GameState
 		tm.setPosition(tm.ts * tm.w * 0.5, tm.ts * tm.h * 0.5);
 		// Create a view of the game world
 		this->view.reset(sf::FloatRect(0.0f, 0.0f, 256.0f, 240.0f));
+
+		// Set up the start menu
+		startMenu = gui::Menu(sf::Vector2u(1, 4), sf::Vector2u(8, 2), mainFont);
+		startMenu.addEntry("Items", nullptr);
+		startMenu.addEntry("Status", nullptr);
+		startMenu.addEntry("Save", nullptr);
+		startMenu.addEntry("Exit", nullptr);
+		startMenu.setPosition(sf::Vector2f(256.0f - 8*startMenu.getSize().x, 0));
+		startMenuVisible = false;
 	}
 };
 
