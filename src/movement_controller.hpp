@@ -77,7 +77,7 @@ class MovementController
 	}
 
 	// Set the position of the entity
-	void setPos(sf::Vector2f pos);
+	void setPosition(sf::Vector2f pos);
 	// Update the entity's position according to their velocity
 	void update(float dt);
 	// Attempt to move the entity in the direction dir in the environment

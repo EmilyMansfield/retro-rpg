@@ -75,9 +75,9 @@ class PlayerRenderer
 		movementController.step(dt, dir, tm);
 	}
 
-	void setPos(sf::Vector2f pos)
+	void setPosition(sf::Vector2f pos)
 	{
-		movementController.setPos(pos);
+		movementController.setPosition(pos);
 	}
 };
 

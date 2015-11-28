@@ -42,7 +42,7 @@ void GameStateTitle::handleEvent(sf::Event& event)
 					areaData.loadFromFile(name + "_areas.json");
 					std::shared_ptr<Player> player(new Player(saveData, areaData, mgr));
 					player->renderer = PlayerRenderer(mgr->getEntity<TileSet>("tileset_overworld"));
-					player->renderer.setPos(sf::Vector2f(2, 2));
+					player->renderer.setPosition(sf::Vector2f(2, 2));
 					player->currentArea = "area_01";
 					player->visitedAreas.insert(player->currentArea);
 					state.reset(new GameStateArea(state, player, mgr));
@@ -132,7 +132,7 @@ void GameStateTitle::callbackCreatePlayer(int index)
 			player.reset(new Player(name, 15, 4, 4, 1.0/64.0, 0, 1, "Adventurer"));
 	}
 	player->renderer = PlayerRenderer(mgr->getEntity<TileSet>("tileset_overworld"));
-	player->renderer.setPos(sf::Vector2f(2, 2));
+	player->renderer.setPosition(sf::Vector2f(2, 2));
 	player->currentArea = "area_01";
 	player->visitedAreas.insert(player->currentArea);
 	state.reset(new GameStateArea(state, player, mgr));

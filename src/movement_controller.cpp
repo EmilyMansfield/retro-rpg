@@ -51,7 +51,7 @@ void MovementController::resetVelToDest()
 void MovementController::changeDirection(Direction dir)
 {
 	// Snap to destination tile
-	setPos(destination);
+	setPosition(destination);
 	// Set new destination
 	destination = destination + dirToVec(dir);
 	// Move towards the new destination
@@ -74,7 +74,7 @@ void MovementController::startMoving(Direction dir)
 void MovementController::stopMoving()
 {
 	// Snap to destination tile to avoid inaccuracies
-	setPos(destination);
+	setPosition(destination);
 	// Stop moving
 	moving = false;
 	velocity.x = 0.0f;
@@ -95,7 +95,7 @@ bool MovementController::canMoveIn(sf::Vector2f start, Direction dir, TileMap& t
 }
 
 
-void MovementController::setPos(sf::Vector2f pos)
+void MovementController::setPosition(sf::Vector2f pos)
 {
 	this->pos = pos;
 }
@@ -105,7 +105,7 @@ void MovementController::update(float dt)
 {
 	// Move entity according to velocity
 	lastPos = pos;
-	setPos(pos + dt * velocity);
+	setPosition(pos + dt * velocity);
 }
 
 void MovementController::step(float dt, Direction dir, TileMap& tm)
