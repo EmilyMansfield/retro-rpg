@@ -2,6 +2,7 @@
 #include <SFML/Window.hpp>
 
 #include "game_state_area.hpp"
+#include "game_state_menu_status.hpp"
 
 void GameStateArea::handleEvent(sf::Event& event)
 {
@@ -74,7 +75,8 @@ void GameStateArea::callbackItems(int index)
 }
 void GameStateArea::callbackStatus(int index)
 {
-
+	std::shared_ptr<GameState> prevState = state;
+	state.reset(new GameStateMenuStatus(state, prevState, player));
 }
 void GameStateArea::callbackSave(int index)
 {
