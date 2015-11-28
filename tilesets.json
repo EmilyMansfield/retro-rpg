@@ -1,0 +1,20 @@
+{
+	"tileset_dungeon" : {
+		"filename": "assets/tileset_dungeon.png",
+		"tilesize": 16
+	},
+	"tileset_overworld": {
+		"filename": "assets/tileset_overworld.png",
+		"tilesize": 16,
+		"animations": [
+			{ "name": "player_idle_n", "x": 0, "y": 0, "len": 1 },
+			{ "name": "player_idle_e", "x": 1, "y": 0, "len": 1 },
+			{ "name": "player_idle_s", "x": 2, "y": 0, "len": 1 },
+			{ "name": "player_idle_w", "x": 3, "y": 0, "len": 1 },
+			{ "name": "player_walk_n", "x": 0, "y": 1, "len": 2 },
+			{ "name": "player_walk_e", "x": 2, "y": 1, "len": 3 },
+			{ "name": "player_walk_s", "x": 5, "y": 1, "len": 2 },
+			{ "name": "player_walk_w", "x": 7, "y": 1, "len": 3 }
+		]
+	}
+}

@@ -8,13 +8,18 @@
 #include "inventory.hpp"
 #include "creature.hpp"
 #include "dialogue.hpp"
+#include "tile_set.hpp"
 #include "entity_manager.hpp"
+#include "tile_map.hpp"
 
 Area::Area(std::string id, Dialogue dialogue, Inventory items,
-		std::vector<Creature*> creatures) : Entity(id)
+		std::vector<Creature*> creatures, TileSet* tileset,
+		TileMap& tilemap) : Entity(id)
 {
 	this->dialogue = dialogue;
 	this->items = items;
+	this->tileset = tileset;
+	this->tilemap = tilemap;
 	for(auto creature : creatures)
 	{
 		this->creatures.push_back(*creature);
@@ -69,6 +74,13 @@ void Area::load(JsonBox::Value& v, EntityManager* mgr)
 			this->doors.push_back(d);
 		}
 	}
+
+	// Attach the tileset
+	this->tileset = mgr->getEntity<TileSet>(o["tileset"].getString());
+
+	// Create the tilemap
+	JsonBox::Array a = o["tilemap"].getArray();
+	this->tilemap = TileMap(a, this->tileset);
 
 	return;
 }

@@ -1,5 +1,15 @@
 {
 	"area_01": {
+		"tileset": "tileset_dungeon",
+		"tilemap": [
+			[2,1,1,2,1,1,1,2],
+			[2,0,0,2,0,0,0,2],
+			[2,0,0,2,0,0,8,2],
+			[2,1,0,2,0,0,0,2],
+			[2,0,0,1,1,0,1,2],
+			[2,9,0,0,0,0,0,2],
+			[1,1,1,1,1,1,1,1]
+		],
 		"dialogue": {
 			"description": "You are in room 1",
 			"choices": []
@@ -21,6 +31,13 @@
 	},
 
 	"area_02": {
+		"tileset": "tileset_dungeon",
+		"tilemap": [
+			[2,1,1,1,2],
+			[2,0,0,0,2],
+			[2,0,0,0,2],
+			[2,1,0,1,2]
+		],
 		"dialogue": {
 			"description": "You are in room 2",
 			"choices": []
