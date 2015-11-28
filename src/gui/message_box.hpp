@@ -54,6 +54,9 @@ class MessageBox : public sf::Drawable, public sf::Transformable
 	unsigned int getPage() const;
 
 	sf::Vector2u getSize() const;
+
+	// Change the text without affecting any other properties
+	void setText(const std::string& text);
 };
 }
 #endif /* GUI_MESSAGE_BOX_HPP */
