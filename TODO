@@ -1,0 +1,56 @@
+GUI System
+
+---	Sort out code repetition and function lengths in gui/menu.hpp
+
++----	Add background and foreground colours for Menu
++---		Fixed foreground and background colours
+-		Make foreground colour dependent on each entry
+-		Make foreground colour modifiable on selection, perhaps through the callback return value
+		These can't be done without more sophisticated colour setting, such as with escape codes
+
+-	Unify partial row and full row code into one in Menu
+
+-	Replace for loop text filling with setw from iomanip
+	Adds unnecessary complexity by repeatedly using streams
+
+-	Implement more relevant container operations in Menu
+
+-	Make navigate handle empty entries better
+
+--	Perhaps replace hacky (though very cool) callback system in Menu?
+
+---	Fix bugs with getSize functions
+
+Rendering
+
+--	Properly decouple movement controller from the player renderer
+
+Asset Management
+
+---	Properly implement global fonts instead of using a static const in a header
+
+General Changes
+
+---	Add const-correctness everywhere
+
+-	Clean up getters/setters in original tutorial files and protect containers from direct access
+
+-	Fixed unsigned/signed/size_t typing inconsistencies. Pick something, and STICK TO IT!
+
+-	Add namespaces throughout the code, to be consistent with gui
+
+-	Create a nicer JSON interface instead of duplicating save/load code
+	Include exceptions too?
+
+--	Remove unnecessary headers, e.g. debug iostreams
+	Completed for gui additions
+
+-	Align comments to 80 character limit and fix general code alignment
+
+----	Make use of `this` consistent
+
+----	Disable key repeating with window.setKeyRepeateEnabled(false)
+
+---	Make keybindings customisable
+
+---	Stop using magic numbers for screen resolution and viewport size
