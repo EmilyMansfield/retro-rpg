@@ -58,7 +58,7 @@ class GameStateArea : public GameState
 		startMenu.addEntry("Status", callbackFunc);
 		startMenu.addEntry("Save", callbackFunc);
 		startMenu.addEntry("Exit", callbackFunc);
-		startMenu.setPosition(sf::Vector2f(256.0f - 8*startMenu.getSize().x, 0));
+		startMenu.setPosition(256.0f - 8*startMenu.getSize().x, 0);
 
 		// Set up the message box that relays general information to the player
 		// e.g. "You obtained x", "Saving game...", "You can't do that here"

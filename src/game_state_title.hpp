@@ -49,32 +49,32 @@ class GameStateTitle : public GameState
 		titleMenu = gui::Menu(sf::Vector2u(1, 2), sf::Vector2u(8, 2), mainFont);
 		titleMenu.addEntry("Continue", titleCallback);
 		titleMenu.addEntry("Quit", titleCallback);
-		titleMenu.setPosition(sf::Vector2f(
+		titleMenu.setPosition(
 			128.0f - 8*titleMenu.getSize().x/2,
-			120.0f - 8*titleMenu.getSize().y/2));
+			120.0f - 8*titleMenu.getSize().y/2);
 		titleMenu.select(0, '*');
 
 		// Name substate
 		nameEntry = gui::MessageBox(sf::Vector2u(17, 1), "What's your name?", mainFont);
-		nameEntry.setPosition(sf::Vector2f(
+		nameEntry.setPosition(
 			128.0f - 8*nameEntry.getSize().x/2,
-			120.0f - 8*nameEntry.getSize().y/2));
+			120.0f - 8*nameEntry.getSize().y/2);
 		nameEntryBox = gui::MessageBox(sf::Vector2u(1, 1), "", mainFont);
-		nameEntryBox.setPosition(sf::Vector2f(
+		nameEntryBox.setPosition(
 			128.0f - 8*nameEntryBox.getSize().x/2,
-			120.0f + 8*nameEntry.getSize().y/2));
+			120.0f + 8*nameEntry.getSize().y/2);
 		
 		// Class substate
 		classEntry = gui::MessageBox(sf::Vector2u(18, 1), "What's your class?", mainFont);
-		classEntry.setPosition(sf::Vector2f(
+		classEntry.setPosition(
 			128.0f - 8*classEntry.getSize().x/2,
-			120.0f - 8*classEntry.getSize().y/2));
+			120.0f - 8*classEntry.getSize().y/2);
 		classEntryMenu = gui::Menu(sf::Vector2u(1, 2), sf::Vector2u(7, 2), mainFont);
 		classEntryMenu.addEntry("Fighter", classCallback);
 		classEntryMenu.addEntry("Rogue", classCallback);
-		classEntryMenu.setPosition(sf::Vector2f(
+		classEntryMenu.setPosition(
 			128.0f - 8*classEntryMenu.getSize().x/2,
-			120.0f + 8*classEntry.getSize().y/2));
+			120.0f + 8*classEntry.getSize().y/2);
 		classEntryMenu.select(0, '*');
 	}
 

@@ -62,9 +62,9 @@ void GameStateTitle::handleEvent(sf::Event& event)
 				if(c == '\b' && name.size() > 0) name.pop_back();
 				else if(c >= ' ' && name.size() < (256/8-2)) name.push_back(c);
 				nameEntryBox = gui::MessageBox(sf::Vector2u(name.size(), 1), name, mainFont);
-				nameEntryBox.setPosition(sf::Vector2f(
+				nameEntryBox.setPosition(
 					128.0f - 8*nameEntryBox.getSize().x/2,
-					120.0 + 8*nameEntry.getSize().y/2));
+					120.0 + 8*nameEntry.getSize().y/2);
 			}
 		}
 	}

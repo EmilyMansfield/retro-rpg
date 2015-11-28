@@ -39,11 +39,11 @@ class GameStateMenuStatus : public GameState
 		// Player name and class name
 		std::string nameStr = player->name + " the " + player->className;
 		nameMsgBox = gui::MessageBox(sf::Vector2u(256/8-2, 1), nameStr, mainFont);
-		nameMsgBox.setPosition(sf::Vector2f(0, 0));
+		nameMsgBox.setPosition(0, 0);
 
 		// Player level and experience
 		levelMenu = gui::Menu(sf::Vector2u(1, 3), sf::Vector2u(128/8-2, 1), mainFont);
-		levelMenu.setPosition(sf::Vector2f(0, 8*nameMsgBox.getSize().y));
+		levelMenu.setPosition(0, 8*nameMsgBox.getSize().y);
 		levelMenu.addEntry("Level: " + std::to_string(player->level), nullptr);
 		levelMenu.addEntry("", nullptr);
 		levelMenu.addEntry("Exp:   " + std::to_string(player->xp) + " / "
