@@ -45,7 +45,7 @@ void GameStateTitle::handleEvent(sf::Event& event)
 					player->renderer.setPos(sf::Vector2f(2, 2));
 					player->currentArea = "area_01";
 					player->visitedAreas.insert(player->currentArea);
-					state.reset(new GameStateArea(state, player->getAreaPtr(mgr), player));
+					state.reset(new GameStateArea(state, player, mgr));
 				}
 				else
 				{
@@ -135,5 +135,5 @@ void GameStateTitle::callbackCreatePlayer(int index)
 	player->renderer.setPos(sf::Vector2f(2, 2));
 	player->currentArea = "area_01";
 	player->visitedAreas.insert(player->currentArea);
-	state.reset(new GameStateArea(state, player->getAreaPtr(mgr), player));
+	state.reset(new GameStateArea(state, player, mgr));
 }

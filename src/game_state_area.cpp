@@ -6,9 +6,21 @@
 
 void GameStateArea::handleEvent(sf::Event& event)
 {
-	if(event.type == sf::Event::KeyPressed)
+	if(subState == SubState::GAME)
 	{
-		if(startMenuVisible)
+		if(event.type == sf::Event::KeyPressed)
+		{
+			// Open the start menu
+			if(event.key.code == sf::Keyboard::Return)
+			{
+				subState = SubState::START;
+				startMenu.select(0, '*');
+			}	
+		}
+	}
+	else if(subState == SubState::START)
+	{
+		if(event.type == sf::Event::KeyPressed)
 		{
 			// Handle menu navigation
 			if(event.key.code == sf::Keyboard::Up)
@@ -23,21 +35,25 @@ void GameStateArea::handleEvent(sf::Event& event)
 			else if(event.key.code == sf::Keyboard::Return)
 				startMenu.activate(this);
 		}
-		else
+	}
+	else if(subState == SubState::INFO)
+	{
+		if(event.type == sf::Event::KeyPressed)
 		{
-			// Open the start menu
 			if(event.key.code == sf::Keyboard::Return)
 			{
-				startMenuVisible = true;
-				startMenu.select(0, '*');
-			}	
+				if(infoMsgBox.getPage() == infoMsgBox.numPages()-1)
+					subState = SubState::GAME;
+				else
+					infoMsgBox.setPage(infoMsgBox.getPage()+1);
+			}
 		}
 	}
 }
 
 void GameStateArea::handleInput(float dt)
 {
-	if(!startMenuVisible)
+	if(subState == SubState::GAME)
 	{
 		// Handle player movement	
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
@@ -55,7 +71,7 @@ void GameStateArea::handleInput(float dt)
 
 void GameStateArea::update(float dt)
 {
-	if(!startMenuVisible)
+	if(subState == SubState::GAME)
 	{
 		this->player->renderer.update(dt);
 	}
@@ -66,7 +82,14 @@ void GameStateArea::draw(sf::RenderWindow& window, float dt) const
 	window.setView(this->view);
 	window.draw(this->area->tilemap);
 	window.draw(this->player->renderer.sprite);
-	if(startMenuVisible) window.draw(startMenu);
+	if(subState == SubState::START)
+	{
+		window.draw(startMenu);
+	}
+	else if(subState == SubState::INFO)
+	{
+		window.draw(infoMsgBox);
+	}
 }
 
 void GameStateArea::callbackItems(int index)
@@ -80,9 +103,11 @@ void GameStateArea::callbackStatus(int index)
 }
 void GameStateArea::callbackSave(int index)
 {
-
+	player->save(mgr);
+	infoMsgBox.setText("Saved game.");
+	subState = SubState::INFO;
 }
 void GameStateArea::callbackExit(int index)
 {
-	startMenuVisible = false;
+	subState = SubState::GAME;
 }

@@ -8,6 +8,9 @@
 #include "tile_map.hpp"
 #include "player.hpp"
 #include "gui/menu.hpp"
+#include "gui/message_box.hpp"
+
+class EntityManager;
 
 class GameStateArea : public GameState
 {
@@ -15,10 +18,18 @@ class GameStateArea : public GameState
 
 	Area* area;
 	std::shared_ptr<Player> player;
+	EntityManager* mgr;
+
+	enum class SubState { GAME, START, INFO };
+	SubState subState;
 
 	sf::View view;
+
+	// Start substate
 	gui::Menu startMenu;
-	bool startMenuVisible;
+
+	// Info substate
+	gui::MessageBox infoMsgBox;
 
 	public:
 
@@ -27,10 +38,11 @@ class GameStateArea : public GameState
 	virtual void update(float dt);
 	virtual void draw(sf::RenderWindow& window, float dt) const;
 
-	GameStateArea(std::shared_ptr<GameState>& ptr, Area* area,
-		std::shared_ptr<Player> player) : state(ptr)
+	GameStateArea(std::shared_ptr<GameState>& ptr,
+		std::shared_ptr<Player> player, EntityManager* mgr) : state(ptr)
 	{
-		this->area = area;
+		this->mgr = mgr;
+		this->area = player->getAreaPtr(mgr);
 		this->player = player;
 		TileMap& tm = this->area->tilemap;
 		// Move the tilemap origin to its centre
@@ -47,7 +59,13 @@ class GameStateArea : public GameState
 		startMenu.addEntry("Save", callbackFunc);
 		startMenu.addEntry("Exit", callbackFunc);
 		startMenu.setPosition(sf::Vector2f(256.0f - 8*startMenu.getSize().x, 0));
-		startMenuVisible = false;
+
+		// Set up the message box that relays general information to the player
+		// e.g. "You obtained x", "Saving game...", "You can't do that here"
+		infoMsgBox = gui::MessageBox(sf::Vector2u(256 / 8 - 2, 4), "Foo", mainFont);
+		infoMsgBox.setPosition(0, 240.0f - 8*infoMsgBox.getSize().y);
+
+		subState = SubState::GAME;
 	}
 
 	// C++ distinguishes between pointers to member functions and pointers to
