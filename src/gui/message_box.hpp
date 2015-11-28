@@ -52,7 +52,7 @@ class MessageBox : public sf::Drawable, public sf::Transformable
 	void setPage(unsigned int page);
 	// Have to use a getter since we used a setter
 	unsigned int getPage() const;
-
+	unsigned int numPages() const;
 	sf::Vector2u getSize() const;
 
 	// Change the text without affecting any other properties

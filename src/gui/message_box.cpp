@@ -87,6 +87,7 @@ void gui::MessageBox::setPage(unsigned int page)
 	currentPage = page;
 }
 unsigned int gui::MessageBox::getPage() const { return currentPage; }
+unsigned int gui::MessageBox::numPages() const { return pages.size(); }
 
 void gui::MessageBox::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
