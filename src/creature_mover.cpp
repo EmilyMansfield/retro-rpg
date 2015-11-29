@@ -1,46 +1,17 @@
 #include <SFML/System.hpp>
 #include <cmath>
 
-#include "movement_controller.hpp"
+#include "creature_mover.hpp"
 #include "tile_map.hpp"
 
-sf::Vector2f MovementController::dirToVec(Direction dir)
-{
-	switch(dir)
-	{
-		case Direction::NORTH:
-		return sf::Vector2f(0, -1);
-
-		case Direction::EAST:
-		return sf::Vector2f(1, 0);
-
-		case Direction::SOUTH:
-		return sf::Vector2f(0, 1);
-
-		case Direction::WEST:
-		return sf::Vector2f(-1, 0);
-
-		default:
-		return sf::Vector2f(0, 0);
-	}
-}
-
-Direction MovementController::vecToDir(sf::Vector2f dir)
-{
-	if(fabs(dir.x) > fabs(dir.y))
-		return (dir.x > 0 ? Direction::EAST : Direction::WEST);
-	else
-		return (dir.y > 0 ? Direction::SOUTH : Direction::NORTH);
-}
-
-void MovementController::setVelToDest()
+void CreatureMover::setVelToDest()
 {
 	velocity = destination - pos;
 	velocity /= (float)sqrt(velocity.x*velocity.x+velocity.y*velocity.y);
 	velocity *= speed;
 }
 
-void MovementController::resetVelToDest()
+void CreatureMover::resetVelToDest()
 {
 	// Set new destination
 	destination = destination + dirToVec(lastMove);
@@ -48,7 +19,7 @@ void MovementController::resetVelToDest()
 	setVelToDest();
 }
 
-void MovementController::changeDirection(Direction dir)
+void CreatureMover::changeDirection(Direction dir)
 {
 	// Snap to destination tile
 	setPosition(destination);
@@ -60,7 +31,7 @@ void MovementController::changeDirection(Direction dir)
 	lastMove = dir;
 }
 
-void MovementController::startMoving(Direction dir)
+void CreatureMover::startMoving(Direction dir)
 {
 	// Set new destination
 	destination = pos + dirToVec(dir);
@@ -71,7 +42,7 @@ void MovementController::startMoving(Direction dir)
 	lastMove = dir;
 }
 
-void MovementController::stopMoving()
+void CreatureMover::stopMoving()
 {
 	// Snap to destination tile to avoid inaccuracies
 	setPosition(destination);
@@ -81,7 +52,7 @@ void MovementController::stopMoving()
 	velocity.y = 0.0f;
 }
 
-bool MovementController::justReachedDestination()
+bool CreatureMover::justReachedDestination()
 {
 	return (pos.x >= destination.x && lastPos.x < destination.x) ||
 		(pos.x <= destination.x && lastPos.x > destination.x) ||
@@ -89,29 +60,22 @@ bool MovementController::justReachedDestination()
 		(pos.y <= destination.y && lastPos.y > destination.y);
 }
 
-bool MovementController::canMoveIn(sf::Vector2f start, Direction dir, TileMap& tm)
+bool CreatureMover::canMoveIn(const sf::Vector2f& start, Direction dir, const TileMap& tm)
 {
 	return tm.at(start + dirToVec(dir)) == 0;
 }
 
-
-void MovementController::setPosition(sf::Vector2f pos)
-{
-	this->pos = pos;
-}
-
-
-void MovementController::update(float dt)
+void CreatureMover::update(float dt)
 {
 	// Move entity according to velocity
 	lastPos = pos;
-	setPosition(pos + dt * velocity);
+	pos += dt * velocity;
 }
 
-void MovementController::step(float dt, Direction dir, TileMap& tm)
+void CreatureMover::step(float dt, Direction dir, const TileMap& tm)
 {
 	// Set direction to move in
-	this->moveIntention = dir;
+	moveIntention = dir;
 
 	// Increment the move delay counter if necessary
 	if(moveTimerOn) moveTimer += dt;
@@ -181,7 +145,12 @@ void MovementController::step(float dt, Direction dir, TileMap& tm)
 	}
 }
 
-Direction MovementController::movementDir()
+bool CreatureMover::isMoving() const
+{
+	return moving;
+}
+
+Direction CreatureMover::getFacing() const
 {
 	if(velocity == sf::Vector2f(0,0)) return lastMove;
 	else return vecToDir(velocity);

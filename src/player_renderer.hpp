@@ -7,13 +7,13 @@
 
 #include "tile_set.hpp"
 #include "tile_map.hpp"
-#include "movement_controller.hpp"
+#include "creature_mover.hpp"
 
 class PlayerRenderer
 {
 	private:
 
-	MovementController movementController;
+	CreatureMover mover;
 
 	// Tilesheet containing the player's texture frames
 	TileSet* tiles;
@@ -33,19 +33,19 @@ class PlayerRenderer
 		this->sprite.setTexture(this->tiles->tex);
 		this->ts = this->tiles->tilesize;
 		this->interp = 0.0f;
-		this->movementController = MovementController(3.0f, 0.1f);
+		this->mover = CreatureMover(3.0f, 0.1f);
 	}
 
 	void update(float dt)
 	{
 		// Move player according to velocity
-		movementController.update(dt);
-		this->sprite.setPosition((float)ts * movementController.pos);
+		mover.update(dt);
+		this->sprite.setPosition((float)ts * mover.getPosition());
 		// Calculate the animation interpolation value by calculating
 		// how far through a single tile of movement the sprite is.
 		// Note that using modf would be safer, but we assume positions
 		// are smaller than 2^31, which I think is reasonable
-		sf::Vector2f p1 = movementController.pos;
+		sf::Vector2f p1 = mover.getPosition();
 		sf::Vector2f p2 = sf::Vector2f((int)p1.x, (int)p1.y);
 		// One of these terms is zero, so this is equivalent to taking
 		// max(fabs(p1.x-p2.x), fabs(p1.y-p2.y))
@@ -53,13 +53,13 @@ class PlayerRenderer
 
 		// id of the playing animation
 		std::string animString;
-		if(movementController.moving)
+		if(mover.isMoving())
 		{
-			animString = std::string("player_walk_") + (char)movementController.movementDir();
+			animString = std::string("player_walk_") + (char)mover.getFacing();
 		}
 		else
 		{
-			animString = std::string("player_idle_") + (char)movementController.movementDir();
+			animString = std::string("player_idle_") + (char)mover.getFacing();
 		}
 
 		// Now calculate the animation frame based on the interpolation value
@@ -72,12 +72,12 @@ class PlayerRenderer
 
 	void step(float dt, Direction dir, TileMap &tm)
 	{
-		movementController.step(dt, dir, tm);
+		mover.step(dt, dir, tm);
 	}
 
 	void setPosition(sf::Vector2f pos)
 	{
-		movementController.setPosition(pos);
+		mover.setPosition(pos);
 	}
 };
 

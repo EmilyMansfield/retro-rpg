@@ -80,12 +80,12 @@ TileMap::TileMap(JsonBox::Array& a, TileSet* tileset)
 	}
 }
 
-unsigned int TileMap::at(unsigned int x, unsigned int y)
+unsigned int TileMap::at(unsigned int x, unsigned int y) const
 {
 	return this->map[y * this->w + x];
 }
 
-unsigned int TileMap::at(sf::Vector2f pos)
+unsigned int TileMap::at(sf::Vector2f pos) const
 {
 	return this->map[(unsigned int)(pos.y * this->w + pos.x)];
 }
