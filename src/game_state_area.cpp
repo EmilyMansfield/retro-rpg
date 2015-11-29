@@ -57,15 +57,15 @@ void GameStateArea::handleInput(float dt)
 	{
 		// Handle player movement	
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-			this->player->renderer.step(dt, Direction::NORTH, this->area->tilemap);
+			this->player->step(dt, Direction::NORTH, this->area->tilemap);
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-			this->player->renderer.step(dt, Direction::EAST, this->area->tilemap);
+			this->player->step(dt, Direction::EAST, this->area->tilemap);
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-			this->player->renderer.step(dt, Direction::SOUTH, this->area->tilemap);
+			this->player->step(dt, Direction::SOUTH, this->area->tilemap);
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-			this->player->renderer.step(dt, Direction::WEST, this->area->tilemap);
+			this->player->step(dt, Direction::WEST, this->area->tilemap);
 		else
-			this->player->renderer.step(dt, Direction::NONE, this->area->tilemap);
+			this->player->step(dt, Direction::NONE, this->area->tilemap);
 	}
 }
 
@@ -73,7 +73,7 @@ void GameStateArea::update(float dt)
 {
 	if(subState == SubState::GAME)
 	{
-		this->player->renderer.update(dt);
+		this->player->update(dt);
 	}
 }
 
@@ -81,7 +81,7 @@ void GameStateArea::draw(sf::RenderWindow& window, float dt) const
 {
 	window.setView(this->view);
 	window.draw(this->area->tilemap);
-	window.draw(this->player->renderer.sprite);
+	window.draw(*this->player->renderer);
 	if(subState == SubState::START)
 	{
 		window.draw(startMenu);

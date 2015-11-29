@@ -3,20 +3,29 @@
 
 #include <string>
 #include <cstdlib>
+#include <memory>
+#include <SFML/Graphics.hpp>
 #include "JsonBox.h"
 
 #include "entity.hpp"
 #include "inventory.hpp"
+#include "creature_mover.hpp"
+#include "creature_renderer.hpp"
 
 class Area;
 class EntityManager;
 class Weapon;
 class Armor;
 class Door;
+class TileSet;
+class TileMap;
 
 class Creature : public Entity
 {
 	public:
+
+	std::shared_ptr<CreatureRenderer> renderer;
+	std::shared_ptr<CreatureMover> mover;
 
 	// Name of the creature
 	std::string name;
@@ -74,6 +83,17 @@ class Creature : public Entity
 
 	// Attempt to load all data from the JSON value
 	virtual void load(JsonBox::Value& v, EntityManager* mgr);
+
+	// Graphical updates
+	void update(float dt);
+
+	// Attach a mover or renderer
+	void attachMover(float speed = 0.0f, float moveDelay = 0.0f);
+	void attachRenderer(TileSet* tilset);
+
+	void setPosition(const sf::Vector2f& pos);
+
+	void step(float dt, Direction dir, const TileMap& tm);
 };
 
 #endif /* CREATURE_HPP */

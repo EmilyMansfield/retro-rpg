@@ -23,7 +23,6 @@ Player::Player(JsonBox::Value& saveData, JsonBox::Value& areaData, EntityManager
 {
 	this->load(saveData, mgr);
 	this->loadArea(areaData, mgr);
-	this->renderer = PlayerRenderer(mgr->getEntity<TileSet>("tileset_overworld"));
 }
 
 // Calculates the total experience required to reach a certain level

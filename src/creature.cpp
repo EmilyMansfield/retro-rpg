@@ -1,5 +1,7 @@
 #include <string>
 #include <cstdlib>
+#include <cmath>
+#include <SFML/Graphics.hpp>
 #include "JsonBox.h"
 
 #include "creature.hpp"
@@ -10,6 +12,8 @@
 #include "door.hpp"
 #include "area.hpp"
 #include "entity_manager.hpp"
+#include "creature_mover.hpp"
+#include "creature_renderer.hpp"
 
 Creature::Creature(std::string id, std::string name, int hp, int strength, int agility, double evasion,
 	unsigned int xp) : Entity(id)
@@ -172,4 +176,53 @@ void Creature::load(JsonBox::Value& v, EntityManager* mgr)
 	}
 
 	return;
+}
+
+void Creature::update(float dt)
+{
+	if(renderer && mover)
+	{
+		// Move creature according to velocity
+		mover->update(dt);
+		// Calculate the animation interpolation value by calculating
+		// how far through a single tile of movement the sprite is
+		sf::Vector2f p1 = mover->getPosition();
+		sf::Vector2f p2(floor(p1.x), floor(p1.y));
+		// One of these terms is zero, so this is equivalent to taking
+		// max(fabs(p1.x-p2.x), fabs(p1.y-p2.y))
+		float interp = fabs(p1.x-p2.x) + fabs(p1.y-p2.y);
+
+		// id of the playing animation
+		std::string animString;
+		if(mover->isMoving())
+		{
+			animString = id + std::string("_walk_") + static_cast<char>(mover->getFacing());
+		}
+		else
+		{
+			animString = id + std::string("_idle_") + static_cast<char>(mover->getFacing());
+		}
+		renderer->setPosition(mover->getPosition());
+		renderer->setFrame(animString, interp);
+	}
+}
+
+void Creature::attachMover(float speed, float moveDelay)
+{
+	mover.reset(new CreatureMover(speed, moveDelay));
+}
+
+void Creature::attachRenderer(TileSet* tiles)
+{
+	renderer.reset(new CreatureRenderer(tiles));
+}
+
+void Creature::setPosition(const sf::Vector2f& pos)
+{
+	if(mover) mover->setPosition(pos);
+}
+
+void Creature::step(float dt, Direction dir, const TileMap& tm)
+{
+	if(mover) mover->step(dt, dir, tm);
 }
