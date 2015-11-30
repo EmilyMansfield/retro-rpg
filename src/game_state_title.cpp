@@ -8,6 +8,9 @@
 #include "entity_manager.hpp"
 #include "game_state_area.hpp"
 
+#include "entity_renderer.hpp"
+#include "creature_mover.hpp"
+
 void GameStateTitle::handleEvent(sf::Event& event)
 {
 	if(subState == SubState::TITLE)
@@ -40,8 +43,8 @@ void GameStateTitle::handleEvent(sf::Event& event)
 					saveData.loadFromFile(name + ".json");
 					areaData.loadFromFile(name + "_areas.json");
 					std::shared_ptr<Player> player(new Player(saveData, areaData, mgr));
-					player->attachRenderer(mgr->getEntity<TileSet>("tileset_overworld"));
-					player->attachMover(3, 0.1);
+					player->attachRenderer<EntityRenderer>(mgr->getEntity<TileSet>("tileset_overworld"));
+					player->attachMover<CreatureMover>(3, 0.1);
 					player->setPosition(sf::Vector2f(2, 2));
 					player->currentArea = "area_01";
 					player->visitedAreas.insert(player->currentArea);
@@ -131,8 +134,8 @@ void GameStateTitle::callbackCreatePlayer(int index)
 		default:
 			player.reset(new Player(name, 15, 4, 4, 1.0/64.0, 0, 1, "Adventurer"));
 	}
-	player->attachRenderer(mgr->getEntity<TileSet>("tileset_overworld"));
-	player->attachMover(3, 0.1);
+	player->attachRenderer<EntityRenderer>(mgr->getEntity<TileSet>("tileset_overworld"));
+	player->attachMover<CreatureMover>(3, 0.1);
 	player->setPosition(sf::Vector2f(2, 2));
 	player->currentArea = "area_01";
 	player->visitedAreas.insert(player->currentArea);

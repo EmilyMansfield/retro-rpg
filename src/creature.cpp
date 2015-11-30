@@ -207,16 +207,6 @@ void Creature::update(float dt)
 	}
 }
 
-void Creature::attachMover(float speed, float moveDelay)
-{
-	mover.reset(new CreatureMover(speed, moveDelay));
-}
-
-void Creature::attachRenderer(TileSet* tiles)
-{
-	renderer.reset(new EntityRenderer(tiles));
-}
-
 void Creature::setPosition(const sf::Vector2f& pos)
 {
 	if(mover) mover->setPosition(pos);

@@ -8,6 +8,7 @@
 #include "JsonBox.h"
 
 #include "entity.hpp"
+#include "overworldable.hpp"
 #include "inventory.hpp"
 #include "mover.hpp"
 #include "renderer.hpp"
@@ -20,12 +21,9 @@ class Door;
 class TileSet;
 class TileMap;
 
-class Creature : public Entity
+class Creature : public Entity, public Overworldable
 {
 	public:
-
-	std::unique_ptr<Renderer> renderer;
-	std::unique_ptr<Mover> mover;
 
 	// Name of the creature
 	std::string name;
@@ -87,10 +85,6 @@ class Creature : public Entity
 
 	// Graphical updates
 	void update(float dt);
-
-	// Attach a mover or renderer
-	void attachMover(float speed = 0.0f, float moveDelay = 0.0f);
-	void attachRenderer(TileSet* tilset);
 
 	void setPosition(const sf::Vector2f& pos);
 
