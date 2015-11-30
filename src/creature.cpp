@@ -13,7 +13,7 @@
 #include "area.hpp"
 #include "entity_manager.hpp"
 #include "creature_mover.hpp"
-#include "creature_renderer.hpp"
+#include "entity_renderer.hpp"
 
 Creature::Creature(std::string id, std::string name, int hp, int strength, int agility, double evasion,
 	unsigned int xp) : Entity(id)
@@ -214,7 +214,7 @@ void Creature::attachMover(float speed, float moveDelay)
 
 void Creature::attachRenderer(TileSet* tiles)
 {
-	renderer.reset(new CreatureRenderer(tiles));
+	renderer.reset(new EntityRenderer(tiles));
 }
 
 void Creature::setPosition(const sf::Vector2f& pos)
