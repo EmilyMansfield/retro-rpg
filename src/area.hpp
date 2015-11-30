@@ -14,6 +14,7 @@
 
 class EntityManager;
 class Door;
+class TreasureChest;
 
 // Movement is achieved through the use of areas, which are contained
 // units of space consisting of an inventory, a list of creatures and
@@ -25,10 +26,6 @@ class Area : public Entity
 	// Dialogue is run whenever the area is entered
 	Dialogue dialogue;
 
-	// Items contained within the area. Not split into individual containers
-	// for simplicity
-	Inventory items;
-
 	// Links between rooms. Every door should have this as one of its area
 	// pointers
 	std::vector<Door*> doors;
@@ -37,16 +34,16 @@ class Area : public Entity
 	// instances of the creatures
 	std::vector<Creature> creatures;
 
+	// Treasure chests in the rooms, each with an inventory
+	std::vector<TreasureChest> chests;
+
 	// Tileset used to draw the area
 	TileSet* tileset;
 
 	// Tilemap describing the appearance of the area
 	TileMap tilemap;
 
-	// Constructors
-	Area(std::string id, Dialogue dialogue, Inventory items,
-		std::vector<Creature*> creatures, TileSet* tileset,
-		TileMap& tilemap);
+	// Constructor
 	Area(std::string id, JsonBox::Value& v, EntityManager* mgr);
 
 	// Load the area from the given Json value

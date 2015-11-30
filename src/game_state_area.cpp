@@ -4,6 +4,8 @@
 #include "game_state_area.hpp"
 #include "game_state_menu_status.hpp"
 
+#include "treasure_chest.hpp"
+
 void GameStateArea::handleEvent(sf::Event& event)
 {
 	if(subState == SubState::GAME)
@@ -74,6 +76,10 @@ void GameStateArea::update(float dt)
 	if(subState == SubState::GAME)
 	{
 		this->player->update(dt);
+		for(auto& chest : this->area->chests)
+		{
+			chest.update(dt);
+		}
 	}
 }
 
@@ -81,6 +87,10 @@ void GameStateArea::draw(sf::RenderWindow& window, float dt) const
 {
 	window.setView(this->view);
 	window.draw(this->area->tilemap);
+	for(auto& chest : this->area->chests)
+	{
+		window.draw(*chest.renderer);
+	}
 	window.draw(*this->player->renderer);
 	if(subState == SubState::START)
 	{

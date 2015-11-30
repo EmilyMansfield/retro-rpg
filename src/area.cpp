@@ -1,5 +1,7 @@
 #include <vector>
 #include <string>
+#include <utility>
+#include <SFML/Graphics.hpp>
 #include "JsonBox.h"
 
 #include "area.hpp"
@@ -11,20 +13,7 @@
 #include "tile_set.hpp"
 #include "entity_manager.hpp"
 #include "tile_map.hpp"
-
-Area::Area(std::string id, Dialogue dialogue, Inventory items,
-		std::vector<Creature*> creatures, TileSet* tileset,
-		TileMap& tilemap) : Entity(id)
-{
-	this->dialogue = dialogue;
-	this->items = items;
-	this->tileset = tileset;
-	this->tilemap = tilemap;
-	for(auto creature : creatures)
-	{
-		this->creatures.push_back(*creature);
-	}
-}
+#include "treasure_chest.hpp"
 
 Area::Area(std::string id, JsonBox::Value& v, EntityManager* mgr) : Entity(id)
 {
@@ -35,14 +24,37 @@ void Area::load(JsonBox::Value& v, EntityManager* mgr)
 {
 	JsonBox::Object o = v.getObject();
 
+	// Attach the tileset
+	this->tileset = mgr->getEntity<TileSet>(o["tileset"].getString());
+
+	// Create the tilemap
+	if(o.find("tilemap") != o.end())
+	{
+		JsonBox::Array a = o["tilemap"].getArray();
+		this->tilemap = TileMap(a, this->tileset);
+	}
+
 	// Build the dialogue
 	// This is an optional parameter because it will not be saved
 	// when the area is modified
 	if(o.find("dialogue") != o.end())
 		this->dialogue = Dialogue(o["dialogue"]);
 
-	// Build the inventory
-	this->items = Inventory(o["inventory"], mgr);
+	// Build the treasure chests
+	if(o.find("chests") != o.end())
+	{
+		this->chests.clear();
+		for(auto chest : o["chests"].getArray())
+		{
+			auto c = chest.getObject();
+			Inventory inventory = Inventory(c["inventory"], mgr);
+			char facing = c["facing"].getString()[0];
+			bool open = false;
+			if(c.find("open") != c.end()) open = c["open"].getBoolean();
+			chests.emplace_back(inventory, static_cast<Direction>(facing), open, 1, mgr->getEntity<TileSet>("tileset_overworld"));
+			chests.back().setPosition(sf::Vector2f(c["x"].getFloat(), c["y"].getFloat()));
+		}
+	}
 
 	// Build the creature list
 	this->creatures.clear();
@@ -75,16 +87,6 @@ void Area::load(JsonBox::Value& v, EntityManager* mgr)
 		}
 	}
 
-	// Attach the tileset
-	this->tileset = mgr->getEntity<TileSet>(o["tileset"].getString());
-
-	// Create the tilemap
-	if(o.find("tilemap") != o.end())
-	{
-		JsonBox::Array a = o["tilemap"].getArray();
-		this->tilemap = TileMap(a, this->tileset);
-	}
-
 	return;
 }
 
@@ -94,7 +96,7 @@ JsonBox::Object Area::getJson()
 	// We don't need to save the dialogue because it doesn't change
 
 	// Save the inventory
-	o["inventory"] = this->items.getJson();
+	// o["inventory"] = this->items.getJson();
 
 	// Save the creatures
 	JsonBox::Array a;

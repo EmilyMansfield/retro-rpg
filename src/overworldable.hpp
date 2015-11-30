@@ -18,7 +18,7 @@ class Overworldable
 	virtual void setPosition(const sf::Vector2f& pos)
 	{
 		if(renderer) renderer->setPosition(pos);
-		if(mover) renderer->setPosition(pos);
+		if(mover) mover->setPosition(pos);
 	}
 
 	template<typename T, typename... U>
