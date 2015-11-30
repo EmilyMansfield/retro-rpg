@@ -76,6 +76,8 @@ class CreatureMover : public Mover
 		this->speed = speed;
 		this->moveDelay = moveDelay;
 	}
+
+	CreatureMover* clone() const { return new CreatureMover(*this); }
 };
 
 #endif /* CREATURE_MOVER_HPP */

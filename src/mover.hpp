@@ -34,6 +34,8 @@ class Mover
 	// described by tm over a time interval dt
 	virtual void step(float dt, Direction dir, const TileMap& tm) = 0;
 
+	virtual Mover* clone() const = 0;
+
 	virtual ~Mover() {}
 };
 

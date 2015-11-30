@@ -9,8 +9,8 @@
 
 #include "entity.hpp"
 #include "inventory.hpp"
-#include "creature_mover.hpp"
-#include "creature_renderer.hpp"
+#include "mover.hpp"
+#include "renderer.hpp"
 
 class Area;
 class EntityManager;
@@ -24,8 +24,8 @@ class Creature : public Entity
 {
 	public:
 
-	std::shared_ptr<CreatureRenderer> renderer;
-	std::shared_ptr<CreatureMover> mover;
+	std::unique_ptr<Renderer> renderer;
+	std::unique_ptr<Mover> mover;
 
 	// Name of the creature
 	std::string name;
@@ -56,6 +56,7 @@ class Creature : public Entity
 	Creature(std::string id, std::string name, int hp, int strength, int agility, double evasion,
 		unsigned int xp);
 	Creature(std::string id, JsonBox::Value& v, EntityManager* mgr);
+	Creature(const Creature& c);
 
 	// Equip a weapon by setting the equipped weapon pointer. Currently
 	// a pointless function (simple enough to be rewritten each time)

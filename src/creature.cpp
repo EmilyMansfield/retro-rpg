@@ -226,3 +226,21 @@ void Creature::step(float dt, Direction dir, const TileMap& tm)
 {
 	if(mover) mover->step(dt, dir, tm);
 }
+
+Creature::Creature(const Creature& c) :
+	Entity(c.id),
+	name(c.name),
+	hp(c.hp),
+	maxHp(c.maxHp),
+	strength(c.strength),
+	agility(c.agility),
+	evasion(c.evasion),
+	xp(c.xp), 
+	inventory(c.inventory),
+	equippedWeapon(c.equippedWeapon),
+	equippedArmor(c.equippedArmor),
+	currentArea(c.currentArea)
+{
+	if(c.mover) mover.reset(c.mover->clone());
+	if(c.renderer) renderer.reset(c.renderer->clone());
+}

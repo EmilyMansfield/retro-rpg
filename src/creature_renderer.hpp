@@ -31,6 +31,8 @@ class CreatureRenderer : public Renderer
 
 	void setPosition(const sf::Vector2f& pos);
 	void setFrame(const std::string& animStr, float interp);
+
+	CreatureRenderer* clone() const { return new CreatureRenderer(*this); }
 };
 
 #endif /* CREATURE_RENDERER_HPP */

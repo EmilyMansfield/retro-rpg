@@ -12,6 +12,8 @@ class Renderer : public sf::Drawable
 	virtual void setPosition(const sf::Vector2f& pos) = 0;
 	virtual void setFrame(const std::string& animStr, float interp) = 0;
 
+	virtual Renderer* clone() const = 0;
+
 	virtual ~Renderer() {}
 };
 #endif /* RENDERER_HPP */
