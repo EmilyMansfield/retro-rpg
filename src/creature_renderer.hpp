@@ -3,9 +3,10 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "renderer.hpp"
 #include "tile_set.hpp"
 
-class CreatureRenderer : public sf::Drawable
+class CreatureRenderer : public Renderer
 {
 	private:
 
