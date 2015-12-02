@@ -10,7 +10,7 @@ enum class Direction { NORTH = 'n', SOUTH = 's', EAST = 'e', WEST = 'w', NONE = 
 // Convert a cardinal direction n,e,s,w to a unit vector
 sf::Vector2f dirToVec(Direction dir);
 // Calculate the predominant cardinal direction a vector is pointing in
-Direction vecToDir(sf::Vector2f dir);
+Direction vecToDir(const sf::Vector2f& dir);
 
 class Mover
 {
@@ -20,6 +20,10 @@ class Mover
 	sf::Vector2f pos;
 
 	public:
+
+	virtual Mover* clone() const = 0;
+
+	virtual ~Mover() {}
 
 	virtual const sf::Vector2f& getPosition() const { return pos; }
 	virtual void setPosition(const sf::Vector2f pos) { this->pos = pos; }
@@ -34,9 +38,6 @@ class Mover
 	// described by tm over a time interval dt
 	virtual void step(float dt, Direction dir, const TileMap& tm) = 0;
 
-	virtual Mover* clone() const = 0;
-
-	virtual ~Mover() {}
 };
 
 #endif /* MOVER_HPP */

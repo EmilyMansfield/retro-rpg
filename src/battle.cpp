@@ -8,14 +8,13 @@
 #include "creature.hpp"
 #include "dialogue.hpp"
 
-BattleEvent::BattleEvent(Creature* source, Creature* target, BattleEventType type)
-{
-	this->source = source;
-	this->target = target;
-	this->type = type;
-}
+BattleEvent::BattleEvent(Creature* source, Creature* target,
+						 BattleEventType type) :
+	source(source),
+	target(target),
+	type(type) {}
 
-int BattleEvent::run()
+int BattleEvent::run() const
 {
 	switch(type)
 	{
@@ -50,17 +49,14 @@ void Battle::kill(Creature* creature)
 	return;
 }
 
-Battle::Battle(std::vector<Creature*>& combatants)
-{
-	this->combatants = combatants;
-
-	// Construct the menu
-	this->battleOptions = Dialogue("What will you do?",
+Battle::Battle(std::vector<Creature*>& combatants) :
+	combatants(combatants),
+	battleOptions(Dialogue("What will you do?",
 	{
 		"Attack",
 		"Defend"
-	});
-
+	}))
+{
 	// Store the unique creature names and whether there is
 	// only one or more of them. This code assumes that the
 	// creatures have not already been assigned unique names,
@@ -132,7 +128,8 @@ void Battle::nextTurn()
 	std::queue<BattleEvent> events;
 
 	// Sort the combatants in agility order
-	std::sort(combatants.begin(), combatants.end(), [](Creature* a, Creature* b) { return a->agility > b->agility; });
+	std::sort(combatants.begin(), combatants.end(),
+		[](Creature* a, Creature* b) { return a->agility > b->agility; });
 
 	// Iterate over the combatants and decide what they should do,
 	// before adding the action to the event queue.

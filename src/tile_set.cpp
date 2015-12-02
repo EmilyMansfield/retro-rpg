@@ -6,19 +6,24 @@
 #include "entity.hpp"
 #include "entity_manager.hpp"
 
-TileSet::TileSet(std::string id, std::string filename,
-	unsigned int tilesize) : Entity(id)
+TileSet::TileSet(const std::string& id,
+				 const std::string& filename,
+				 unsigned int tilesize) :
+	Entity(id),
+	tilesize(tilesize)
 {
 	this->tex.loadFromFile(filename);
-	this->tilesize = tilesize;
 }
 
-TileSet::TileSet(std::string id, JsonBox::Value& v, EntityManager* mgr) : Entity(id)
+TileSet::TileSet(const std::string& id,
+				 const JsonBox::Value& v,
+				 EntityManager* mgr) :
+	Entity(id)
 {
 	this->load(v, mgr);
 }
 
-void TileSet::load(JsonBox::Value& v, EntityManager* mgr)
+void TileSet::load(const JsonBox::Value& v, EntityManager* mgr)
 {
 	JsonBox::Object o = v.getObject();
 	this->tilesize = o["tilesize"].getInteger();

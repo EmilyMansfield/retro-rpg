@@ -17,11 +17,16 @@ class Item : public Entity
 	std::string description;
 
 	// Constructors
-	Item(std::string id, std::string name, std::string description);
-	Item(std::string id, JsonBox::Value& v, EntityManager* mgr);
+	Item(const std::string& id,
+		 const std::string& name,
+		 const std::string& description);
+	Item(const std::string& id, 
+		 const JsonBox::Value& v,
+		 EntityManager* mgr);
 
 	// Load the item information from the JSON value
-	virtual void load(JsonBox::Value& v, EntityManager* mgr);
+	virtual void load(const JsonBox::Value& v,
+					  EntityManager* mgr);
 };
 
 #endif /* ITEM_HPP */

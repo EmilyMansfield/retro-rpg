@@ -40,13 +40,17 @@ class TileSet : public Entity
 	std::map<std::string, Animation> animations;
 
 	// Constructors
-	TileSet(std::string id, std::string filename, unsigned int tilesize);
-	TileSet(std::string id, JsonBox::Value& v, EntityManager* mgr);
+	TileSet(const std::string& id,
+			const std::string& filename,
+			unsigned int tilesize);
+	TileSet(const std::string& id,
+			const JsonBox::Value& v,
+			EntityManager* mgr);
 
 	// Load the tile set from a json file
 	// JSON is not really very useful for this, but its a requirement of
 	// the EntityManager so we have to implement it
-	virtual void load(JsonBox::Value& v, EntityManager* mgr);
+	virtual void load(const JsonBox::Value& v, EntityManager* mgr);
 };
 
 #endif /* TILE_SET_HPP */

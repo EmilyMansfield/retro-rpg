@@ -15,12 +15,13 @@
 #include "tile_map.hpp"
 #include "treasure_chest.hpp"
 
-Area::Area(std::string id, JsonBox::Value& v, EntityManager* mgr) : Entity(id)
+Area::Area(const std::string& id, const JsonBox::Value& v,
+		   EntityManager* mgr) : Entity(id)
 {
 	this->load(v, mgr);
 }
 
-void Area::load(JsonBox::Value& v, EntityManager* mgr)
+void Area::load(const JsonBox::Value& v, EntityManager* mgr)
 {
 	JsonBox::Object o = v.getObject();
 
@@ -90,7 +91,7 @@ void Area::load(JsonBox::Value& v, EntityManager* mgr)
 	return;
 }
 
-JsonBox::Object Area::getJson()
+JsonBox::Object Area::getJson() const
 {
 	JsonBox::Object o;
 	// We don't need to save the dialogue because it doesn't change

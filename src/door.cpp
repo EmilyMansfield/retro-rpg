@@ -6,21 +6,26 @@
 #include "entity.hpp"
 #include "entity_manager.hpp"
 
-Door::Door(std::string id, std::string description, std::pair<std::string, std::string> areas,
-	int locked, Item* key) : Entity(id)
-{
-	this->description = description;
-	this->areas = areas;
-	this->locked = locked;
-	this->key = key;
-}
+Door::Door(const std::string& id,
+		   const std::string& description,
+		   const std::pair<std::string, std::string>& areas,
+		   int locked,
+		   Item* key) : 
+	Entity(id),
+	description(description),
+	locked(locked),
+	key(key),
+	areas(areas) {}
 
-Door::Door(std::string id, JsonBox::Value& v, EntityManager* mgr) : Entity(id)
+Door::Door(const std::string& id,
+		   const JsonBox::Value& v,
+		   EntityManager* mgr) :
+	Entity(id)
 {
 	this->load(v, mgr);
 }
 
-void Door::load(JsonBox::Value& v, EntityManager* mgr)
+void Door::load(const JsonBox::Value& v, EntityManager* mgr)
 {
 	JsonBox::Object o = v.getObject();
 	this->description = o["description"].getString();

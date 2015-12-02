@@ -7,28 +7,34 @@
 #include "creature.hpp"
 #include "entity_manager.hpp"
 
-Player::Player(std::string name, int hp, int strength, int agility, double evasion,
-	unsigned int xp, unsigned int level, std::string className) :
-	Creature("player", name, hp, strength, agility, evasion, xp)
-{
-	this->level = level;
-	this->className = className;
-}
+Player::Player(const std::string name,
+			   int hp,
+			   int strength,
+			   int agility,
+			   double evasion,
+			   unsigned int xp,
+			   unsigned int level,
+			   const std::string& className) :
+	Creature("player", name, hp, strength, agility, evasion, xp),
+	level(level),
+	className(className) {}
 
-Player::Player() : Player::Player("", 0, 0, 0, 0.0, 0, 1, "nullid")
-{
-}
+Player::Player() :
+	Player::Player("", 0, 0, 0, 0.0, 0, 1, "nullid") {}
 
-Player::Player(JsonBox::Value& saveData, JsonBox::Value& areaData, EntityManager* mgr) : Player::Player()
+Player::Player(const JsonBox::Value& saveData,
+			   const JsonBox::Value& areaData,
+			   EntityManager* mgr) :
+	Player::Player()
 {
 	this->load(saveData, mgr);
 	this->loadArea(areaData, mgr);
 }
 
 // Calculates the total experience required to reach a certain level
-unsigned int Player::xpToLevel(unsigned int level)
+unsigned int Player::xpToLevel(unsigned int level) const
 {
-	return (unsigned int)(1.5 * std::pow(this->level, 3));
+	return (unsigned int)(1.5 * std::pow(level, 3));
 }
 
 // Level the player to the next level if it has enough experience
@@ -79,7 +85,7 @@ bool Player::levelUp()
 	return true;
 }
 
-JsonBox::Object Player::toJson()
+JsonBox::Object Player::toJson() const
 {
 	JsonBox::Object o = Creature::toJson();
 
@@ -89,7 +95,7 @@ JsonBox::Object Player::toJson()
 	return o;
 }
 
-void Player::save(EntityManager* mgr)
+void Player::save(EntityManager* mgr) const
 {
 	// Construct JSON representation of the player
 	// and save it to a file
@@ -111,7 +117,8 @@ void Player::save(EntityManager* mgr)
 }
 
 // Attempt to load all data from the JSON value
-void Player::load(JsonBox::Value& saveData, EntityManager* mgr)
+void Player::load(const JsonBox::Value& saveData,
+				  EntityManager* mgr)
 {
 	// Load data shared with Creature
 	Creature::load(saveData, mgr);
@@ -125,7 +132,7 @@ void Player::load(JsonBox::Value& saveData, EntityManager* mgr)
 	return;
 }
 
-void Player::loadArea(JsonBox::Value& areaData, EntityManager* mgr)
+void Player::loadArea(const JsonBox::Value& areaData, EntityManager* mgr)
 {
 	// Load the area
 	JsonBox::Object o = areaData.getObject();

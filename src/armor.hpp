@@ -15,11 +15,12 @@ class Armor : public Item
 	int defense;
 
 	// Constructors
-	Armor(std::string id, std::string name, std::string description, int defense);
-	Armor(std::string id, JsonBox::Value& v, EntityManager* mgr);
+	Armor(const std::string& id, const std::string& name,
+		  const std::string& description, int defense);
+	Armor(const std::string& id, const JsonBox::Value& v, EntityManager* mgr);
 
 	// Load the armor from the Json value
-	void load(JsonBox::Value& v, EntityManager* mgr);
+	void load(const JsonBox::Value& v, EntityManager* mgr);
 };
 
 #endif /* ARMOR_HPP */

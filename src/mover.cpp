@@ -24,7 +24,7 @@ sf::Vector2f dirToVec(Direction dir)
 	}
 }
 
-Direction vecToDir(sf::Vector2f dir)
+Direction vecToDir(const sf::Vector2f& dir)
 {
 	if(fabs(dir.x) > fabs(dir.y))
 		return (dir.x > 0 ? Direction::EAST : Direction::WEST);

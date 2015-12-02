@@ -31,6 +31,32 @@ class TreasureChest : public Activator
 
 	Inventory inventory;
 
+	TreasureChest(const Inventory& inventory,
+				  Direction facing,
+				  bool open,
+				  float speed,
+				  TileSet* tiles) :
+		speed(speed),
+		inventory(inventory)
+	{
+		attachMover<StaticMover>(facing);
+		attachRenderer<EntityRenderer>(tiles);
+		state = (open ? State::OPEN : State::CLOSED);
+		animStr = std::string("chest_opening_") + static_cast<char>(mover->getFacing());
+		update(0);
+	}
+
+	TreasureChest(TreasureChest&& rhs) :
+		state(std::move(rhs.state)),
+		interp(std::move(rhs.interp)),
+		animStr(std::move(rhs.animStr)),
+		speed(std::move(rhs.speed)),
+		inventory(std::move(rhs.inventory))
+	{
+		mover.reset(rhs.mover.release());
+		renderer.reset(rhs.renderer.release());
+	}
+
 	void toggle(Creature& user)
 	{
 		if(state == State::CLOSED || state == State::CLOSING)
@@ -67,28 +93,6 @@ class TreasureChest : public Activator
 			renderer->setFrame(animStr, 1.0f-interp);
 		else
 			renderer->setFrame(animStr, interp);
-	}
-
-	TreasureChest(const Inventory& inventory, Direction facing,
-		bool open, float speed, TileSet* tiles) :
-		speed(speed), inventory(inventory)
-	{
-		attachMover<StaticMover>(facing);
-		attachRenderer<EntityRenderer>(tiles);
-		state = (open ? State::OPEN : State::CLOSED);
-		animStr = std::string("chest_opening_") + static_cast<char>(mover->getFacing());
-		update(0);
-	}
-
-	TreasureChest(TreasureChest&& rhs) :
-		state(std::move(rhs.state)),
-		interp(std::move(rhs.interp)),
-		animStr(std::move(rhs.animStr)),
-		speed(std::move(rhs.speed)),
-		inventory(std::move(rhs.inventory))
-	{
-		mover.reset(rhs.mover.release());
-		renderer.reset(rhs.renderer.release());
 	}
 };
 

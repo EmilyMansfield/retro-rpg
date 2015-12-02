@@ -51,9 +51,16 @@ class Creature : public Entity, public Overworldable
 	std::string currentArea;
 
 	// Constructors
-	Creature(std::string id, std::string name, int hp, int strength, int agility, double evasion,
-		unsigned int xp);
-	Creature(std::string id, JsonBox::Value& v, EntityManager* mgr);
+	Creature(const std::string& id,
+			 const std::string& name,
+			 int hp,
+			 int strength,
+			 int agility,
+			 double evasion,
+			 unsigned int xp);
+	Creature(const std::string& id,
+			 const JsonBox::Value& v,
+			 EntityManager* mgr);
 	Creature(const Creature& c);
 
 	// Equip a weapon by setting the equipped weapon pointer. Currently
@@ -66,7 +73,7 @@ class Creature : public Entity, public Overworldable
 	void equipArmor(Armor* armor);
 
 	// Convert internal area id into a pointer
-	Area* getAreaPtr(EntityManager* mgr);
+	Area* getAreaPtr(EntityManager* mgr) const;
 
 	// Attack the target creature, reducing their health if necessary
 	int attack(Creature* target);
@@ -78,10 +85,10 @@ class Creature : public Entity, public Overworldable
 	int traverse(Door* door);
 
 	// Create a JSON object containing the creature data
-	virtual JsonBox::Object toJson();
+	virtual JsonBox::Object toJson() const;
 
 	// Attempt to load all data from the JSON value
-	virtual void load(JsonBox::Value& v, EntityManager* mgr);
+	virtual void load(const JsonBox::Value& v, EntityManager* mgr);
 
 	// Graphical updates
 	void update(float dt);

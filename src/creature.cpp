@@ -15,23 +15,48 @@
 #include "creature_mover.hpp"
 #include "entity_renderer.hpp"
 
-Creature::Creature(std::string id, std::string name, int hp, int strength, int agility, double evasion,
-	unsigned int xp) : Entity(id)
-{
-	this->name = name;
-	this->hp = hp;
-	this->maxHp = hp;
-	this->strength = strength;
-	this->agility = agility;
-	this->evasion = evasion;
-	this->equippedArmor = nullptr;
-	this->equippedWeapon = nullptr;
-	this->xp = xp;
-}
+Creature::Creature(const std::string& id,
+				   const std::string& name,
+				   int hp,
+				   int strength,
+				   int agility,
+				   double evasion,
+				   unsigned int xp) :
+	Entity(id),
+	name(name),
+	hp(hp),
+	maxHp(hp),
+	strength(strength),
+	agility(agility),
+	evasion(evasion),
+	xp(xp),
+	equippedWeapon(nullptr),
+	equippedArmor(nullptr) {}
 
-Creature::Creature(std::string id, JsonBox::Value& v, EntityManager* mgr) : Entity(id)
+Creature::Creature(const std::string& id,
+				   const JsonBox::Value& v,
+				   EntityManager* mgr) :
+	Entity(id)
 {
 	this->load(v, mgr);
+}
+
+Creature::Creature(const Creature& c) :
+	Entity(c.id),
+	name(c.name),
+	hp(c.hp),
+	maxHp(c.maxHp),
+	strength(c.strength),
+	agility(c.agility),
+	evasion(c.evasion),
+	xp(c.xp), 
+	inventory(c.inventory),
+	equippedWeapon(c.equippedWeapon),
+	equippedArmor(c.equippedArmor),
+	currentArea(c.currentArea)
+{
+	if(c.mover) mover.reset(c.mover->clone());
+	if(c.renderer) renderer.reset(c.renderer->clone());
 }
 
 void Creature::equipWeapon(Weapon* weapon)
@@ -48,7 +73,7 @@ void Creature::equipArmor(Armor* armor)
 	return;
 }
 
-Area* Creature::getAreaPtr(EntityManager* mgr)
+Area* Creature::getAreaPtr(EntityManager* mgr) const
 {
 	return mgr->getEntity<Area>(this->currentArea);
 }
@@ -125,7 +150,7 @@ int Creature::traverse(Door* door)
 	return flag;
 }
 
-JsonBox::Object Creature::toJson()
+JsonBox::Object Creature::toJson() const
 {
 	JsonBox::Object o;
 	o["name"] = JsonBox::Value(this->name);
@@ -142,7 +167,7 @@ JsonBox::Object Creature::toJson()
 	return o;
 }
 
-void Creature::load(JsonBox::Value& v, EntityManager* mgr)
+void Creature::load(const JsonBox::Value& v, EntityManager* mgr)
 {
 	JsonBox::Object o = v.getObject();
 	this->name = o["name"].getString();
@@ -215,22 +240,4 @@ void Creature::setPosition(const sf::Vector2f& pos)
 void Creature::step(float dt, Direction dir, const TileMap& tm)
 {
 	if(mover) mover->step(dt, dir, tm);
-}
-
-Creature::Creature(const Creature& c) :
-	Entity(c.id),
-	name(c.name),
-	hp(c.hp),
-	maxHp(c.maxHp),
-	strength(c.strength),
-	agility(c.agility),
-	evasion(c.evasion),
-	xp(c.xp), 
-	inventory(c.inventory),
-	equippedWeapon(c.equippedWeapon),
-	equippedArmor(c.equippedArmor),
-	currentArea(c.currentArea)
-{
-	if(c.mover) mover.reset(c.mover->clone());
-	if(c.renderer) renderer.reset(c.renderer->clone());
 }

@@ -56,6 +56,18 @@ class CreatureMover : public Mover
 
 	public:
 
+	CreatureMover(float speed = 0.0f,
+				  float moveDelay = 0.0f) :
+		moveIntention(Direction::NONE),
+		lastMove(Direction::SOUTH),
+		speed(speed),
+		moving(false),
+		moveTimer(0.0f),
+		moveDelay(moveDelay),
+		moveTimerOn(false) {}
+
+	CreatureMover* clone() const { return new CreatureMover(*this); }
+
 	bool isMoving() const;
 	Direction getFacing() const;
 
@@ -65,19 +77,6 @@ class CreatureMover : public Mover
 	// Attempt to move the creature in the direction dir in the environment
 	// described by tm over a time interval dt
 	void step(float dt, Direction dir, const TileMap& tm);
-
-	CreatureMover(float speed = 0.0f, float moveDelay = 0.0f)
-	{
-		this->moveIntention = Direction::NONE;
-		this->lastMove = Direction::SOUTH;
-		this->moving = false;
-		this->moveTimer = 0.0f;
-		this->moveTimerOn = false;
-		this->speed = speed;
-		this->moveDelay = moveDelay;
-	}
-
-	CreatureMover* clone() const { return new CreatureMover(*this); }
 };
 
 #endif /* CREATURE_MOVER_HPP */

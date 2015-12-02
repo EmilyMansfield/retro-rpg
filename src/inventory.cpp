@@ -10,8 +10,17 @@
 #include "armor.hpp"
 #include "entity_manager.hpp"
 
+Inventory::Inventory(const JsonBox::Value& v,
+					 EntityManager* mgr)
+{
+	JsonBox::Object o = v.getObject();
+	load<Item>(o["items"], mgr);
+	load<Weapon>(o["weapons"], mgr);
+	load<Armor>(o["armor"], mgr);
+}
+
 template <typename T>
-void Inventory::load(JsonBox::Value& v, EntityManager* mgr)
+void Inventory::load(const JsonBox::Value& v, EntityManager* mgr)
 {
 	for(auto item : v.getArray())
 	{
@@ -22,7 +31,7 @@ void Inventory::load(JsonBox::Value& v, EntityManager* mgr)
 }
 
 template <typename T>
-JsonBox::Array Inventory::jsonArray()
+JsonBox::Array Inventory::jsonArray() const
 {
 	JsonBox::Array a;
 	for(auto item : this->items)
@@ -69,7 +78,7 @@ void Inventory::remove(Item* item, int count)
 }
 
 template <typename T>
-T* Inventory::get(unsigned int n)
+T* Inventory::get(unsigned int n) const
 {
 	// Using a list so we don't have random access, and must
 	// step through n times from the start instead
@@ -87,7 +96,7 @@ T* Inventory::get(unsigned int n)
 		return nullptr;
 }
 
-int Inventory::count(Item* item)
+int Inventory::count(Item* item) const
 {
 	for(auto it : this->items)
 	{
@@ -98,13 +107,13 @@ int Inventory::count(Item* item)
 }
 
 template <typename T>
-int Inventory::count(unsigned int n)
+int Inventory::count(unsigned int n) const
 {
 	return count(get<T>(n));
 }
 
 template <typename T>
-int Inventory::print(bool label)
+int Inventory::print(bool label) const
 {
 	unsigned int i = 1;
 
@@ -126,7 +135,7 @@ int Inventory::print(bool label)
 }
 
 // Overload of print to print all items when the template argument is empty
-int Inventory::print(bool label)
+int Inventory::print(bool label) const
 {
 	unsigned int i = 0;
 
@@ -161,15 +170,7 @@ void Inventory::merge(Inventory* inventory)
 	return;
 }
 
-Inventory::Inventory(JsonBox::Value& v, EntityManager* mgr)
-{
-	JsonBox::Object o = v.getObject();
-	load<Item>(o["items"], mgr);
-	load<Weapon>(o["weapons"], mgr);
-	load<Armor>(o["armor"], mgr);
-}
-
-JsonBox::Object Inventory::getJson()
+JsonBox::Object Inventory::getJson() const
 {
 	JsonBox::Object o;
 
@@ -181,22 +182,22 @@ JsonBox::Object Inventory::getJson()
 }
 
 // Template instantiations
-template void Inventory::load<Item>(JsonBox::Value&, EntityManager*);
-template void Inventory::load<Weapon>(JsonBox::Value&, EntityManager*);
-template void Inventory::load<Armor>(JsonBox::Value&, EntityManager*);
+template void Inventory::load<Item>(const JsonBox::Value&, EntityManager*);
+template void Inventory::load<Weapon>(const JsonBox::Value&, EntityManager*);
+template void Inventory::load<Armor>(const JsonBox::Value&, EntityManager*);
 
-template JsonBox::Array Inventory::jsonArray<Item>();
-template JsonBox::Array Inventory::jsonArray<Weapon>();
-template JsonBox::Array Inventory::jsonArray<Armor>();
+template JsonBox::Array Inventory::jsonArray<Item>() const;
+template JsonBox::Array Inventory::jsonArray<Weapon>() const;
+template JsonBox::Array Inventory::jsonArray<Armor>() const;
 
-template int Inventory::count<Item>(unsigned int);
-template int Inventory::count<Weapon>(unsigned int);
-template int Inventory::count<Armor>(unsigned int);
+template int Inventory::count<Item>(unsigned int) const;
+template int Inventory::count<Weapon>(unsigned int) const;
+template int Inventory::count<Armor>(unsigned int) const;
 
-template Item* Inventory::get<Item>(unsigned int);
-template Weapon* Inventory::get<Weapon>(unsigned int);
-template Armor* Inventory::get<Armor>(unsigned int);
+template Item* Inventory::get<Item>(unsigned int) const;
+template Weapon* Inventory::get<Weapon>(unsigned int) const;
+template Armor* Inventory::get<Armor>(unsigned int) const;
 
-template int Inventory::print<Item>(bool);
-template int Inventory::print<Weapon>(bool);
-template int Inventory::print<Armor>(bool);
+template int Inventory::print<Item>(bool) const;
+template int Inventory::print<Weapon>(bool) const;
+template int Inventory::print<Armor>(bool) const;

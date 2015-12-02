@@ -25,13 +25,18 @@ class Inventory
 	// Given the Json value v which contains a list of items, weapons, or armor of type T
 	// load the Ts into the storage list (either items, weapons, or armor)
 	template <typename T>
-	void load(JsonBox::Value& v, EntityManager* mgr);
+	void load(const JsonBox::Value& v, EntityManager* mgr);
 
 	// Return a JSON representation of all the items of the type T
 	template <typename T>
-	JsonBox::Array jsonArray();
+	JsonBox::Array jsonArray() const;
 
 	public:
+
+	// Load the inventory from a JSON value
+	Inventory(const JsonBox::Value& v,
+			  EntityManager* mgr);
+	Inventory() {}
 
 	// Add an item to the inventory
 	void add(Item* item, int count);
@@ -40,18 +45,18 @@ class Inventory
 	void remove(Item* item, int count);
 
 	// Returns the count of the specified item
-	int count(Item* item);
+	int count(Item* item) const;
 	template <typename T>
-	int count(unsigned int n);
+	int count(unsigned int n) const;
 
 	// Return the nth item in the storage list
 	template <typename T>
-	T* get(unsigned int n);
+	T* get(unsigned int n) const;
 
 	// Output a list of the items onto stdout, formatted nicely and
 	// numbered if required
 	template <typename T>
-	int print(bool label = false);
+	int print(bool label = false) const;
 
 	// Remove all items from the inventory
 	void clear();
@@ -61,16 +66,12 @@ class Inventory
 	// into a new slot if they do not
 	void merge(Inventory* inventory);
 
-	// Load the inventory from a JSON value
-	Inventory(JsonBox::Value& v, EntityManager* mgr);
-	Inventory() {}
-
 	// Print the entire inventory; items, then weapons, then armor,
 	// but if the inventory is empty then output "Nothing"
-	int print(bool label = false);
+	int print(bool label = false) const;
 
 	// Get a Json object representation of the inventory
-	JsonBox::Object getJson();
+	JsonBox::Object getJson() const;
 };
 
 #endif /* INVENTORY_HPP */

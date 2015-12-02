@@ -20,19 +20,19 @@ class EntityRenderer : public Renderer
 	public:
 
 	EntityRenderer() {}
-	EntityRenderer(TileSet* tiles)
+	EntityRenderer(TileSet* tiles) :
+		tiles(tiles),
+		ts(tiles->tilesize)
 	{
-		this->tiles = tiles;
 		this->sprite.setTexture(this->tiles->tex);
-		this->ts = this->tiles->tilesize;
 	}
+
+	EntityRenderer* clone() const { return new EntityRenderer(*this); }
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	void setPosition(const sf::Vector2f& pos);
 	void setFrame(const std::string& animStr, float interp);
-
-	EntityRenderer* clone() const { return new EntityRenderer(*this); }
 };
 
 #endif /* ENTITY_RENDERER_HPP */

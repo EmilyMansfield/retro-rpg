@@ -27,7 +27,7 @@ class BattleEvent
 
 	// Convert the event type to the corresponding function and call it
 	// on the source and target
-	int run();
+	int run() const;
 };
 
 class Battle

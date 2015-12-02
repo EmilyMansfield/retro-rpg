@@ -5,18 +5,22 @@
 #include "entity.hpp"
 #include "entity_manager.hpp"
 
-Item::Item(std::string id, std::string name, std::string description) : Entity(id)
-{
-	this->name = name;
-	this->description = description;
-}
+Item::Item(const std::string& id,
+		   const std::string& name,
+		   const std::string& description) :
+	Entity(id),
+	name(name),
+	description(description) {}
 
-Item::Item(std::string id, JsonBox::Value& v, EntityManager* mgr) : Entity(id)
+Item::Item(const std::string& id,
+		   const JsonBox::Value& v,
+		   EntityManager* mgr) :
+	Entity(id)
 {
 	this->load(v, mgr);
 }
 
-void Item::load(JsonBox::Value& v, EntityManager* mgr)
+void Item::load(const JsonBox::Value& v, EntityManager* mgr)
 {
 	JsonBox::Object o = v.getObject();
 	this->name = o["name"].getString();

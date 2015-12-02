@@ -5,19 +5,8 @@
 #include "tile_set.hpp"
 #include "tile_map.hpp"
 
-void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	// Apply the transformation from sf::Transformable
-	states.transform *= this->getTransform();
-
-	// Set the texture to the tileset
-	states.texture = &tileset->tex;
-
-	// Draw the vertex array
-	target.draw(this->verts, states);
-}
-
-TileMap::TileMap(JsonBox::Array& a, TileSet* tileset)
+TileMap::TileMap(const JsonBox::Array& a,
+				 TileSet* tileset)
 {
 	// Height is the length of the first array
 	this->h = a.size();
@@ -80,12 +69,24 @@ TileMap::TileMap(JsonBox::Array& a, TileSet* tileset)
 	}
 }
 
+void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	// Apply the transformation from sf::Transformable
+	states.transform *= this->getTransform();
+
+	// Set the texture to the tileset
+	states.texture = &tileset->tex;
+
+	// Draw the vertex array
+	target.draw(this->verts, states);
+}
+
 unsigned int TileMap::at(unsigned int x, unsigned int y) const
 {
 	return this->map[y * this->w + x];
 }
 
-unsigned int TileMap::at(sf::Vector2f pos) const
+unsigned int TileMap::at(const sf::Vector2f& pos) const
 {
 	return this->map[(unsigned int)(pos.y * this->w + pos.x)];
 }

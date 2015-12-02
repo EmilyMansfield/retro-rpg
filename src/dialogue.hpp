@@ -23,7 +23,7 @@ class Dialogue
 	public:
 
 	// Run the dialogue
-	int activate()
+	int activate() const
 	{
 		// Output the information
 		std::cout << description << std::endl;
@@ -51,14 +51,13 @@ class Dialogue
 	// constructor. By passing by value we can call the constructor using
 	// an initialisation list such as
 	// Dialogue my_dialogue("Hello", {"Choice1", "Choice"});
-	Dialogue(std::string description, std::vector<std::string> choices)
-	{
-		this->description = description;
-		this->choices = choices;
-	}
+	Dialogue(const std::string& description,
+			 const std::vector<std::string>& choices) :
+		description(description),
+		choices(choices) {}
 
 	// Create a dialogue from a JSON value
-	Dialogue(JsonBox::Value& v)
+	Dialogue(const JsonBox::Value& v)
 	{
 		JsonBox::Object o = v.getObject();
 		description = o["description"].getString();
@@ -68,12 +67,12 @@ class Dialogue
 
 	Dialogue() {}
 
-	void addChoice(std::string choice)
+	void addChoice(const std::string& choice)
 	{
 		this->choices.push_back(choice);
 	}
 
-	unsigned int size()
+	unsigned int size() const
 	{
 		return this->choices.size();
 	}

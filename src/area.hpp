@@ -44,13 +44,13 @@ class Area : public Entity
 	TileMap tilemap;
 
 	// Constructor
-	Area(std::string id, JsonBox::Value& v, EntityManager* mgr);
+	Area(const std::string& id, const JsonBox::Value& v, EntityManager* mgr);
 
 	// Load the area from the given Json value
-	void load(JsonBox::Value& v, EntityManager* mgr);
+	void load(const JsonBox::Value& v, EntityManager* mgr);
 
 	// Return a Json object representing the area
-	JsonBox::Object getJson();
+	JsonBox::Object getJson() const;
 };
 
 #endif /* AREA_HPP */
