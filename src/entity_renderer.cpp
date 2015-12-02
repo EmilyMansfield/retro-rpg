@@ -20,5 +20,5 @@ void EntityRenderer::setFrame(const std::string& animStr, float interp)
 	// Calculate the animation frame based on the interpolation value
 	// then set the texture rectangle accordingly
 	Animation& a = tiles->animations[animStr];
-	sprite.setTextureRect(sf::IntRect(floor(a.x + interp * a.len) * ts, a.y * ts, ts, ts));
+	sprite.setTextureRect(sf::IntRect(fmin(floor(a.x + interp * a.len), a.x+a.len-1) * ts, a.y * ts, ts, ts));
 }
