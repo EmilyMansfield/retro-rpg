@@ -23,41 +23,44 @@ class Text : public sf::Drawable, public sf::Transformable
 	private:
 
 	// String of text to display. May contain non-ascii values
-	std::string text;
+	std::string mText;
 	// Font to draw text in
-	const gui::Font* font;
+	const gui::Font* mFont;
 	// Colour of the text
-	sf::Color textCol;
+	sf::Color mTextCol;
 	// Background colour of all ascii text elements. Non-ascii elements
 	// (i.e. those above the 0x80 range) are used to print geometry pieces,
 	// which do not fill the entire glyph bounds and so handle their own
 	// backgrounds
-	sf::Color backgroundCol;
+	sf::Color mBackgroundCol;
 	// 1x1 texture used to print the background
-	sf::Texture backgroundTex;
+	sf::Texture mBackgroundTex;
 
 	// Array of vertices corresponding to the bounds of the glyphs to draw
-	sf::VertexArray vertices;
+	sf::VertexArray mVertices;
 	// Array of bounds of ascii glyphs
-	sf::VertexArray backgroundVertices;
+	sf::VertexArray mBackgroundVertices;
 
 	// Width and height of the produced text
-	sf::FloatRect bounds;
+	sf::FloatRect mBounds;
 
 	// Regenerate the geometry of the text, populating the vertex arrays
 	// and calculating the bounds
 	void generateGeometry();
 
-	// Construct a textured quad with position pos  and colour col from a glyph
-	void glyphToQuad(const sf::Glyph& g, sf::Vertex* quad,
-		const sf::Vector2f& pos, const sf::Color& col = sf::Color::Black);
+	// Construct a textured quad with position pos and colour col from a glyph
+	void glyphToQuad(const sf::Glyph& g,
+					 sf::Vertex* quad,
+					 const sf::Vector2f& pos,
+					 const sf::Color& col = sf::Color::Black);
 
 	public:
 
-	Text() : font(nullptr) {}
-	Text(const std::string& text, const gui::Font& font,
-		const sf::Color& backgroundCol = gui::Style::bg,
-		const sf::Color& textCol = gui::Style::fg);
+	Text() : mFont(nullptr) {}
+	Text(const std::string& text,
+		 const gui::Font& font,
+		 const sf::Color& backgroundCol = gui::Style::bg,
+		 const sf::Color& textCol = gui::Style::fg);
 
 	// Override sf::Drawable::draw so the text can be printed using window.draw()
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

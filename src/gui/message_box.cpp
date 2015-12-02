@@ -6,11 +6,25 @@
 #include "message_box.hpp"
 #include "text.hpp"
 
+gui::MessageBox::MessageBox(const sf::Vector2u& dimensions,
+							const std::string& text,
+							const gui::Font& font,
+							const sf::Color& backgroundCol,
+							const sf::Color& textCol) :
+	mDimensions(dimensions),
+	mFont(&font),
+	mCurrentPage(0),
+	mBackgroundCol(backgroundCol),
+	mTextCol(textCol)
+{
+	createPages(gui::alignString(text, dimensions.x));
+}
+
 void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 {
-	unsigned int borderWidth = dimensions.x + 2;
-	unsigned int& maxWidth = dimensions.x;
-	unsigned int& maxHeight = dimensions.y;
+	unsigned int borderWidth = mDimensions.x + 2;
+	unsigned int& maxWidth = mDimensions.x;
+	unsigned int& maxHeight = mDimensions.y;
 
 	std::string page = gui::Border::genTop(borderWidth);
 
@@ -18,9 +32,11 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 	if(lines.size() == 0)
 	{
 		for(size_t i = 0; i < maxHeight; ++i)
+		{
 			page += gui::Border::genRow(borderWidth);
+		}
 		page += gui::Border::genBottom(borderWidth);
-		pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
+		mPages.push_back(gui::Text(page, *mFont, mBackgroundCol, mTextCol));
 		return;
 	}
 
@@ -41,7 +57,7 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 			// Add the bottom border of the page
 			page += gui::Border::genBottom(borderWidth);
 			// Add the page to the list of pages and reset
-			pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
+			mPages.push_back(gui::Text(page, *mFont, mBackgroundCol, mTextCol));
 			page = gui::Border::genTop(borderWidth);
 		}
 		else
@@ -64,44 +80,41 @@ void gui::MessageBox::createPages(const std::vector<std::string>& lines)
 			page += gui::Border::genRow(borderWidth);
 		}
 		page += gui::Border::genBottom(borderWidth);
-		pages.push_back(gui::Text(page, *font, backgroundCol, textCol));
+		mPages.push_back(gui::Text(page, *mFont, mBackgroundCol, mTextCol));
 	}
-}
-
-gui::MessageBox::MessageBox(const sf::Vector2u& dimensions,
-	const std::string& text, const gui::Font& font,
-	const sf::Color& backgroundCol, const sf::Color& textCol)
-{
-	this->dimensions = dimensions;
-	this->font = &font;
-	this->currentPage = 0;
-	this->backgroundCol = backgroundCol;
-	this->textCol = textCol;
-	createPages(gui::alignString(text, dimensions.x));
 }
 
 void gui::MessageBox::setPage(unsigned int page)
 {
-	if(page >= pages.size())
-		page = pages.size() % page;
-	currentPage = page;
+	if(page >= mPages.size())
+		page = mPages.size() % page;
+	mCurrentPage = page;
 }
-unsigned int gui::MessageBox::getPage() const { return currentPage; }
-unsigned int gui::MessageBox::numPages() const { return pages.size(); }
 
-void gui::MessageBox::draw(sf::RenderTarget& target, sf::RenderStates states) const
+unsigned int gui::MessageBox::getPage() const
+{
+	return mCurrentPage;
+}
+
+unsigned int gui::MessageBox::numPages() const 
+{
+	return mPages.size();
+}
+
+void gui::MessageBox::draw(sf::RenderTarget& target,
+						   sf::RenderStates states) const
 {
 	states.transform *= getTransform();
-	pages.at(currentPage).draw(target, states);
+	mPages.at(mCurrentPage).draw(target, states);
 }
 
 sf::Vector2u gui::MessageBox::getSize() const
 {
-	return dimensions + sf::Vector2u(2, 2);
+	return mDimensions + sf::Vector2u(2, 2);
 }
 
 void gui::MessageBox::setText(const std::string& text)
 {
-	pages.clear();
-	createPages(gui::alignString(text, dimensions.x));
+	mPages.clear();
+	createPages(gui::alignString(text, mDimensions.x));
 }

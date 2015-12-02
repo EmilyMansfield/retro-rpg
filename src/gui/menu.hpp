@@ -62,30 +62,30 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// to right and top to bottom as in the example, along with
 	// their callbacks. We maintain this vector to allow for
 	// dynamic insertion and deletion of elements.
-	std::vector<std::pair<std::string, void (*)(void*, int)>> entries;
+	std::vector<std::pair<std::string, void (*)(void*, int)>> mEntries;
 	// Preprocessed entries which have been aligned and split into
 	// lines. This only needs to be regenerated when the entries
 	// themselves are changed
-	std::vector<std::string> alignedLines;
+	std::vector<std::string> mAlignedLines;
 	// The overall menu is a single gui::Text object
 	// created by stitching each individual entry together
 	// in the correct pattern
-	gui::Text text;
+	gui::Text mText;
 	// Number of entries in width x height format,
 	// *not* rows x columns 
-	sf::Vector2u alignment;
+	sf::Vector2u mAlignment;
 	// Bounds of each individual entry, in width x height
-	sf::Vector2u entrySize;
+	sf::Vector2u mEntrySize;
 	// Font to use
-	const gui::Font* font;
+	const gui::Font* mFont;
 	// The currently selected element and its selector character
-	unsigned int selectedEntry;
-	unsigned char selectorCharacter;
+	size_t mSelectedEntry;
+	unsigned char mSelectorCharacter;
 
 	// We have to store these ourselves because generateGeometry
 	// will reset the text properties
-	sf::Color backgroundCol;
-	sf::Color textCol;
+	sf::Color mBackgroundCol;
+	sf::Color mTextCol;
 
 	void formatEntries();
 	void generateGeometry();
@@ -94,19 +94,20 @@ class Menu : public sf::Drawable, public sf::Transformable
 
 	Menu() {}
 	Menu(const sf::Vector2u& alignment, const sf::Vector2u& entrySize,
-		const gui::Font& font, const sf::Color& backgroundCol = gui::Style::bg,
-		const sf::Color& textCol = gui::Style::fg);
+		 const gui::Font& font, const sf::Color& backgroundCol = gui::Style::bg,
+		 const sf::Color& textCol = gui::Style::fg);
 
 	// Mark an entry as selected by adding a selector before its entry,
 	// by default `*`. Can be a non-ascii character.
-	void select(unsigned int index, unsigned char selector = '*');
+	void select(size_t index, unsigned char selector = '*');
 	// Move the selector in the specified direction using the specified
 	// navigation mode, which determines the behaviour when the selector
 	// reaches the end of a row or column
 	// STOP - Do not move any more
 	// LOOP - Reset to the start of the row or column
 	// ADVANCE - Reset to the start of the next row or column
-	void navigate(gui::Direction dir, gui::NavigationMode xMode, gui::NavigationMode yMode);
+	void navigate(gui::Direction dir, gui::NavigationMode xMode,
+		gui::NavigationMode yMode);
 
 	// Call the callback associated with the currently selected entry
 	void activate(void* ptr);
