@@ -9,8 +9,8 @@ class Activator : public Overworldable
 {
 	public:
 
-	virtual void toggle(const Creature& user) = 0;
-	virtual void set(const Creature& user, bool on) = 0;
+	virtual void toggle(Creature& user) = 0;
+	virtual void set(bool on) = 0;
 
 	virtual ~Activator() {}
 };

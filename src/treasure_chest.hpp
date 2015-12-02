@@ -31,17 +31,23 @@ class TreasureChest : public Activator
 
 	Inventory inventory;
 
-	void toggle(const Creature& user)
+	void toggle(Creature& user)
 	{
 		if(state == State::CLOSED || state == State::CLOSING)
+		{
 			state = State::OPENING;
+			user.inventory.merge(&inventory);
+			inventory.clear();
+		}
 		else
+		{
 			state = State::CLOSING;
+		}
 		interp = 0.0f;
 		animStr = std::string("chest_opening_") + static_cast<char>(mover->getFacing());
 	}
 
-	void set(const Creature& user, bool on)
+	void set(bool on)
 	{
 		state = (on ? State::OPENING : State::CLOSING);
 		interp = 0.0f;
