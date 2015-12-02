@@ -10,10 +10,10 @@ gui::Menu::Menu(const sf::Vector2u& alignment, const sf::Vector2u& entrySize,
 	mAlignment(alignment),
 	mEntrySize(entrySize),
 	mFont(&font),
-	mTextCol(textCol),
-	mBackgroundCol(backgroundCol),
 	mSelectedEntry(0),
-	mSelectorCharacter(' ')
+	mSelectorCharacter(' '),
+	mBackgroundCol(backgroundCol),
+	mTextCol(textCol)
 {
 	formatEntries();
 	generateGeometry();

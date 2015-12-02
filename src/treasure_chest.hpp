@@ -71,7 +71,7 @@ class TreasureChest : public Activator
 
 	TreasureChest(const Inventory& inventory, Direction facing,
 		bool open, float speed, TileSet* tiles) :
-		inventory(inventory), speed(speed)
+		speed(speed), inventory(inventory)
 	{
 		attachMover<StaticMover>(facing);
 		attachRenderer<EntityRenderer>(tiles);
