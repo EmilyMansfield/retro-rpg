@@ -64,7 +64,11 @@ void gui::Text::generateGeometry()
 	for(size_t i = 0; i < mText.size(); ++i)
 	{
 		if(mText[i] != '\n') ++count;
-		if(0x80 <= mText[i] <= 0x88) ++count;
+		if(0x80 <= static_cast<unsigned char>(mText[i]) &&
+			static_cast<unsigned char>(mText[i]) <= 0x88)
+		{
+			++count;
+		}
 	}
 	// Allocate space in the vertex array for them
 	mVertices.resize(4 * count);
@@ -74,7 +78,10 @@ void gui::Text::generateGeometry()
 	count = 0;
 	for(size_t i = 0; i < mText.size(); ++i)
 	{
-		if(mText[i] != '\n' && mText[i] < 0x80) ++count;
+		if(mText[i] != '\n' && static_cast<unsigned char>(mText[i]) < 0x80)
+		{
+			++count;
+		}
 	}
 	// Allocate space for them
 	mBackgroundVertices.resize(4 * count);
