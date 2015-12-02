@@ -20,6 +20,11 @@ class Overworldable
 		if(renderer) renderer->setPosition(pos);
 		if(mover) mover->setPosition(pos);
 	}
+	virtual sf::Vector2f getPosition() const
+	{
+		if(mover) return mover->getPosition();
+		else return sf::Vector2f(0,0);
+	}
 
 	template<typename T, typename... U>
 	void attachRenderer(U&&... u)

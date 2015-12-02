@@ -17,7 +17,42 @@ void GameStateArea::handleEvent(sf::Event& event)
 			{
 				subState = SubState::START;
 				startMenu.select(0, '*');
-			}	
+			}
+			// Activate adjacent objects
+			if(event.key.code == sf::Keyboard::Space)
+			{
+				// Search for nearby chests
+				for(auto& chest : area->chests)
+				{
+					sf::Vector2f p1 = chest.getPosition();
+					sf::Vector2f p2 = player->mover->getPosition();
+					switch(player->mover->getFacing())
+					{
+						case Direction::NORTH:
+						if(p1.x == p2.x && p1.y == p2.y-1)
+							chest.toggle(*player);
+						break;
+
+						case Direction::EAST:
+						if(p1.y == p2.y && p1.x == p2.x+1)
+							chest.toggle(*player);
+						break;
+
+						case Direction::SOUTH:
+						if(p1.x == p2.x && p1.y == p2.y+1)
+							chest.toggle(*player);
+						break;
+
+						case Direction::WEST:
+						if(p1.y == p2.y && p1.x == p2.x-1)
+							chest.toggle(*player);
+						break;
+
+						default:
+						break;
+					}
+				}
+			}
 		}
 	}
 	else if(subState == SubState::START)

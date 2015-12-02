@@ -50,8 +50,8 @@ class TreasureChest : public Activator
 
 	void update(float dt)
 	{
-		if(state == State::CLOSED) interp = 1.0f;
-		else if(state == State::OPEN) interp = 0.0f;
+		if(state == State::OPEN || state == State::CLOSED)
+			interp = 1.0f;
 		else
 		{
 			if(interp < 1.0f) interp += speed * dt;
@@ -71,7 +71,7 @@ class TreasureChest : public Activator
 		attachRenderer<EntityRenderer>(tiles);
 		state = (open ? State::OPEN : State::CLOSED);
 		animStr = std::string("chest_opening_") + static_cast<char>(mover->getFacing());
-		interp = 0.0f;
+		update(0);
 	}
 
 	TreasureChest(TreasureChest&& rhs) :

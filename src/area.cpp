@@ -51,7 +51,7 @@ void Area::load(JsonBox::Value& v, EntityManager* mgr)
 			char facing = c["facing"].getString()[0];
 			bool open = false;
 			if(c.find("open") != c.end()) open = c["open"].getBoolean();
-			chests.emplace_back(inventory, static_cast<Direction>(facing), open, 1, mgr->getEntity<TileSet>("tileset_overworld"));
+			chests.emplace_back(inventory, static_cast<Direction>(facing), open, 10.0f, mgr->getEntity<TileSet>("tileset_overworld"));
 			chests.back().setPosition(sf::Vector2f(c["x"].getFloat(), c["y"].getFloat()));
 		}
 	}
