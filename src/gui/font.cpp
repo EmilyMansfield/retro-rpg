@@ -4,9 +4,10 @@
 
 bool gui::Font::loadFromFile(const std::string& filename, unsigned int characterSize)
 {
-	tex.loadFromFile(filename);
+	bool status = tex.loadFromFile(filename);
 	this->characterSize = characterSize;
 	this->width = tex.getSize().x / characterSize;
+	return status;
 }
 
 gui::Font::Font(const std::string& filename, unsigned int characterSize) : Font()
