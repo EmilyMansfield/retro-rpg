@@ -7,7 +7,7 @@
 #include "creature.hpp"
 #include "entity_manager.hpp"
 
-Player::Player(const std::string name,
+Player::Player(const std::string& name,
 			   int hp,
 			   int strength,
 			   int agility,

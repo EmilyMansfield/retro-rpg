@@ -25,7 +25,7 @@ class Player : public Creature
 	std::unordered_set<std::string> visitedAreas;
 
 	// Constructors
-	Player(const std::string name,
+	Player(const std::string& name,
 		   int hp,
 		   int strength,
 		   int agility,
