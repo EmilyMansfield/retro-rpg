@@ -62,7 +62,7 @@ class TreasureChest : public Activator
 		if(state == State::CLOSED || state == State::CLOSING)
 		{
 			state = State::OPENING;
-			user.inventory.merge(&inventory);
+			user.inventory += inventory;
 			inventory.clear();
 		}
 		else

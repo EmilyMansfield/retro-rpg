@@ -3,6 +3,7 @@
 
 #include "game_state_area.hpp"
 #include "game_state_menu_status.hpp"
+#include "game_state_menu_items.hpp"
 
 #include "treasure_chest.hpp"
 
@@ -71,6 +72,11 @@ void GameStateArea::handleEvent(sf::Event& event)
 			// Open a menu option
 			else if(event.key.code == sf::Keyboard::Return)
 				startMenu.activate(this);
+			// Close the menu
+			else if(event.key.code == sf::Keyboard::Escape)
+			{
+				subState = SubState::GAME;
+			}
 		}
 	}
 	else if(subState == SubState::INFO)
@@ -139,7 +145,8 @@ void GameStateArea::draw(sf::RenderWindow& window, float dt) const
 
 void GameStateArea::callbackItems(int index)
 {
-
+	std::shared_ptr<GameState> prevState = state;
+	state.reset(new GameStateMenuItems(state, prevState, player));
 }
 void GameStateArea::callbackStatus(int index)
 {

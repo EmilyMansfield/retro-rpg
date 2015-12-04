@@ -21,6 +21,9 @@ class Entity
 	// Pure virtual function stops Entity from being instantiated and forces it
 	// to be implemented in all derived types
 	virtual void load(const JsonBox::Value& v, EntityManager* mgr) = 0;
+
+	template <class T>
+	bool isA() const;
 };
 
 #endif /* ENTITY_HPP */

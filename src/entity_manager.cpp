@@ -40,10 +40,11 @@ T* EntityManager::getEntity(const std::string& id) const
 	// The id prefix should match to the type T, so take the
 	// first characters of the id up to the length of the
 	// prefix and compare the two
-	if(id.substr(0, entityToString<T>().size()) == entityToString<T>())
-		return dynamic_cast<T*>(this->data.at(id));
-	else
-		return nullptr;
+	return dynamic_cast<T*>(this->data.at(id));
+	// if(id.substr(0, entityToString<T>().size()) == entityToString<T>())
+	// 	return dynamic_cast<T*>(this->data.at(id));
+	// else
+	// 	return nullptr;
 }
 
 // Template specialisations
