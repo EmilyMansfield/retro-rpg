@@ -108,8 +108,14 @@ void gui::Menu::formatEntries()
 				alignedLine +=
 					alignedEntries[numRows * mAlignment.x + entry][line];
 			}
-			alignedLine += std::string((mAlignment.x-partialRow) *
-										(2+mEntrySize.x), ' ');
+			std::string padding((mAlignment.x-partialRow) * (2+mEntrySize.x), ' ');
+			if(mSelectedEntry / mAlignment.x == numRows &&
+				mSelectedEntry % mAlignment.x >= partialRow &&
+				line == 0)
+			{
+				padding[((mSelectedEntry-1) % mAlignment.x) * (mEntrySize.x+2)] = '*';
+			}
+			alignedLine += padding;
 			mAlignedLines.push_back(alignedLine);
 		}
 	}
@@ -137,7 +143,19 @@ void gui::Menu::generatePage(size_t start, size_t end)
 	std::string padding(width, ' ');
 	for(size_t i = bound; i < height; ++i)
 	{
-		textStr += gui::Border::surround(padding) + "\n";
+		// Add the selector character if necessary
+		if(mSelectedEntry / mAlignment.x == i / mEntrySize.y &&
+			i % mEntrySize.y == 0)
+		{
+			size_t loc = (mSelectedEntry % mAlignment.x) * (mEntrySize.x+2);
+			padding[loc] = '*';
+			textStr += gui::Border::surround(padding) + "\n";
+			padding[loc] = ' ';
+		}
+		else
+		{
+			textStr += gui::Border::surround(padding) + "\n";
+		}
 	}
 
 	// Add bottom border
@@ -218,7 +236,7 @@ sf::Vector2u gui::Menu::getSize() const
 {
 	return sf::Vector2u(
 						(mEntrySize.x + 2) * mAlignment.x + 2,
-						(mEntrySize.y	) * mAlignment.y + 2);
+						(mEntrySize.y    ) * mAlignment.y + 2);
 }
 
 void gui::Menu::navigate(gui::Direction dir, gui::NavigationMode xMode,
