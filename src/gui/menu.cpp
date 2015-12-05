@@ -14,7 +14,8 @@ gui::Menu::Menu(const sf::Vector2u& alignment, const sf::Vector2u& entrySize,
 	mSelectedEntry(0),
 	mSelectorCharacter(' '),
 	mBackgroundCol(backgroundCol),
-	mTextCol(textCol)
+	mTextCol(textCol),
+	mTrim(false)
 {
 	formatEntries();
 	generateGeometry();
@@ -26,7 +27,10 @@ void gui::Menu::formatEntries()
 	std::vector<std::vector<std::string>> alignedEntries;
 	for(auto entry : mEntries)
 	{
-		alignedEntries.push_back(gui::alignString(entry.first, mEntrySize.x));
+		if(mTrim)
+			alignedEntries.push_back({entry.first.substr(0, mEntrySize.x)});
+		else
+			alignedEntries.push_back(gui::alignString(entry.first, mEntrySize.x));
 	}
 
 	// If laid out from left to right and top to bottom, then the
@@ -340,4 +344,9 @@ size_t gui::Menu::numPages() const
 void gui::Menu::setPage(size_t page)
 {
 	mCurrentPage = page;
+}
+
+void gui::Menu::setTrim(bool trim)
+{
+	mTrim = trim;
 }

@@ -41,15 +41,21 @@ class GameStateMenuItems : public GameState
 		titleMsgBox = gui::MessageBox(sf::Vector2u(256/8-2, 1), "Items", mainFont);
 		titleMsgBox.setPosition(0, 0);
 
-		itemMenu = gui::Menu(sf::Vector2u(3, 6), sf::Vector2u(256/3/8-2, 2), mainFont);
+		itemMenu = gui::Menu(sf::Vector2u(1, 6), sf::Vector2u(256/8-4, 2), mainFont);
 		itemMenu.setPosition(0, 8*titleMsgBox.getSize().y);
-		if(player->inventory.size() > 0) itemMenu.select(0, '*');
+		itemMenu.setTrim(true);
 		for(size_t i = 0; i < player->inventory.size(); ++i)
 		{
 			Item* item = player->inventory.get(i);
 			if(item != nullptr)
-				itemMenu.addEntry(item->name, itemCallback);
+			{
+				unsigned int c = player->inventory.count(item);
+				std::string countStr = std::string("x") + (c > 9 ? "" : " ") + std::to_string(c);
+				size_t n = 256/8 - 4 - item->name.size() - countStr.size();
+				itemMenu.addEntry(item->name + std::string(n, ' ') + countStr, itemCallback);
+			}
 		}
+		if(player->inventory.size() > 0) itemMenu.select(0, '*');
 	}
 
 	static void itemCallback(void* ptr, int index)

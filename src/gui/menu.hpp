@@ -86,6 +86,10 @@ class Menu : public sf::Drawable, public sf::Transformable
 	sf::Color mBackgroundCol;
 	sf::Color mTextCol;
 
+	// If true, no attempt will be made to fit the entries into a box,
+	// they will simply be truncated to fit
+	bool mTrim;
+
 	void formatEntries();
 	void generatePage(size_t start, size_t end);
 	void generateGeometry();
@@ -128,6 +132,8 @@ class Menu : public sf::Drawable, public sf::Transformable
 	size_t getPage() const;
 	size_t numPages() const;
 	void setPage(size_t page);
+
+	void setTrim(bool trim);
 };
 }
 
