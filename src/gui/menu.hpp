@@ -67,10 +67,9 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// lines. This only needs to be regenerated when the entries
 	// themselves are changed
 	std::vector<std::string> mAlignedLines;
-	// The overall menu is a single gui::Text object
-	// created by stitching each individual entry together
-	// in the correct pattern
-	gui::Text mText;
+	// Pages of the menu formed from stitching the aligned lines together
+	std::vector<gui::Text> mPages;
+	size_t mCurrentPage;
 	// Number of entries in width x height format,
 	// *not* rows x columns 
 	sf::Vector2u mAlignment;
@@ -88,6 +87,7 @@ class Menu : public sf::Drawable, public sf::Transformable
 	sf::Color mTextCol;
 
 	void formatEntries();
+	void generatePage(size_t start, size_t end);
 	void generateGeometry();
 
 	public:
@@ -124,6 +124,10 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// Return the total size of the menu, including borders,
 	// measured in characters
 	sf::Vector2u getSize() const;
+
+	size_t getPage() const;
+	size_t numPages() const;
+	void setPage(size_t page);
 };
 }
 

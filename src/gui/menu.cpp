@@ -7,6 +7,7 @@
 gui::Menu::Menu(const sf::Vector2u& alignment, const sf::Vector2u& entrySize,
 				const gui::Font& font, const sf::Color& backgroundCol,
 				const sf::Color& textCol) :
+	mCurrentPage(0),
 	mAlignment(alignment),
 	mEntrySize(entrySize),
 	mFont(&font),
@@ -68,7 +69,7 @@ void gui::Menu::formatEntries()
 			// which is equivalent to each entry being surrounded by 1
 			// space. Each entry should also have additional right padding
 			// so that it's the same length as mEntrySize.x
-			if(i == mSelectedEntry)
+			if(i == mSelectedEntry && row == 0)
 				entry[row] = std::string(1, mSelectorCharacter) + entry[row];
 			else
 				entry[row] = " " + entry[row];
@@ -114,7 +115,7 @@ void gui::Menu::formatEntries()
 	}
 }
 
-void gui::Menu::generateGeometry()
+void gui::Menu::generatePage(size_t start, size_t end)
 {
 	// Width and height of final text, without borders
 	unsigned int width = mAlignment.x * (mEntrySize.x + 2);
@@ -124,9 +125,10 @@ void gui::Menu::generateGeometry()
 	std::string textStr = gui::Border::genTop(width+2);
 
 	// Add entry lines, up to the maximum number allowable
-	size_t bound = mAlignedLines.size();
-	if(bound > height) bound = height;
-	for(size_t i = 0; i < bound; ++i)
+	size_t bound = end;
+	if(end-start > height) bound = start + height;
+	if(bound > mAlignedLines.size()) bound = mAlignedLines.size();
+	for(size_t i = start; i < bound; ++i)
 	{
 		textStr += gui::Border::surround(mAlignedLines[i]) + "\n";
 	}
@@ -141,10 +143,24 @@ void gui::Menu::generateGeometry()
 	// Add bottom border
 	textStr += gui::Border::genBottom(width+2);
 
-	// Finally we can create the gui::Text
-	mText = gui::Text(textStr, *mFont);
-	mText.setColor(mTextCol);
-	mText.setBackgroundColor(mBackgroundCol);
+	// Finally we can create the gui::Text and add it to the pages
+	mPages.push_back(gui::Text(textStr, *mFont));
+	mPages.back().setColor(mTextCol);
+	mPages.back().setBackgroundColor(mBackgroundCol);
+}
+
+void gui::Menu::generateGeometry()
+{
+	size_t lines = mAlignment.y * mEntrySize.y;
+	mPages.clear();
+	size_t numPages = 1 + mAlignedLines.size() / lines;
+	if(mAlignedLines.size() % lines == 0)
+		numPages -= 1;
+
+	for(size_t i = 0; i < numPages; ++i)
+	{
+		generatePage(i*lines, (i+1)*lines);
+	}
 }
 
 void gui::Menu::select(size_t index, unsigned char selector)
@@ -171,29 +187,31 @@ void gui::Menu::addEntry(const std::string& entry, void (*callback)(void*, int))
 void gui::Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
-	mText.draw(target, states);
+	mPages.at(mCurrentPage).draw(target, states);
 }
 
 const sf::Color& gui::Menu::getBackgroundColor() const
 {
-	return mText.getBackgroundColor();
+	return mBackgroundCol;
 }
 
 const sf::Color& gui::Menu::getColor() const
 {
-	return mText.getColor();
+	return mTextCol;
 }
 
 void gui::Menu::setBackgroundColor(const sf::Color& backgroundCol)
 {
 	mBackgroundCol = backgroundCol;
-	mText.setBackgroundColor(backgroundCol);
+	for(auto& page : mPages)
+		page.setBackgroundColor(backgroundCol);
 }
 
 void gui::Menu::setColor(const sf::Color& textCol)
 {
 	mTextCol = textCol;
-	mText.setColor(textCol);
+	for(auto& page : mPages)
+		page.setColor(textCol);
 }
 
 sf::Vector2u gui::Menu::getSize() const
@@ -291,4 +309,17 @@ void gui::Menu::navigate(gui::Direction dir, gui::NavigationMode xMode,
 	}
 
 	select(pos.y * mAlignment.x + pos.x, mSelectorCharacter);
+}
+
+size_t gui::Menu::getPage() const
+{
+	return mCurrentPage;
+}
+size_t gui::Menu::numPages() const
+{
+	return mPages.size();
+}
+void gui::Menu::setPage(size_t page)
+{
+	mCurrentPage = page;
 }
