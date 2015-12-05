@@ -191,7 +191,7 @@ void gui::Menu::select(size_t index, unsigned char selector)
 
 void gui::Menu::activate(void* ptr)
 {
-	if(mEntries.at(mSelectedEntry).second)
+	if(mSelectedEntry < mEntries.size() && mEntries.at(mSelectedEntry).second)
 		mEntries.at(mSelectedEntry).second(ptr, mSelectedEntry);
 }
 
