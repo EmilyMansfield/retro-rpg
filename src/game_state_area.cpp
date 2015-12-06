@@ -31,22 +31,22 @@ void GameStateArea::handleEvent(sf::Event& event)
 					{
 						case Direction::NORTH:
 						if(p1.x == p2.x && p1.y == p2.y-1)
-							chest.toggle(*player);
+							openChest(chest);
 						break;
 
 						case Direction::EAST:
 						if(p1.y == p2.y && p1.x == p2.x+1)
-							chest.toggle(*player);
+							openChest(chest);
 						break;
 
 						case Direction::SOUTH:
 						if(p1.x == p2.x && p1.y == p2.y+1)
-							chest.toggle(*player);
+							openChest(chest);
 						break;
 
 						case Direction::WEST:
 						if(p1.y == p2.y && p1.x == p2.x-1)
-							chest.toggle(*player);
+							openChest(chest);
 						break;
 
 						default:
@@ -162,4 +162,20 @@ void GameStateArea::callbackSave(int index)
 void GameStateArea::callbackExit(int index)
 {
 	subState = SubState::GAME;
+}
+
+void GameStateArea::openChest(TreasureChest& chest)
+{
+	if(chest.getClosed())
+	{
+		std::string str = "Found ";
+		for(size_t i = 0; i < chest.inventory.size(); ++i)
+		{
+			Item* item = chest.inventory.get(i);
+			str += item->name + "\n";
+		}
+		infoMsgBox.setText(str);
+		subState = SubState::INFO;
+		chest.toggle(*player);
+	}
 }

@@ -94,6 +94,16 @@ class TreasureChest : public Activator
 		else
 			renderer->setFrame(animStr, interp);
 	}
+
+	// Note that getOpen != !getClosed
+	bool getOpen() const
+	{
+		return state == State::OPEN;
+	}
+	bool getClosed() const
+	{
+		return state == State::CLOSED;
+	}
 };
 
 #endif /* TREASURE_CHEST_HPP */

@@ -31,6 +31,8 @@ class GameStateArea : public GameState
 	// Info substate
 	gui::MessageBox infoMsgBox;
 
+	void openChest(TreasureChest& chest);
+
 	public:
 
 	virtual void handleEvent(sf::Event& event);
