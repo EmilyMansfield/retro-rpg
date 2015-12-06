@@ -5,6 +5,24 @@
 		"description": "A small blade, probably made of iron. Keep the sharp end away from your body."
 	},
 
+	"weapon_broadsword": {
+		"name": "Broadsword",
+		"damage": 4,
+		"description": "A heavy sword with a wide blade. Doubles as an oar."
+	},
+
+	"weapon_longsword": {
+		"name": "Longsword",
+		"damage": 10,
+		"description": "A long straight sword. Great if close-combat is a little too close for comfort."
+	},
+
+	"weapon_bastard_sword": {
+		"name": "Bastard Sword",
+		"damage": 15,
+		"description": "A large sword useable with one or two hands. The illegitimate offspring of a Longsword and a Greatsword."
+	},
+
 	"weapon_rat_claw": {
 		"name": "_rat_claw",
 		"damage": 1,

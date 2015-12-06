@@ -19,7 +19,7 @@
 			{
 				"inventory": {
 					"items": [
-						["item_gold_coin", 5],
+						["item_gold_coin", 50],
 						["item_iron_key", 1]
 					],
 					"weapons": [
