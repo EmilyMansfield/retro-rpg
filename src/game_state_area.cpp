@@ -170,11 +170,11 @@ void GameStateArea::openChest(TreasureChest& chest)
 {
 	if(chest.getClosed())
 	{
-		std::string str = "Found ";
+		std::string str = "Found\n";
 		for(size_t i = 0; i < chest.inventory.size(); ++i)
 		{
 			Item* item = chest.inventory.get(i);
-			str += item->name + "\n";
+			str += item->name + " x " + std::to_string(chest.inventory.count(item)) + "\n";
 		}
 		infoMsgBox.setText(str);
 		subState = SubState::INFO;
