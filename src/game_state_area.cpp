@@ -70,7 +70,8 @@ void GameStateArea::handleEvent(sf::Event& event)
 			else if(event.key.code == sf::Keyboard::Left)
 				startMenu.navigate(gui::Direction::LEFT, gui::NavigationMode::STOP, gui::NavigationMode::LOOP);
 			// Open a menu option
-			else if(event.key.code == sf::Keyboard::Return)
+			else if(event.key.code == sf::Keyboard::Return ||
+				event.key.code == sf::Keyboard::Space)
 				startMenu.activate(this);
 			// Close the menu
 			else if(event.key.code == sf::Keyboard::Escape)
@@ -83,7 +84,8 @@ void GameStateArea::handleEvent(sf::Event& event)
 	{
 		if(event.type == sf::Event::KeyPressed)
 		{
-			if(event.key.code == sf::Keyboard::Return)
+			if(event.key.code == sf::Keyboard::Return ||
+				event.key.code == sf::Keyboard::Space)
 			{
 				if(infoMsgBox.getPage() == infoMsgBox.numPages()-1)
 					subState = SubState::GAME;
