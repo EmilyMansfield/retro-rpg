@@ -177,7 +177,7 @@ void gui::Menu::generateGeometry()
 	size_t lines = mAlignment.y * mEntrySize.y;
 	mPages.clear();
 	size_t numPages = 1 + mAlignedLines.size() / lines;
-	if(mAlignedLines.size() % lines == 0)
+	if(mAlignedLines.size() % lines == 0 && mAlignedLines.size() > 0)
 		numPages -= 1;
 
 	for(size_t i = 0; i < numPages; ++i)
