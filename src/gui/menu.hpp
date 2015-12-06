@@ -52,7 +52,7 @@ namespace gui
 // in the constructor).
 
 enum class Direction { UP, DOWN, LEFT, RIGHT };
-enum class NavigationMode { STOP, LOOP, ADVANCE };
+enum class NavigationMode { STOP, LOOP, ADVANCE, PAGE };
 
 class Menu : public sf::Drawable, public sf::Transformable
 {

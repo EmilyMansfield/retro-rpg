@@ -15,13 +15,9 @@ void GameStateMenuItems::handleEvent(sf::Event& event)
 		}
 		// Handle menu navigation
 		else if(event.key.code == sf::Keyboard::Up)
-			itemMenu.navigate(gui::Direction::UP, gui::NavigationMode::ADVANCE, gui::NavigationMode::ADVANCE);
+			itemMenu.navigate(gui::Direction::UP, gui::NavigationMode::STOP, gui::NavigationMode::PAGE);
 		else if(event.key.code == sf::Keyboard::Down)
-			itemMenu.navigate(gui::Direction::DOWN, gui::NavigationMode::ADVANCE, gui::NavigationMode::ADVANCE);
-		else if(event.key.code == sf::Keyboard::Left)
-			itemMenu.navigate(gui::Direction::LEFT, gui::NavigationMode::ADVANCE, gui::NavigationMode::ADVANCE);
-		else if(event.key.code == sf::Keyboard::Right)
-			itemMenu.navigate(gui::Direction::RIGHT, gui::NavigationMode::ADVANCE, gui::NavigationMode::ADVANCE);
+			itemMenu.navigate(gui::Direction::DOWN, gui::NavigationMode::STOP, gui::NavigationMode::PAGE);
 		// Open a menu option
 		else if(event.key.code == sf::Keyboard::Return)
 			itemMenu.activate(this);

@@ -1,5 +1,6 @@
 #include <utility>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 #include "gui.hpp"
 #include "menu.hpp"
@@ -145,7 +146,7 @@ void gui::Menu::generatePage(size_t start, size_t end)
 
 	// Add padding lines, up to the indented height
 	std::string padding(width, ' ');
-	for(size_t i = bound; i < height; ++i)
+	for(size_t i = bound; i < start+height; ++i)
 	{
 		// Add the selector character if necessary
 		if(mSelectedEntry / mAlignment.x == i / mEntrySize.y &&
@@ -246,8 +247,9 @@ sf::Vector2u gui::Menu::getSize() const
 void gui::Menu::navigate(gui::Direction dir, gui::NavigationMode xMode,
 						 gui::NavigationMode yMode)
 {
-	sf::Vector2u pos(mSelectedEntry % mAlignment.x,
-					 mSelectedEntry / mAlignment.x);
+	size_t entriesOnPrevPage = mCurrentPage*mAlignment.x*mAlignment.y;
+	sf::Vector2u pos((mSelectedEntry-entriesOnPrevPage) % mAlignment.x,
+					 (mSelectedEntry-entriesOnPrevPage) / mAlignment.x);
 
 	switch(dir)
 	{
@@ -266,6 +268,12 @@ void gui::Menu::navigate(gui::Direction dir, gui::NavigationMode xMode,
 				// decrementing is a no-go if pos.x might be 0
 				if(pos.x == 0) pos.x = mAlignment.x - 1;
 				else --pos.x;
+			}
+			else if(yMode == gui::NavigationMode::PAGE)
+			{
+				if(mCurrentPage == 0) mCurrentPage = mPages.size();
+				--mCurrentPage;
+				pos.y = mAlignment.y-1;
 			}
 		}
 		else
@@ -286,6 +294,11 @@ void gui::Menu::navigate(gui::Direction dir, gui::NavigationMode xMode,
 				if(pos.x >= mAlignment.x-1) pos.x = 0;
 				else ++pos.x;
 			}
+			else if(yMode == gui::NavigationMode::PAGE)
+			{
+				++mCurrentPage;
+				pos.y = 0;
+			}
 		}
 		else
 			++pos.y;
@@ -304,6 +317,11 @@ void gui::Menu::navigate(gui::Direction dir, gui::NavigationMode xMode,
 				pos.x = 0;
 				if(pos.y == mAlignment.y - 1) pos.y = 0;
 				else ++pos.y;
+			}
+			else if(xMode == gui::NavigationMode::PAGE)
+			{
+				++mCurrentPage;
+				pos.x = 0;
 			}
 		}
 		else
@@ -324,13 +342,21 @@ void gui::Menu::navigate(gui::Direction dir, gui::NavigationMode xMode,
 				if(pos.y == 0) pos.y = mAlignment.y - 1;
 				else --pos.y;
 			}
+			else if(xMode == gui::NavigationMode::PAGE)
+			{
+				if(mCurrentPage == 0) mCurrentPage = mPages.size();
+				--mCurrentPage;
+				pos.x = mAlignment.x - 1;
+			}
 		}
 		else
 			--pos.x;
 		break;
 	}
 
-	select(pos.y * mAlignment.x + pos.x, mSelectorCharacter);
+	mCurrentPage %= mPages.size();
+	size_t index = pos.y * mAlignment.x + pos.x + mCurrentPage*mAlignment.x*mAlignment.y;
+	select(index, mSelectorCharacter);
 }
 
 size_t gui::Menu::getPage() const
@@ -343,7 +369,7 @@ size_t gui::Menu::numPages() const
 }
 void gui::Menu::setPage(size_t page)
 {
-	mCurrentPage = page;
+	mCurrentPage = page % mPages.size();
 }
 
 void gui::Menu::setTrim(bool trim)
