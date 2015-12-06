@@ -15,9 +15,15 @@ void GameStateMenuItems::handleEvent(sf::Event& event)
 		}
 		// Handle menu navigation
 		else if(event.key.code == sf::Keyboard::Up)
+		{
 			itemMenu.navigate(gui::Direction::UP, gui::NavigationMode::STOP, gui::NavigationMode::PAGE);
+			updateInfo();
+		}
 		else if(event.key.code == sf::Keyboard::Down)
+		{
 			itemMenu.navigate(gui::Direction::DOWN, gui::NavigationMode::STOP, gui::NavigationMode::PAGE);
+			updateInfo();
+		}
 		// Open a menu option
 		else if(event.key.code == sf::Keyboard::Return)
 			itemMenu.activate(this);
@@ -38,9 +44,24 @@ void GameStateMenuItems::draw(sf::RenderWindow& window, float dt) const
 
 	window.draw(titleMsgBox);
 	window.draw(itemMenu);
+	window.draw(infoMsgBox);
 }
 
 void GameStateMenuItems::callbackQuit(int index)
 {
 	state = prevState;
+}
+
+void GameStateMenuItems::updateInfo()
+{
+	size_t selected = itemMenu.getSelected();
+	if(selected < player->inventory.size())
+	{
+		Item* item = player->inventory.get(selected);
+		infoMsgBox.setText(item->description);
+	}
+	else
+	{
+		infoMsgBox.setText("");
+	}
 }

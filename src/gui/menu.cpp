@@ -376,3 +376,8 @@ void gui::Menu::setTrim(bool trim)
 {
 	mTrim = trim;
 }
+
+size_t gui::Menu::getSelected() const
+{
+	return mSelectedEntry;
+}

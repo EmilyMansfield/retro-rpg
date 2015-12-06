@@ -112,6 +112,7 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// ADVANCE - Reset to the start of the next row or column
 	void navigate(gui::Direction dir, gui::NavigationMode xMode,
 		gui::NavigationMode yMode);
+	size_t getSelected() const;
 
 	// Call the callback associated with the currently selected entry
 	void activate(void* ptr);

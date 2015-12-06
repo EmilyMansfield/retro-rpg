@@ -21,6 +21,9 @@ class GameStateMenuItems : public GameState
 
 	gui::Menu itemMenu;
 	gui::MessageBox titleMsgBox;
+	gui::MessageBox infoMsgBox;
+
+	void updateInfo();
 
 	public:
 
@@ -37,12 +40,16 @@ class GameStateMenuItems : public GameState
 		player(player)
 	{
 		this->view.reset(sf::FloatRect(0.0f, 0.0f, 256.0f, 240.0f));
+		const unsigned int chPerRow = view.getSize().x / 8;
 
-		titleMsgBox = gui::MessageBox(sf::Vector2u(256/8-2, 1), "Items", mainFont);
+		// "Items" message box
+		titleMsgBox = gui::MessageBox(sf::Vector2u(chPerRow-2, 1), "Items", mainFont);
 		titleMsgBox.setPosition(0, 0);
+		unsigned int titleH = titleMsgBox.getSize().y;
 
-		itemMenu = gui::Menu(sf::Vector2u(1, 6), sf::Vector2u(256/8-4, 2), mainFont);
-		itemMenu.setPosition(0, 8*titleMsgBox.getSize().y);
+		// Navigatable list of items
+		itemMenu = gui::Menu(sf::Vector2u(1, 9), sf::Vector2u(chPerRow-4, 2), mainFont);
+		itemMenu.setPosition(0, 8*titleH);
 		itemMenu.setTrim(true);
 		for(size_t i = 0; i < player->inventory.size(); ++i)
 		{
@@ -51,11 +58,21 @@ class GameStateMenuItems : public GameState
 			{
 				unsigned int c = player->inventory.count(item);
 				std::string countStr = std::string("x") + (c > 9 ? "" : " ") + std::to_string(c);
-				size_t n = 256/8 - 4 - item->name.size() - countStr.size();
+				size_t n = chPerRow - 4 - item->name.size() - countStr.size();
 				itemMenu.addEntry(item->name + std::string(n, ' ') + countStr, itemCallback);
 			}
 		}
-		if(player->inventory.size() > 0) itemMenu.select(0, '*');
+		unsigned int itemH = itemMenu.getSize().y;
+
+		// Info message box
+		infoMsgBox = gui::MessageBox(sf::Vector2u(chPerRow - 2, 5), "", mainFont);
+		infoMsgBox.setPosition(0, 8*(titleH+itemH));
+		// Initialise the info box text
+		if(player->inventory.size() > 0)
+		{
+			itemMenu.select(0, '*');
+			updateInfo();
+		}
 	}
 
 	static void itemCallback(void* ptr, int index)
