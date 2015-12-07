@@ -26,7 +26,10 @@ void Area::load(const JsonBox::Value& v, EntityManager* mgr)
 	JsonBox::Object o = v.getObject();
 
 	// Attach the tileset
-	this->tileset = mgr->getEntity<TileSet>(o["tileset"].getString());
+	if(o.find("tileset") != o.end())
+	{
+		this->tileset = mgr->getEntity<TileSet>(o["tileset"].getString());
+	}
 
 	// Create the tilemap
 	if(o.find("tilemap") != o.end())
