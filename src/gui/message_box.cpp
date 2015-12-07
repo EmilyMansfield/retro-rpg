@@ -117,4 +117,5 @@ void gui::MessageBox::setText(const std::string& text)
 {
 	mPages.clear();
 	createPages(gui::alignString(text, mDimensions.x));
+	mCurrentPage = 0;
 }
