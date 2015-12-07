@@ -54,13 +54,11 @@ class GameStateMenuItems : public GameState
 		for(size_t i = 0; i < player->inventory.size(); ++i)
 		{
 			Item* item = player->inventory.get(i);
-			if(item != nullptr)
-			{
-				unsigned int c = player->inventory.count(item);
-				std::string countStr = std::string("x") + (c > 9 ? "" : " ") + std::to_string(c);
-				size_t n = chPerRow - 4 - item->name.size() - countStr.size();
-				itemMenu.addEntry(item->name + std::string(n, ' ') + countStr, itemCallback);
-			}
+
+			unsigned int c = player->inventory.count(item);
+			std::string countStr = std::string("x") + (c > 9 ? "" : " ") + std::to_string(c);
+			size_t n = chPerRow - 4 - item->name.size() - countStr.size();
+			itemMenu.addEntry(item->name + std::string(n, ' ') + countStr, itemCallback);
 		}
 		unsigned int itemH = itemMenu.getSize().y;
 
