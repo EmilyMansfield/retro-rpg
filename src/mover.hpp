@@ -2,6 +2,9 @@
 #define MOVER_HPP
 
 #include <SFML/System.hpp>
+#include "JsonBox.h"
+
+#include <iostream>
 
 class TileMap;
 
@@ -30,6 +33,7 @@ class Mover
 
 	virtual bool isMoving() const = 0;
 	virtual Direction getFacing() const = 0;
+	virtual void setFacing(Direction facing) = 0;
 
 	// Update the entity's position according to their velocity
 	virtual void update(float dt) = 0;
@@ -38,6 +42,22 @@ class Mover
 	// described by tm over a time interval dt
 	virtual void step(float dt, Direction dir, const TileMap& tm) = 0;
 
+	virtual JsonBox::Object toJson() const
+	{
+		JsonBox::Object o;
+		o["x"] = JsonBox::Value((int)pos.x);
+		o["y"] = JsonBox::Value((int)pos.y);
+		o["facing"] = JsonBox::Value(std::string(1, static_cast<char>(getFacing())));
+
+		return o;
+	}
+
+	virtual void load(const JsonBox::Value& v)
+	{
+		JsonBox::Object o = v.getObject();
+		setPosition(sf::Vector2f(o["x"].getInteger(), o["y"].getInteger()));
+		setFacing(static_cast<Direction>(o["facing"].getString()[0]));
+	}
 };
 
 #endif /* MOVER_HPP */

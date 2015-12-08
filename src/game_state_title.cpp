@@ -45,7 +45,8 @@ void GameStateTitle::handleEvent(sf::Event& event)
 					std::shared_ptr<Player> player(new Player(saveData, areaData, mgr));
 					player->attachRenderer<EntityRenderer>(mgr->getEntity<TileSet>("tileset_overworld"));
 					player->attachMover<CreatureMover>(3, 0.1);
-					player->setPosition(sf::Vector2f(2, 2));
+					player->loadMover(saveData);
+					// player->setPosition(sf::Vector2f(2, 2));
 					player->currentArea = "area_01";
 					player->visitedAreas.insert(player->currentArea);
 					state.reset(new GameStateArea(state, player, mgr));

@@ -4,6 +4,7 @@
 #include <memory>
 #include <utility>
 #include <SFML/Graphics.hpp>
+#include "JsonBox.h"
 
 #include "renderer.hpp"
 #include "mover.hpp"
@@ -24,6 +25,12 @@ class Overworldable
 	{
 		if(mover) return mover->getPosition();
 		else return sf::Vector2f(0,0);
+	}
+
+	virtual void loadMover(const JsonBox::Value& v)
+	{
+		JsonBox::Object o = v.getObject();
+		if(mover != nullptr) mover->load(o["mover"].getObject());
 	}
 
 	template<typename T, typename... U>

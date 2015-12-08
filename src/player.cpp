@@ -91,6 +91,7 @@ JsonBox::Object Player::toJson() const
 
 	o["className"] = JsonBox::Value(this->className);
 	o["level"] = JsonBox::Value(int(this->level));
+	if(mover != nullptr) o["mover"] = JsonBox::Value(mover->toJson());
 
 	return o;
 }

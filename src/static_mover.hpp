@@ -21,6 +21,7 @@ class StaticMover : public Mover
 
 	bool isMoving() const { return false; }
 	Direction getFacing() const { return facing; }
+	void setFacing(Direction facing) { this->facing = facing; }
 
 	void update(float dt) {}
 	void step(float dt, Direction dir, const TileMap& tm) {}

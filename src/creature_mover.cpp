@@ -155,3 +155,8 @@ Direction CreatureMover::getFacing() const
 	if(velocity == sf::Vector2f(0,0)) return lastMove;
 	else return vecToDir(velocity);
 }
+
+void CreatureMover::setFacing(Direction facing)
+{
+	lastMove = facing;
+}

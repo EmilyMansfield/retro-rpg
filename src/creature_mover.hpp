@@ -70,6 +70,7 @@ class CreatureMover : public Mover
 
 	bool isMoving() const;
 	Direction getFacing() const;
+	void setFacing(Direction facing);
 
 	// Update the creature's position according to their velocity
 	void update(float dt);
