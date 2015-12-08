@@ -121,5 +121,19 @@ JsonBox::Object Area::getJson() const
 	}
 	o["doors"] = a;
 
+	// Save the chests
+	a.clear();
+	for(const auto& chest : chests)
+	{
+		JsonBox::Object c;
+		c["inventory"] = JsonBox::Value(chest.inventory.getJson());
+		c["x"] = JsonBox::Value((int)chest.mover->getPosition().x);
+		c["y"] = JsonBox::Value((int)chest.mover->getPosition().y);
+		c["facing"] = JsonBox::Value(std::string(1, static_cast<char>(chest.mover->getFacing())));
+		c["open"] = JsonBox::Value(chest.getOpen());
+		a.push_back(c);
+	}
+	o["chests"] = a;
+
 	return o;
 }
