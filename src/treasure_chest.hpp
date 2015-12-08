@@ -87,7 +87,12 @@ class TreasureChest : public Activator
 		else
 		{
 			if(interp < 1.0f) interp += speed * dt;
-			if(interp > 1.0f) interp = 1.0f;
+			if(interp > 1.0f)
+			{
+				interp = 1.0f;
+				if(state == State::OPENING) state = State::OPEN;
+				else if(state == State::CLOSING) state = State::CLOSED;
+			}
 		}
 		if(state == State::CLOSING || state == State::CLOSED)
 			renderer->setFrame(animStr, 1.0f-interp);
