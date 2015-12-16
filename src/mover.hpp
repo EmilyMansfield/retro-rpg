@@ -2,7 +2,7 @@
 #define MOVER_HPP
 
 #include <SFML/System.hpp>
-#include "JsonBox.h"
+#include <JsonBox.h>
 
 #include <iostream>
 

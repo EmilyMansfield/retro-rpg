@@ -1,5 +1,5 @@
 #include <string>
-#include "JsonBox.h"
+#include <JsonBox.h>
 #include <SFML/Graphics.hpp>
 
 #include "tile_set.hpp"

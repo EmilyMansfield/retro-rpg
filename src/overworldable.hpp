@@ -4,7 +4,7 @@
 #include <memory>
 #include <utility>
 #include <SFML/Graphics.hpp>
-#include "JsonBox.h"
+#include <JsonBox.h>
 
 #include "renderer.hpp"
 #include "mover.hpp"

@@ -1,6 +1,6 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "JsonBox.h"
+#include <JsonBox.h>
 
 #include "tile_set.hpp"
 #include "tile_map.hpp"

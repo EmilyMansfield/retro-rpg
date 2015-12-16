@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include <string>
 #include <SFML/System.hpp>
-#include "JsonBox.h"
+#include <JsonBox.h>
 
 #include "creature.hpp"
 

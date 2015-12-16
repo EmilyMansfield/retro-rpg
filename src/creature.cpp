@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <SFML/Graphics.hpp>
-#include "JsonBox.h"
+#include <JsonBox.h>
 
 #include "creature.hpp"
 #include "entity.hpp"

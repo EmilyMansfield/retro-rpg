@@ -2,7 +2,7 @@
 #define TILE_SET_HPP
 
 #include <string>
-#include "JsonBox.h"
+#include <JsonBox.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 

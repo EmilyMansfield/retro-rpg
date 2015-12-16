@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <fstream>
-#include "JsonBox.h"
+#include <JsonBox.h>
 
 #include "game_state_title.hpp"
 #include "player.hpp"

@@ -2,7 +2,7 @@
 #include <string>
 #include <utility>
 #include <SFML/Graphics.hpp>
-#include "JsonBox.h"
+#include <JsonBox.h>
 
 #include "area.hpp"
 #include "door.hpp"
