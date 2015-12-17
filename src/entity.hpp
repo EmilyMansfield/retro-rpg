@@ -12,11 +12,11 @@ class Entity
 
 	std::string id;
 
-	Entity(const std::string& id) : id(id) {}
+	Entity(const std::string& id);
 
 	// Destructor must be made virtual as all derived classes are
 	// treated as Entity in the EntityManager
-	virtual ~Entity() {}
+	virtual ~Entity();
 
 	// Pure virtual function stops Entity from being instantiated and forces it
 	// to be implemented in all derived types

@@ -3,6 +3,34 @@
 
 #include "mover.hpp"
 
+Mover::~Mover() {}
+
+const sf::Vector2f& Mover::getPosition() const
+{
+	return pos;
+}
+void Mover::setPosition(const sf::Vector2f pos)
+{
+	this->pos = pos;
+}
+
+JsonBox::Object Mover::toJson() const
+{
+	JsonBox::Object o;
+	o["x"] = JsonBox::Value((int)pos.x);
+	o["y"] = JsonBox::Value((int)pos.y);
+	o["facing"] = JsonBox::Value(std::string(1, static_cast<char>(getFacing())));
+
+	return o;
+}
+
+void Mover::load(const JsonBox::Value& v)
+{
+	JsonBox::Object o = v.getObject();
+	setPosition(sf::Vector2f(o["x"].getInteger(), o["y"].getInteger()));
+	setFacing(static_cast<Direction>(o["facing"].getString()[0]));
+}
+
 sf::Vector2f dirToVec(Direction dir)
 {
 	switch(dir)

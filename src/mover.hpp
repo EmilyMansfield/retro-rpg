@@ -26,10 +26,10 @@ class Mover
 
 	virtual Mover* clone() const = 0;
 
-	virtual ~Mover() {}
+	virtual ~Mover();
 
-	virtual const sf::Vector2f& getPosition() const { return pos; }
-	virtual void setPosition(const sf::Vector2f pos) { this->pos = pos; }
+	virtual const sf::Vector2f& getPosition() const;
+	virtual void setPosition(const sf::Vector2f pos);
 
 	virtual bool isMoving() const = 0;
 	virtual Direction getFacing() const = 0;
@@ -42,22 +42,8 @@ class Mover
 	// described by tm over a time interval dt
 	virtual void step(float dt, Direction dir, const TileMap& tm) = 0;
 
-	virtual JsonBox::Object toJson() const
-	{
-		JsonBox::Object o;
-		o["x"] = JsonBox::Value((int)pos.x);
-		o["y"] = JsonBox::Value((int)pos.y);
-		o["facing"] = JsonBox::Value(std::string(1, static_cast<char>(getFacing())));
-
-		return o;
-	}
-
-	virtual void load(const JsonBox::Value& v)
-	{
-		JsonBox::Object o = v.getObject();
-		setPosition(sf::Vector2f(o["x"].getInteger(), o["y"].getInteger()));
-		setFacing(static_cast<Direction>(o["facing"].getString()[0]));
-	}
+	virtual JsonBox::Object toJson() const;
+	virtual void load(const JsonBox::Value& v);
 };
 
 #endif /* MOVER_HPP */

@@ -20,7 +20,7 @@ class GameState
 	virtual void update(float dt) = 0;
 	virtual void draw(sf::RenderWindow& window, float dt) const = 0;
 
-	virtual ~GameState() {}	
+	virtual ~GameState();
 };
 
 #endif /* GAME_STATE_HPP */

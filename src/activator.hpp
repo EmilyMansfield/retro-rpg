@@ -12,7 +12,7 @@ class Activator : public Overworldable
 	virtual void toggle(Creature& user) = 0;
 	virtual void set(bool on) = 0;
 
-	virtual ~Activator() {}
+	virtual ~Activator();
 };
 
 #endif /* ACTIVATOR_HPP */

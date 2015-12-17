@@ -11,6 +11,17 @@ class Area;
 class Door;
 class TileSet;
 
+Entity::Entity(const std::string& id) :
+	id(id)
+{
+
+}
+
+Entity::~Entity()
+{
+
+}
+
 template <class T>
 bool Entity::isA() const
 {

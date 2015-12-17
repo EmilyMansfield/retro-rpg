@@ -14,6 +14,6 @@ class Renderer : public sf::Drawable
 
 	virtual Renderer* clone() const = 0;
 
-	virtual ~Renderer() {}
+	virtual ~Renderer();
 };
 #endif /* RENDERER_HPP */

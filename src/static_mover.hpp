@@ -15,16 +15,16 @@ class StaticMover : public Mover
 
 	public:
 
-	StaticMover(Direction facing) : facing(facing) {}
+	StaticMover(Direction facing);
 
-	StaticMover* clone() const { return new StaticMover(*this); }
+	StaticMover* clone() const;
 
-	bool isMoving() const { return false; }
-	Direction getFacing() const { return facing; }
-	void setFacing(Direction facing) { this->facing = facing; }
+	bool isMoving() const;
+	Direction getFacing() const;
+	void setFacing(Direction facing);
 
-	void update(float dt) {}
-	void step(float dt, Direction dir, const TileMap& tm) {}
+	void update(float dt);
+	void step(float dt, Direction dir, const TileMap& tm);
 };
 
 #endif /* STATIC_MOVER_HPP */
