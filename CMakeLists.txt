@@ -12,7 +12,12 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 include_directories(src/include)
 
 # Set compiler flags
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+set(CMAKE_CXX_FLAGS "")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	set(CMAKE_CXX_FLAGS "-std=c++11 -Weverything -Wno-comment -Wno-c++98-compat")
+else()
+	set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wno-comment")
+endif()
 set(PROJECT_LINK_LIBS m JsonBox)
 
 # Add the final executable to be built
