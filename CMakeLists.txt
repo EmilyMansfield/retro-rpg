@@ -12,8 +12,8 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 include_directories(src/include)
 
 # Set compiler flags
-set(CMAKE_CXX_FLAGS "-std=c++11")
-set(PROJECT_LINK_LIBS m)
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+set(PROJECT_LINK_LIBS m JsonBox)
 
 # Add the final executable to be built
 set(EXECUTABLE_NAME "pprpg")
@@ -28,17 +28,6 @@ if(SFML_FOUND)
 else()
 	message(FATAL_ERROR "SFML not found, CMake will exit.")
 endif()
-
-# Detect and add JsonBox
-find_package(JSONBOX)
-if(JSONBOX_FOUND)
-	include_directories(${JSONBOX_INCLUDE_DIRS})
-	set(PROJECT_LINK_LIBS ${PROJECT_LINK_LIBS} ${JSONBOX_LIBRARIES})
-else()
-	message(FATAL_ERROR "JsonBox not found, CMake will exit.")
-endif()
-
-#set(PROJECT_LINK_LIBS ${PROJECT_LINK_LIBS} ${CMAKE_SOURCE_DIR}/libJsonBox.a)
 
 # Link with libraries
 target_link_libraries(${EXECUTABLE_NAME} ${PROJECT_LINK_LIBS})
