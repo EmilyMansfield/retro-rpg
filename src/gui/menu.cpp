@@ -200,7 +200,7 @@ void gui::Menu::activate(void* ptr)
 		mEntries.at(mSelectedEntry).second(ptr, mSelectedEntry);
 }
 
-void gui::Menu::addEntry(const std::string& entry, void (*callback)(void*, int))
+void gui::Menu::addEntry(const std::string& entry, void (*callback)(void*, size_t))
 {
 	mEntries.push_back(std::make_pair(entry, callback));
 	formatEntries();

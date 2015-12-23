@@ -6,6 +6,7 @@
 #include "static_mover.hpp"
 #include "entity_renderer.hpp"
 #include "treasure_chest.hpp"
+#include "creature.hpp"
 
 TreasureChest::TreasureChest(const Inventory& inventory,
 			  Direction facing,

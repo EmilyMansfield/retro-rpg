@@ -24,7 +24,7 @@ void GameStateMenuStatus::draw(sf::RenderWindow& window, float dt) const
 	window.draw(levelMenu);
 }
 
-void GameStateMenuStatus::callbackQuit(int index)
+void GameStateMenuStatus::callbackQuit(size_t index)
 {
 	state = prevState;
 }

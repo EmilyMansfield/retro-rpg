@@ -27,25 +27,28 @@ void GameStateArea::handleEvent(sf::Event& event)
 				{
 					sf::Vector2f p1 = chest.getPosition();
 					sf::Vector2f p2 = player->mover->getPosition();
+					sf::Vector2i p1i(static_cast<int>(p1.x), static_cast<int>(p1.y));
+					sf::Vector2i p2i(static_cast<int>(p2.x), static_cast<int>(p2.y));
+
 					switch(player->mover->getFacing())
 					{
 						case Direction::NORTH:
-						if(p1.x == p2.x && p1.y == p2.y-1)
+						if(p1i.x == p2i.x && p1i.y == p2i.y-1)
 							openChest(chest);
 						break;
 
 						case Direction::EAST:
-						if(p1.y == p2.y && p1.x == p2.x+1)
+						if(p1i.y == p2i.y && p1i.x == p2i.x+1)
 							openChest(chest);
 						break;
 
 						case Direction::SOUTH:
-						if(p1.x == p2.x && p1.y == p2.y+1)
+						if(p1i.x == p2i.x && p1i.y == p2i.y+1)
 							openChest(chest);
 						break;
 
 						case Direction::WEST:
-						if(p1.y == p2.y && p1.x == p2.x-1)
+						if(p1i.y == p2i.y && p1i.x == p2i.x-1)
 							openChest(chest);
 						break;
 
@@ -145,23 +148,23 @@ void GameStateArea::draw(sf::RenderWindow& window, float dt) const
 	}
 }
 
-void GameStateArea::callbackItems(int index)
+void GameStateArea::callbackItems(size_t index)
 {
 	std::shared_ptr<GameState> prevState = state;
 	state.reset(new GameStateMenuItems(state, prevState, player));
 }
-void GameStateArea::callbackStatus(int index)
+void GameStateArea::callbackStatus(size_t index)
 {
 	std::shared_ptr<GameState> prevState = state;
 	state.reset(new GameStateMenuStatus(state, prevState, player));
 }
-void GameStateArea::callbackSave(int index)
+void GameStateArea::callbackSave(size_t index)
 {
 	player->save(mgr);
 	infoMsgBox.setText("Saved game.");
 	subState = SubState::INFO;
 }
-void GameStateArea::callbackExit(int index)
+void GameStateArea::callbackExit(size_t index)
 {
 	subState = SubState::GAME;
 }

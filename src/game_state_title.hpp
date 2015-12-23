@@ -78,7 +78,7 @@ class GameStateTitle : public GameState
 		classEntryMenu.select(0, '*');
 	}
 
-	static void titleCallback(void* ptr, int index)
+	static void titleCallback(void* ptr, size_t index)
 	{
 		switch(index)
 		{
@@ -87,13 +87,13 @@ class GameStateTitle : public GameState
 			default: break;
 		}
 	}
-	static void classCallback(void *ptr, int index)
+	static void classCallback(void *ptr, size_t index)
 	{
 		static_cast<GameStateTitle*>(ptr)->callbackCreatePlayer(index);
 	}
-	void callbackContinue(int index);
-	void callbackQuit(int index);
-	void callbackCreatePlayer(int index);
+	void callbackContinue(size_t index);
+	void callbackQuit(size_t index);
+	void callbackCreatePlayer(size_t index);
 };
 
 #endif /* GAME_STATE_TITLE_HPP */

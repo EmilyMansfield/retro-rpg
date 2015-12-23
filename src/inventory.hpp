@@ -19,15 +19,15 @@ class ItemEntry
 
 	public:
 
-	unsigned int count;
+	size_t count;
 
 	ItemEntry(Item* ptr,
-			  unsigned int count) :
+			  size_t count) :
 		ptr(ptr),
 		count(count) {}
 
 	ItemEntry(const std::string& id,
-			  unsigned int count,
+			  size_t count,
 			  EntityManager* mgr) :
 		ptr(mgr->getEntity<Item>(id)),
 		count(count) {}
@@ -58,20 +58,20 @@ class Inventory
 	Inventory() {}
 
 	// Add an item to the inventory
-	void add(Item* item, unsigned int count);
+	void add(Item* item, size_t count);
 
 	// Remove the specified number of items from the inventory
-	void remove(Item* item, unsigned int count);
+	void remove(Item* item, size_t count);
 
 	// Returns the count of the specified item
-	unsigned int count(Item* item) const;
+	size_t count(Item* item) const;
 	template <typename T>
-	unsigned int count(unsigned int n) const;
+	size_t count(size_t n) const;
 
 	// Return the nth item in the storage list
-	Item* get(unsigned int n) const;
+	Item* get(size_t n) const;
 	template <typename T>
-	T* get(unsigned int n) const;
+	T* get(size_t n) const;
 
 	// Remove all items from the inventory
 	void clear();

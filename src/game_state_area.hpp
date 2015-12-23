@@ -84,7 +84,7 @@ class GameStateArea : public GameState
 	// By using the index argument of the original gui::Menu callback, we can
 	// use a single static callback to call an arbitrary number of member
 	// callback functions.
-	static void callbackFunc(void* ptr, int index)
+	static void callbackFunc(void* ptr, size_t index)
 	{
 		// The alternative is to create an array of callbacks, then you can use
 		// the index to call the callback directly, but this greatly complicates
@@ -100,10 +100,10 @@ class GameStateArea : public GameState
 			default: break;
 		}
 	}
-	void callbackItems(int index);
-	void callbackStatus(int index);
-	void callbackSave(int index);
-	void callbackExit(int index);
+	void callbackItems(size_t index);
+	void callbackStatus(size_t index);
+	void callbackSave(size_t index);
+	void callbackExit(size_t index);
 };
 
 #endif /* GAME_STATE_AREA_HPP */

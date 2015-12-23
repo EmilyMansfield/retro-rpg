@@ -112,16 +112,16 @@ void GameStateTitle::draw(sf::RenderWindow& window, float dt) const
 	}
 }
 
-void GameStateTitle::callbackContinue(int index)
+void GameStateTitle::callbackContinue(size_t index)
 {
 	subState = SubState::NAME;
 
 }
-void GameStateTitle::callbackQuit(int index)
+void GameStateTitle::callbackQuit(size_t index)
 {
 	state.reset();
 }
-void GameStateTitle::callbackCreatePlayer(int index)
+void GameStateTitle::callbackCreatePlayer(size_t index)
 {
 	std::shared_ptr<Player> player;
 	switch(index)

@@ -2,6 +2,7 @@
 #define OVERWORLDABLE_HPP
 
 #include <memory>
+#include <utility>
 #include <SFML/Graphics.hpp>
 #include <JsonBox.h>
 
@@ -21,10 +22,15 @@ class Overworldable
 	virtual void loadMover(const JsonBox::Value& v);
 
 	template<typename T, typename... U>
-	void attachRenderer(U&&... u);
-
+	void attachRenderer(U&&... u)
+	{
+		renderer.reset(new T(std::forward<U>(u)...));
+	}
 	template<typename T, typename... U>
-	void attachMover(U&&... u);
+	void attachMover(U&&... u)
+	{
+		mover.reset(new T(std::forward<U>(u)...));
+	}
 };
 
 #endif /* OVERWORLDABLE_HPP */

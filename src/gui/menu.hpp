@@ -62,7 +62,7 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// to right and top to bottom as in the example, along with
 	// their callbacks. We maintain this vector to allow for
 	// dynamic insertion and deletion of elements.
-	std::vector<std::pair<std::string, void (*)(void*, int)>> mEntries;
+	std::vector<std::pair<std::string, void (*)(void*, size_t)>> mEntries;
 	// Preprocessed entries which have been aligned and split into
 	// lines. This only needs to be regenerated when the entries
 	// themselves are changed
@@ -117,7 +117,7 @@ class Menu : public sf::Drawable, public sf::Transformable
 	// Call the callback associated with the currently selected entry
 	void activate(void* ptr);
 
-	void addEntry(const std::string& entry, void (*callback)(void*, int));
+	void addEntry(const std::string& entry, void (*callback)(void*, size_t));
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

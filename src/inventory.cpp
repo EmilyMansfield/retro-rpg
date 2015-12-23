@@ -47,7 +47,7 @@ JsonBox::Array Inventory::jsonArray() const
 	return a;
 }
 
-void Inventory::add(Item* item, unsigned int count)
+void Inventory::add(Item* item, size_t count)
 {
 	for(auto& it : items)
 	{
@@ -61,7 +61,7 @@ void Inventory::add(Item* item, unsigned int count)
 	items.push_back(ItemEntry(item, count));
 }
 
-void Inventory::remove(Item* item, unsigned int count)
+void Inventory::remove(Item* item, size_t count)
 {
 	// Iterate through the items, and if they are found then decrease
 	// the quantity by the quantity removed
@@ -76,7 +76,7 @@ void Inventory::remove(Item* item, unsigned int count)
 	}
 }
 
-Item* Inventory::get(unsigned int n) const
+Item* Inventory::get(size_t n) const
 {
 	if(n < items.size())
 		return items[n];
@@ -85,11 +85,11 @@ Item* Inventory::get(unsigned int n) const
 }
 
 template <typename T>
-T* Inventory::get(unsigned int n) const
+T* Inventory::get(size_t n) const
 {
 	// Unless T=Item, there's no guarantee that there are
 	// n of an item type
-	for(unsigned int i = 0, j = 0; i < items.size(); ++i)
+	for(size_t i = 0, j = 0; i < items.size(); ++i)
 	{
 		if(!static_cast<Item*>(items[i])->isA<T>()) continue;
 		if(j == n)
@@ -100,7 +100,7 @@ T* Inventory::get(unsigned int n) const
 	return nullptr;
 }
 
-unsigned int Inventory::count(Item* item) const
+size_t Inventory::count(Item* item) const
 {
 	for(auto it : this->items)
 	{
@@ -111,7 +111,7 @@ unsigned int Inventory::count(Item* item) const
 }
 
 template <typename T>
-unsigned int Inventory::count(unsigned int n) const
+size_t Inventory::count(size_t n) const
 {
 	return count(get<T>(n));
 }
@@ -157,10 +157,10 @@ template JsonBox::Array Inventory::jsonArray<Item>() const;
 template JsonBox::Array Inventory::jsonArray<Weapon>() const;
 template JsonBox::Array Inventory::jsonArray<Armor>() const;
 
-template unsigned int Inventory::count<Item>(unsigned int) const;
-template unsigned int Inventory::count<Weapon>(unsigned int) const;
-template unsigned int Inventory::count<Armor>(unsigned int) const;
+template size_t Inventory::count<Item>(size_t) const;
+template size_t Inventory::count<Weapon>(size_t) const;
+template size_t Inventory::count<Armor>(size_t) const;
 
-template Item* Inventory::get<Item>(unsigned int) const;
-template Weapon* Inventory::get<Weapon>(unsigned int) const;
-template Armor* Inventory::get<Armor>(unsigned int) const;
+template Item* Inventory::get<Item>(size_t) const;
+template Weapon* Inventory::get<Weapon>(size_t) const;
+template Armor* Inventory::get<Armor>(size_t) const;

@@ -50,11 +50,11 @@ class GameStateMenuStatus : public GameState
 			+ std::to_string(player->xpToLevel(player->level+1)), nullptr);
 	}
 
-	static void titleCallback(void* ptr, int index)
+	static void titleCallback(void* ptr, size_t index)
 	{
 		static_cast<GameStateMenuStatus*>(ptr)->callbackQuit(index);
 	}
-	void callbackQuit(int index);
+	void callbackQuit(size_t index);
 };
 
 #endif /* GAME_STATE_MENU_STATUS_HPP */

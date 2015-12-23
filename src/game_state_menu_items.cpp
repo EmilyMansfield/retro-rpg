@@ -47,7 +47,7 @@ void GameStateMenuItems::draw(sf::RenderWindow& window, float dt) const
 	window.draw(infoMsgBox);
 }
 
-void GameStateMenuItems::callbackQuit(int index)
+void GameStateMenuItems::callbackQuit(size_t index)
 {
 	state = prevState;
 }

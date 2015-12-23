@@ -73,11 +73,11 @@ class GameStateMenuItems : public GameState
 		}
 	}
 
-	static void itemCallback(void* ptr, int index)
+	static void itemCallback(void* ptr, size_t index)
 	{
 
 	}
-	void callbackQuit(int index);
+	void callbackQuit(size_t index);
 };
 
 #endif /* GAME_STATE_MENU_ITEMS_HPP */
