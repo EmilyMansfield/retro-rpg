@@ -11,8 +11,8 @@ gui::Text::Text(const std::string& text, const gui::Font& font,
 				const sf::Color& backgroundCol, const sf::Color& textCol) :
 	mText(text),
 	mFont(&font),
-	mBackgroundCol(backgroundCol),
-	mTextCol(textCol)
+	mTextCol(textCol),
+	mBackgroundCol(backgroundCol)
 {
 	mBackgroundTex.create(1, 1);
 	unsigned char pixels[4] = {
