@@ -31,6 +31,8 @@ class Overworldable
 	{
 		mover.reset(new T(std::forward<U>(u)...));
 	}
+
+	virtual ~Overworldable();
 };
 
 #endif /* OVERWORLDABLE_HPP */

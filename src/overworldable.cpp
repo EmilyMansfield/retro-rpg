@@ -22,3 +22,8 @@ void Overworldable::loadMover(const JsonBox::Value& v)
 	JsonBox::Object o = v.getObject();
 	if(mover != nullptr) mover->load(o["mover"].getObject());
 }
+
+Overworldable::~Overworldable()
+{
+
+}
