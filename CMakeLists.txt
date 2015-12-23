@@ -14,7 +14,7 @@ include_directories(src/include)
 # Set compiler flags
 set(CMAKE_CXX_FLAGS "")
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	set(CMAKE_CXX_FLAGS "-std=c++11 -Weverything -Wno-comment -Wno-c++98-compat")
+	set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wno-comment")
 else()
 	set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wno-comment")
 endif()
